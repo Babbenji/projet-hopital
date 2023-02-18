@@ -1,0 +1,20 @@
+### Endpoint for sending an email notification
+POST http://localhost:8080/api/notification/email
+Content-Type: application/json
+
+{
+  "to": "noreply.hopital@gmail.com",
+  "subject": "Test Email Microservice",
+  "body": "Bonjour, ceci est un email de test. Le microservice de messagerie fonctionne."
+}
+
+### Endpoint for sending an email notification
+POST http://localhost:8080/api/notification/email
+Content-Type: application/json
+
+{
+  "to": "rachida.el-ouariachi@etu.univ-orleans.fr",
+  "subject": "Test du service de messagerie du micro-service Hopital (M2 MIAGE)",
+  "body": "Bonjour, ceci est un e-mail de test pour vérifier que notre service de messagerie fonctionne correctement.\n\nCordialement, \n\nDes étudiants en M2 MIAGE de l'Université d'Orléans."
+
+}
