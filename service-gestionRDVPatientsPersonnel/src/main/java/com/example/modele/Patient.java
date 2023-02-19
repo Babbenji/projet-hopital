@@ -10,6 +10,14 @@ public class Patient extends Utilisateur{
     private Medecin medecintr_pat;
     private String antecedents_pat;
 
+    public Patient(String prenom, String nom, String email, String numeroSecu, String numeroTel, LocalDate dateNaissance, String genre) {
+        super(nom, prenom, email);
+        this.numsecu_pat = numeroSecu;
+        this.numtel_pat = numeroTel;
+        this.datenais_pat = dateNaissance;
+        this.genre_pat = genre;
+    }
+
     public String getNumsecu_pat() {
         return numsecu_pat;
     }
@@ -59,5 +67,6 @@ public class Patient extends Utilisateur{
     }
 
     public Patient() {
+        super();
     }
 }

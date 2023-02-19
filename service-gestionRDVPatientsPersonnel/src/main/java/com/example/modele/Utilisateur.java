@@ -40,4 +40,10 @@ public class Utilisateur {
 
     public Utilisateur() {
     }
+
+    public Utilisateur(String prenom_uti, String nom_uti, String email_uti) {
+        this.prenom_uti = prenom_uti;
+        this.nom_uti = nom_uti;
+        this.email_uti = email_uti;
+    }
 }

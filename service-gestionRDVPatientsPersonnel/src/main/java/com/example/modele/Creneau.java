@@ -7,6 +7,12 @@ public class Creneau {
     private String heure_cren;
     private boolean dispo_cren;
 
+    public Creneau(LocalDate date_cren, String heure_cren) {
+        this.date_cren = date_cren;
+        this.heure_cren = heure_cren;
+        this.dispo_cren=true;
+    }
+
     public LocalDate getDate_cren() {
         return date_cren;
     }

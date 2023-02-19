@@ -1,6 +1,7 @@
 package com.example.modele;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Consultation {
     private int id_cons;
@@ -15,6 +16,17 @@ public class Consultation {
     private LocalDate datecrea_cons;
     private LocalDate datemodif_cons;
     private LocalDate dateannul_cons;
+
+    public Consultation(Creneau creneau_cons, String motif_cons, String ordo_cons, Medecin medecin_cons, Patient patient_cons, TypeCons type_cons) {
+        this.creneau_cons = creneau_cons;
+        this.motif_cons = motif_cons;
+        this.ordo_cons = ordo_cons;
+        this.medecin_cons = medecin_cons;
+        this.patient_cons = patient_cons;
+        this.type_cons = type_cons;
+        this.datecrea_cons = LocalDate.now();
+        this.datemodif_cons = LocalDate.now();
+    }
 
     public int getId_cons() {
         return id_cons;
