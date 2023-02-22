@@ -6,7 +6,7 @@ import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 
 public interface FacadeServiceGestionStock {
-    void passerCommande(Commande commande);
+    void passerCommande();
 
     void ajouterFournisseur(Fournisseur fournisseur) throws FournisseurDejaExistantException;
 

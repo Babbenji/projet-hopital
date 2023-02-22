@@ -4,16 +4,18 @@ public class ProduitMedical {
 
     private int idProduitMedical;
 
+    private float prixProduitMedical;
+
     private String nomProduitMedical;
 
     private String descriptionProduitMedical;
 
-    public ProduitMedical(int idProduitMedical, String nomProduitMedical, String descriptionProduitMedical) {
+    public ProduitMedical(int idProduitMedical, float prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical) {
         this.idProduitMedical = idProduitMedical;
+        this.prixProduitMedical = prixProduitMedical;
         this.nomProduitMedical = nomProduitMedical;
         this.descriptionProduitMedical = descriptionProduitMedical;
     }
-
 
     public int getIdProduitMedical() {
         return idProduitMedical;
@@ -37,5 +39,13 @@ public class ProduitMedical {
 
     public void setDescriptionProduitMedical(String descriptionProduitMedical) {
         this.descriptionProduitMedical = descriptionProduitMedical;
+    }
+
+    public float getPrixProduitMedical() {
+        return prixProduitMedical;
+    }
+
+    public void setPrixProduitMedical(float prixProduitMedical) {
+        this.prixProduitMedical = prixProduitMedical;
     }
 }

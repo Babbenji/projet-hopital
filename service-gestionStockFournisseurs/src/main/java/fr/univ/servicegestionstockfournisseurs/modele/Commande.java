@@ -10,11 +10,9 @@ public class Commande {
     private Date dateCommande;
     private float prixCommande;
 
-    public Commande(int idCommande, Map<ProduitMedical,Integer> panierCommande, Date dateCommande, float prixCommande) {
-        this.idCommande = idCommande;
+    public Commande(Map<ProduitMedical,Integer> panierCommande, Date dateCommande) {
         this.panierCommande = panierCommande;
         this.dateCommande = dateCommande;
-        this.prixCommande = prixCommande;
     }
 
     public int getIdCommande() {
