@@ -1,4 +1,11 @@
 package com.example.repository;
 
-public interface ConsultationRepository {
+import com.example.modele.Consultation;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ConsultationRepository extends MongoRepository<Consultation, Integer>, CrudRepository<Consultation,Integer> {
+    Consultation findConsultationById_cons(int id_cons);
 }
