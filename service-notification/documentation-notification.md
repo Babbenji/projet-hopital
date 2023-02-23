@@ -29,16 +29,16 @@ _Service gestion de stock :_
 - [x] Mise en place de la couche de présentation : Spring Web
 - [x] Mise en place de la couche de persistance : Spring Data JPA
 - [x] Mise en place de la librairie d'envoi d'e-mails : Java Mail Sender
-- [ ] Mise en place d'une base de données : PostgresSQL ou MongoDB
+- [x] Mise en place d'une base de données : PostgresSQL ~~ou MongoDB~~
 - [ ] Mise en place d'un serveur annuaire de services : Consul
 - [ ] Mise en place d'un serveur de surveillance de l'état de santé des services : Spring Boot Actuator
-- [ ] Mise en place d'un serveur d'écoute des événements des autres services : RabbitMQ
+- [ ] Mise en place d'un serveur d'écoute des événements des autres services : RabbitMQ ~~ou Kafka ou Redis~~
 - [ ] Mise en place d'un serveur de configuration : Spring Cloud Config
 - [ ] Mise en place d'un serveur de monitoring : Spring Boot Admin
 
-- [ ] Stocker les notifications dans la base de données
+- [x] Stocker les notifications dans la base de données
 
-- [ ] Gestion des notifications par type (email, sms, ~~push, teams~~)
+- [ ] Gestion des notifications par type (email, sms, ~~push~~)
 - [ ] Gestion des notifications par statut (envoyée, en attente, erreur)
 - [ ] Gestion des notifications par contenu (texte, html, json, xml)
 - [ ] Gestion des notifications par destinataire
@@ -65,8 +65,6 @@ _Service gestion de stock :_
 |:--------|-------------------------|----------------------------------------------|
 | POST    | /notifications/email    | Envoyer une notification par e-mail          |
 | POST    | /notifications/sms      | Envoyer une notification par SMS             |
-| POST    | /notifications/push     | Envoyer une notification push                |
-| POST    | /notifications/teams    | Envoyer une notification par Teams           |
 | GET     | /notifications/{id}     | Obtenir une notification par son identifiant |
 | GET     | /notifications          | Obtenir la liste des notifications           |
 | PUT     | /notifications/{id}     | Modifier une notification                    |
@@ -103,7 +101,7 @@ Durée conservation des données : https://www.cnil.fr/fr/les-durees-de-conserva
 - Politique de confidentialité
 - Archivage et suppression des notifications après un certain temps
 - Statistiques
-- Spécifier le type de notification (email, sms, push, teams)
+- Spécifier le type de notification (email, sms, push)
 - Spécifier le statut de la notification (envoyée, en attente, erreur)
 - Spécifier le type de contenu (texte, html, json, xml)
 - Spam protection
@@ -128,6 +126,41 @@ Durée conservation des données : https://www.cnil.fr/fr/les-durees-de-conserva
 - Gestion des CORS
 - Gestion des secrets
 - Gestion des certificats
+
+
+### Commandes environnement de développement
+
+**Serveur de base de données PostgresSQL**
+
+```bash 
+# Récupérer l'image docker de la base de données
+docker pull postgres
+
+# Lancer le serveur de base de données
+docker run --name postgres -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 postgres
+
+# Vérifier que le serveur de base de données est bien lancé
+docker ps
+
+# Se connecter au serveur de base de données
+docker exec -it postgres psql -U postgres
+
+# Créer la base de données
+CREATE DATABASE postgresbd;
+
+# Créer un utilisateur
+CREATE USER user WITH ENCRYPTED PASSWORD 'mdp';
+
+# Donner les droits à l'utilisateur
+GRANT ALL PRIVILEGES ON DATABASE postgresbd TO user;
+
+# Quitter le serveur de base de données
+\q
+
+# debug docker socket
+sudo systemctl restart docker.socket docker.service
+docker rm -f <container id>
+````
 
 
 ### Méthodes de déploiement
@@ -163,7 +196,6 @@ git remote add origin https://github.com/rachy-da/micro-services.git
 git push -u origin main
 
 #push an existing repository from the command line :
-
 git remote add origin https://github.com/rachy-da/micro-services.git
 git branch -M main
 git push -u origin main

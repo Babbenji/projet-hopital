@@ -15,14 +15,13 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmail(String to, String subject, String body) {
+    public void envoyerEmail(String destinataire, String objet, String contenu) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply.hopital@gmail.com");
-//        message.setFrom("");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+        message.setTo(destinataire);
+        message.setSubject(objet);
+        message.setText(contenu);
 
         this.javaMailSender.send(message);
     }
