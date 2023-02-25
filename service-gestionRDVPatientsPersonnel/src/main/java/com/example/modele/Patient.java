@@ -66,7 +66,5 @@ public class Patient extends Utilisateur{
         this.antecedents_pat = antecedents_pat;
     }
 
-    public Patient() {
-        super();
-    }
+    public Patient() {}
 }

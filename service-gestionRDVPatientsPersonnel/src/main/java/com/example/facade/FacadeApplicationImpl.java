@@ -80,6 +80,12 @@ public class FacadeApplicationImpl implements FacadeApplication{
         consultation.setCr_cons(compteRendu);
         consultationRepository.save(consultation);
 
+    @Override
+    public void annulerConsultation(int idConsultation) {
+        //Rendre dispo creneau à nouveau
+        //Supprimer la consultation
+    }
+
     }
 //Si le creneau existe déjà, erreur : a faire
     @Override
@@ -95,11 +101,33 @@ public class FacadeApplicationImpl implements FacadeApplication{
         return consultation;
     }
 
+    @Override
+    public void demanderAnnulation(int idConsultation, String motifAnnulation) {
+        //Generer notif avec message
+    }
+
+    @Override
+    public Patient getPatientByNumSecu(String numeroSecu) {
+        return null;
+    }
 
 
     @Override
     public Medecin getMedecinTraitant(String numeroSecu) {
         Patient p = patientRepository.findByNumsecu_pat(numeroSecu);
         return p.getMedecintr_pat();
+    }
+
+    @Override
+    public void deleteConsultationByID(int idConsultation) {
+
+    }
+    @Override
+    public void deleteMedecinByID(int idMedecin) {
+
+    }
+    @Override
+    public void deletePatientByID(int idPatient) {
+
     }
 }
