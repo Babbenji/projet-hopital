@@ -79,14 +79,14 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
         consultation.setCr_cons(compteRendu);
         consultationRepository.save(consultation);
-
+    }
     @Override
     public void annulerConsultation(int idConsultation) {
         //Rendre dispo creneau à nouveau
         //Supprimer la consultation
     }
 
-    }
+
 //Si le creneau existe déjà, erreur : a faire
     @Override
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) {
@@ -106,10 +106,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
         //Generer notif avec message
     }
 
-    @Override
-    public Patient getPatientByNumSecu(String numeroSecu) {
-        return null;
-    }
 
 
     @Override
