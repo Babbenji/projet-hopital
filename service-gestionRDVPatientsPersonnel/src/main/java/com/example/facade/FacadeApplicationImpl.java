@@ -48,12 +48,23 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
 
     @Override
+    public void annulerConsultation(int idConsultation) {
+        //Rendre dispo creneau à nouveau
+        //Supprimer la consultation
+    }
+
+    @Override
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) {
         Creneau creneau = new Creneau(LocalDate.parse(dateRDV), heureRDV);
         Medecin medecin = getMedecinTraitant(patient.getNumsecu_pat());
         creneau.setDispo_cren(false);
         Consultation consultation = new Consultation(creneau, motif, ordonnance, medecin, patient, TypeCons.valueOf(type));
         return consultation;
+    }
+
+    @Override
+    public void demanderAnnulation(int idConsultation, String motifAnnulation) {
+        //Generer notif avec message
     }
 
     @Override
@@ -80,5 +91,18 @@ public class FacadeApplicationImpl implements FacadeApplication{
     public Medecin getMedecinTraitant(String numeroSecu) {
         Patient p = getPatientByNumSecu(numeroSecu);
         return p.getMedecintr_pat();
+    }
+
+    @Override
+    public void deleteConsultationByID(int idConsultation) {
+
+    }
+    @Override
+    public void deleteMedecinByID(int idMedecin) {
+
+    }
+    @Override
+    public void deletePatientByID(int idPatient) {
+
     }
 }

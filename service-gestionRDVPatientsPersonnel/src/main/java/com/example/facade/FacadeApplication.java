@@ -33,11 +33,14 @@ public interface FacadeApplication {
     public List<Consultation> voirConsultationsMedecin(int idMedecin);
     //Rediger le CR d'une consultation
     public void modifierCRConsultation(int idConsultation, String compteRendu);
+    //Annuler un RDV (Côté médecin)
+    public void annulerConsultation(int idConsultation);
 
     //Prendre un RDV
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type);
     //Voir son dossier avec la liste des consultations et les données du patient (Pour le patient et pour les médecins/personnel)
-    //Annuler un RDV (Côté médecin ou côté patient)
+    //Demande d'annulation par le patient
+    public void demanderAnnulation(int idConsultation, String motifAnnulation);
 
     //REQUETES
     public Patient getPatientByNumSecu(String numeroSecu);
@@ -45,5 +48,8 @@ public interface FacadeApplication {
     public Medecin getMedecinByID(int idMedecin);
     public Consultation getConsultationByID(int idConsultation);
     public Medecin getMedecinTraitant(String numeroSecu);
+    public void deleteConsultationByID(int idConsultation);
+    public void deleteMedecinByID(int idMedecin);
+    public void deletePatientByID(int idPatient);
 
 }
