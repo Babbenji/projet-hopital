@@ -12,11 +12,11 @@ public interface FacadeApplication {
     /***
      * Ajouter un patient
      * */
-    public Patient ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre);
+    public int ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre);
     /***
      * Ajouter un médecin
      * */
-    public Medecin ajouterMedecin(String prenom, String nom, String email);
+    public int ajouterMedecin(String prenom, String nom, String email);
 
     public void modifierAntecedentsPatient(String numeroSecu, String antecedents);
     //Assigner un medecin à un patient
@@ -40,10 +40,7 @@ public interface FacadeApplication {
     //Annuler un RDV (Côté médecin ou côté patient)
 
     //REQUETES
-    public Patient getPatientByNumSecu(String numeroSecu);
-    public Medecin getMedecinByPrenomNom(String prenomMedecin, String nomMedecin);
-    public Medecin getMedecinByID(int idMedecin);
-    public Consultation getConsultationByID(int idConsultation);
+
     public Medecin getMedecinTraitant(String numeroSecu);
 
 }

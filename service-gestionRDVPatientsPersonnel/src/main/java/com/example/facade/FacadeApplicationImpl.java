@@ -1,84 +1,105 @@
 package com.example.facade;
 
 import com.example.modele.*;
+import com.example.repository.ConsultationRepository;
+import com.example.repository.CreneauRepository;
+import com.example.repository.MedecinRepository;
+import com.example.repository.PatientRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Component
 public class FacadeApplicationImpl implements FacadeApplication{
+
+    @Autowired
+    ConsultationRepository consultationRepository;
+
+    @Autowired
+    CreneauRepository creneauRepository;
+
+    @Autowired
+    MedecinRepository medecinRepository;
+
+    @Autowired
+    PatientRepository patientRepository;
+
+
     @Override
-    public Patient ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
-        return new Patient(prenom, nom, email, numeroSecu, numeroTel, LocalDate.parse(dateNaissance), genre);
+    public int ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
+        Patient patient =  new Patient(prenom, nom, email, numeroSecu, numeroTel, LocalDate.parse(dateNaissance), genre);
+        patientRepository.save(patient);
+
+        return patient.getId_uti();
+
     }
 
     @Override
-    public Medecin ajouterMedecin(String prenom, String nom, String email) {
-        return new Medecin(prenom, nom, email);
+    public int ajouterMedecin(String prenom, String nom, String email) {
+
+        Medecin medecin =  new Medecin(prenom, nom, email);
+        medecinRepository.save(medecin);
+        return medecin.getId_uti();
     }
 
     @Override
     public void modifierAntecedentsPatient(String numeroSecu, String antecedents) {
-        Patient p = this.getPatientByNumSecu(numeroSecu);
-        p.setAntecedents_pat(antecedents);
+        Patient pa = patientRepository.findByNumsecu_pat(numeroSecu);
+        pa.setAntecedents_pat(antecedents);
+        patientRepository.save(pa);
     }
 
     @Override
     public void assignerMedecinTraitant(String numeroSecu, String prenomMedecin, String nomMedecin) {
-        Patient p = this.getPatientByNumSecu(numeroSecu);
-        Medecin m = this.getMedecinByPrenomNom(prenomMedecin, nomMedecin);
+        Patient p = patientRepository.findByNumsecu_pat(numeroSecu);
+        Medecin m = medecinRepository.findByPrenom_utiAndNom_uti(prenomMedecin, nomMedecin);
         p.setMedecintr_pat(m);
+        patientRepository.save(p);
+
     }
 
     @Override
     public void confirmerRDV(int idConsultation) {
-        Consultation consultation = getConsultationByID(idConsultation);
+        Consultation consultation = consultationRepository.findConsultationById_cons(idConsultation);
         consultation.setConfirm_cons(true);
+        consultationRepository.save(consultation);
     }
 
     @Override
     public List<Consultation> voirConsultationsMedecin(int idMedecin) {
-        Medecin medecin = getMedecinByID(idMedecin);
+        Medecin medecin = medecinRepository.findById_uti(idMedecin);
         return medecin.getListeconsultations_med();
     }
 
     @Override
     public void modifierCRConsultation(int idConsultation, String compteRendu) {
-        Consultation consultation = getConsultationByID(idConsultation);
-        consultation.setCr_cons(compteRendu);
-    }
+        Consultation consultation = consultationRepository.findConsultationById_cons(idConsultation);
 
+        consultation.setCr_cons(compteRendu);
+        consultationRepository.save(consultation);
+
+    }
+//Si le creneau existe déjà, erreur : a faire
     @Override
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) {
         Creneau creneau = new Creneau(LocalDate.parse(dateRDV), heureRDV);
-        Medecin medecin = getMedecinTraitant(patient.getNumsecu_pat());
         creneau.setDispo_cren(false);
+        creneauRepository.save(creneau);
+
+        Medecin medecin = getMedecinTraitant(patient.getNumsecu_pat());
+
         Consultation consultation = new Consultation(creneau, motif, ordonnance, medecin, patient, TypeCons.valueOf(type));
+        consultationRepository.save( consultation);
         return consultation;
     }
 
-    @Override
-    public Patient getPatientByNumSecu(String numeroSecu) {
-        return null;
-    }
 
-    @Override
-    public Medecin getMedecinByPrenomNom(String prenomMedecin, String nomMedecin) {
-        return null;
-    }
-
-    @Override
-    public Medecin getMedecinByID(int idMedecin) {
-        return null;
-    }
-
-    @Override
-    public Consultation getConsultationByID(int idConsultation) {
-        return null;
-    }
 
     @Override
     public Medecin getMedecinTraitant(String numeroSecu) {
-        Patient p = getPatientByNumSecu(numeroSecu);
+        Patient p = patientRepository.findByNumsecu_pat(numeroSecu);
         return p.getMedecintr_pat();
     }
 }

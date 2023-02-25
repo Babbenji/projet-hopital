@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatientRepository extends MongoRepository<Patient, Integer>, CrudRepository<Patient,Integer> {
 
-    Patient findByNumsecu_pat(int numsecu_pat);
+    Patient findByNumsecu_pat(String numsecu_pat);
     Patient findById_uti(int id_uti);
+
+
 
 
 }
