@@ -5,7 +5,7 @@ public enum TypeCons {
     DENTAIRE,
     HOSPITALISATION,
     SOINS_DIVERS,
-    VISITE_MEDICAL,
+    VISITE_MEDICALE
 
     
 }
