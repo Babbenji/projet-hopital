@@ -38,7 +38,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
     @Override
     public int ajouterMedecin(String prenom, String nom, String email) {
-
         Medecin medecin =  new Medecin(prenom, nom, email);
         medecinRepository.save(medecin);
         return medecin.getId_uti();
