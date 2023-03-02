@@ -5,6 +5,14 @@ public class Utilisateur {
     private String prenom_uti;
     private String nom_uti;
     private String email_uti;
+    private static int IDS = 1;
+
+    public Utilisateur(int id_uti, String prenom_uti, String nom_uti, String email_uti) {
+        this.id_uti = IDS++;
+        this.prenom_uti = prenom_uti;
+        this.nom_uti = nom_uti;
+        this.email_uti = email_uti;
+    }
 
     public int getId_uti() {
         return id_uti;
