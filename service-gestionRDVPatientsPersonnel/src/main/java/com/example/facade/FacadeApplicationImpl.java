@@ -8,6 +8,8 @@ import com.example.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -81,8 +83,12 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
     @Override
     public void annulerConsultation(int idConsultation) {
-        //Rendre dispo creneau à nouveau
-        //Supprimer la consultation
+        Consultation consultation = consultationRepository.findConsultationById_cons( idConsultation);
+        Creneau creneau = consultation.getCreneau_cons();
+
+        creneau.setDispo_cren(true);
+        consultationRepository.removeById_cons(idConsultation);
+
     }
 
 
@@ -103,6 +109,8 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Override
     public void demanderAnnulation(int idConsultation, String motifAnnulation) {
         //Generer notif avec message
+        System.out.println(motifAnnulation);
+        annulerConsultation(idConsultation);
     }
 
 
@@ -115,14 +123,16 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
     @Override
     public void deleteConsultationByID(int idConsultation) {
-
+        consultationRepository.removeById_cons(idConsultation);
     }
     @Override
     public void deleteMedecinByID(int idMedecin) {
+        medecinRepository.removeById_cons(idMedecin);
 
     }
     @Override
     public void deletePatientByID(int idPatient) {
+        patientRepository.removeById_cons(idPatient);
 
     }
 }
