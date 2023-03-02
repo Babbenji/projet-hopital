@@ -8,8 +8,6 @@ import com.example.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -57,8 +55,9 @@ public class FacadeApplicationImpl implements FacadeApplication{
         Patient p = patientRepository.findByNumsecu_pat(numeroSecu);
         Medecin m = medecinRepository.findByPrenom_utiAndNom_uti(prenomMedecin, nomMedecin);
         p.setMedecintr_pat(m);
+        m.ajouterPatient(p);
         patientRepository.save(p);
-
+        medecinRepository.save(m);
     }
 
     @Override
@@ -102,7 +101,10 @@ public class FacadeApplicationImpl implements FacadeApplication{
         Medecin medecin = getMedecinTraitant(patient.getNumsecu_pat());
 
         Consultation consultation = new Consultation(creneau, motif, ordonnance, medecin, patient, TypeCons.valueOf(type));
-        consultationRepository.save( consultation);
+        medecin.ajouterConsultation(consultation);
+        consultationRepository.save(consultation);
+        medecinRepository.save(medecin);
+
         return consultation;
     }
 
@@ -110,7 +112,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
     public void demanderAnnulation(int idConsultation, String motifAnnulation) {
         //Generer notif avec message
         System.out.println(motifAnnulation);
-        annulerConsultation(idConsultation);
     }
 
 
@@ -128,11 +129,14 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Override
     public void deleteMedecinByID(int idMedecin) {
         medecinRepository.removeById_cons(idMedecin);
-
     }
     @Override
     public void deletePatientByID(int idPatient) {
         patientRepository.removeById_cons(idPatient);
+    }
 
+    @Override
+    public Patient getPatientByEmail(String email) {
+        return patientRepository.findPatientByEmail_uti(email);
     }
 }

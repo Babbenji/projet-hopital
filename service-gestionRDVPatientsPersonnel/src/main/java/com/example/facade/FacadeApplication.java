@@ -49,4 +49,7 @@ public interface FacadeApplication {
     public void deleteMedecinByID(int idMedecin);
     public void deletePatientByID(int idPatient);
 
+    public Patient getPatientByEmail(String email);
+
+
 }

@@ -24,6 +24,13 @@ public class Medecin extends Utilisateur {
         this.listepatients_med = listepatients_med;
     }
 
+    public void ajouterConsultation(Consultation consultation){
+        this.listeconsultations_med.add(consultation);
+    }
+    public void ajouterPatient(Patient patient){
+        this.listepatients_med.add(patient);
+    }
+
     public Medecin() {
     }
 }
