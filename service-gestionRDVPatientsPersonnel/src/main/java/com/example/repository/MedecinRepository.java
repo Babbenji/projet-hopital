@@ -14,6 +14,8 @@ public interface MedecinRepository extends MongoRepository<Medecin, Integer>, Cr
     Medecin findById_uti(int id_uti);
 
     List<Consultation> getById_uti(int id_uti);
+    void removeById_cons(int id_cons);
+
 
 
 }

@@ -12,6 +12,7 @@ public interface PatientRepository extends MongoRepository<Patient, Integer>, Cr
     Patient findByNumsecu_pat(String numsecu_pat);
     Patient findById_uti(int id_uti);
 
+    void removeById_cons(int id_cons);
 
 
 

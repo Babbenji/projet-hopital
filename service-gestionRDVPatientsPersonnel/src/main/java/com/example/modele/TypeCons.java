@@ -4,5 +4,8 @@ public enum TypeCons {
     OPTIQUE,
     DENTAIRE,
     HOSPITALISATION,
-    SOINS_DIVERS
+    SOINS_DIVERS,
+    VISITE_MEDICAL,
+
+    
 }
