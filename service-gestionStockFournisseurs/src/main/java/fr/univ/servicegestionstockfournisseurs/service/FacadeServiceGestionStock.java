@@ -12,35 +12,31 @@ public interface FacadeServiceGestionStock {
 
     void ajouterProduitPanier(ProduitMedical produit) throws ProduitDejaExistantException;
 
-    void annulerCommande(Commande commande) throws CommandeInexistanteException;
+    void annulerCommande(int idCommande) throws CommandeInexistanteException;
 
-    void supprimerFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
+    void supprimerFournisseur(int idFournisseur) throws FournisseurInexistantException;
 
-    void supprimerProduit(ProduitMedical produit) throws ProduitInexistantException;
-
-    void modifierCommande(Commande commande) throws CommandeInexistanteException;
+    void supprimerProduit(int idProduit) throws ProduitInexistantException;
 
     void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
 
-    void modifierProduit(ProduitMedical produit) throws ProduitInexistantException;
+    void modifierProduit(int idProduit) throws ProduitInexistantException;
 
-    void afficherCommande(Commande commande) throws CommandeInexistanteException;
+    void afficherCommande(int idCommande) throws CommandeInexistanteException;
 
-    void afficherFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
+    Fournisseur getFournisseur(int idFournisseur) throws FournisseurInexistantException;
 
-    void afficherProduit(ProduitMedical produit) throws ProduitInexistantException;
+    void getProduit(int idProduit) throws ProduitInexistantException;
 
-    void afficherCatalogueFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
+    void getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException;
 
-    void afficherPanierCommande(Commande commande) throws CommandeInexistanteException;
+    void getPanierCommande(int idCommande) throws CommandeInexistanteException;
 
-    void afficherCommandesProduit(ProduitMedical produit) throws ProduitInexistantException;
+    void getCommandesDejaPassees();
 
-    void afficherCommandesDejaPassees();
+    void getFournisseurs();
 
-    void afficherFournisseurs();
+    void getStock();
 
-    void afficherStock();
-
-    void afficherStockProduit(ProduitMedical produit) throws ProduitInexistantException;
+    void getStockProduit(int idProduit) throws ProduitInexistantException;
 }

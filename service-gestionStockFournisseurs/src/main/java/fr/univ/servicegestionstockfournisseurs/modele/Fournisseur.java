@@ -1,18 +1,20 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
+import org.springframework.data.annotation.Id;
+
+import javax.annotation.processing.Generated;
 import java.util.List;
 
 public class Fournisseur {
 
+    @Id
+    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idFournisseur;
-
     private String nomFournisseur;
-
     private List<ProduitMedical> catalogueFournisseur;
 
 
-    public Fournisseur(int idFournisseur, String nomFournisseur, List<ProduitMedical> catalogueFournisseur) {
-        this.idFournisseur = idFournisseur;
+    public Fournisseur(String nomFournisseur, List<ProduitMedical> catalogueFournisseur) {
         this.nomFournisseur = nomFournisseur;
         this.catalogueFournisseur = catalogueFournisseur;
     }
