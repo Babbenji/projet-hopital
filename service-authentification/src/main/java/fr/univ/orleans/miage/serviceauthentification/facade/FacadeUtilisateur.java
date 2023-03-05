@@ -1,37 +1,39 @@
 package fr.univ.orleans.miage.serviceauthentification.facade;
 
 
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UserDejaExistantException;
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UserInexistantException;
-import fr.univ.orleans.miage.serviceauthentification.modele.User;
+import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UtilisateurDejaExistantException;
+import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UtilisateurInexistantException;
+import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 
 import java.util.Collection;
+import java.util.Optional;
 
-public interface FacadeUser {
+public interface FacadeUtilisateur {
 
     /**
      * Permet de créer un compte utilisateur
      * @param email
      * @param mdp
-     * @return User
-     * @thorws UserDejaExistantException
+     * @return Utilisateur
+     * @thorws UtilisateurDejaExistantException
      */
-    User inscription(String email, String mdp) throws UserDejaExistantException;
+    Utilisateur inscription(String email, String mdp) throws UtilisateurDejaExistantException;
 
     /**
      * Permet de récupérer un utilisateur par son email
+     *
      * @param email
-     * @return User
-     * @throws UserInexistantException
+     * @return Utilisateur
+     * @throws UtilisateurInexistantException
      */
-    User getUserByEmail(String email) throws UserInexistantException;
+    Utilisateur getUtilisateurByEmail(String email) throws UtilisateurInexistantException;
 
     /**
      * Permet de se supprimer un utilisateur du système
      * @param email
-     * @throws UserInexistantException
+     * @throws UtilisateurInexistantException
      */
-    void desincription(String email) throws UserInexistantException;
+    void desincription(String email) throws UtilisateurInexistantException;
 
     /**
      * Permet de vérifier si un utilisateur existe
@@ -46,27 +48,27 @@ public interface FacadeUser {
      * @param email
      * @return
      */
-    boolean isUserConnected(String email);
+    boolean isUtilisateurConnected(String email);
 
     /**
      * Permet de récupérer la liste des utilisateurs du système
-     * @return Collection<User>
+     * @return Collection<Utilisateur>
      *     Liste des utilisateurs
      *     null si aucun utilisateur n'est trouvé
      *     null si une erreur est survenue
      *     null si le système est indisponible
      */
-    Collection<User> getAllUsers();
+    Collection<Utilisateur> getAllUtilisateurs();
 
 
     /**
      * Permet de récupérer la liste des utilisateurs par rôle
      * @param role
-     * @return Collection<User>
+     * @return Collection<Utilisateur>
      *     Liste des utilisateurs
      *     null si aucun utilisateur n'est trouvé
      *     null si une erreur est survenue
      */
-    Collection<User> getUsersByRole(String role);
+    Collection<Utilisateur> getUtilisateursByRole(String role);
 
 }

@@ -1,8 +1,8 @@
-POST http://localhost:8081/api/v1/authent/inscription
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@univ-orleans.fr",
+  "email": "fred22@univ-orleans.fr",
   "password": "fred"
 }
 
@@ -14,12 +14,12 @@ Content-Type: application/json
 %}
 
 ###
-POST http://localhost:8081/api/v1/authent/login
+POST http://localhost:8081/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "login": "yohan.boichut@gmail.com",
-  "password": "pass"
+  "login": "fred14@univ-orleans.fr",
+  "password": "fred"
 }
 
 > {%
@@ -30,8 +30,8 @@ Content-Type: application/json
 %}
 ###
 
-GET http://localhost:8081/api/v1/authent/inscription/fred@univ-orleans.fr
-Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiZnJlZEB1bml2LW9ybGVhbnMuZnIiLCJleHAiOjE2NzgwMDk4NzMsImlhdCI6MTY3Nzk3Mzg3Mywic2NvcGUiOiIifQ.DtDyP-Tl36-1fBRbXmPxBl4wUTFAJxXQYXdT5J1CSYwmN9iwYetSIuxir7v-HMux5bwo9YC7DdRWOa8RCtX3386rJNbfSDTLJEMqzrjzRvZUGkC6c4CPO2C3hGpPZu0CItU530O3LwPPFTxqLSZUeDq7xooQQPC7pMLWXu-Ly21J3Xkb0TIqbyNIu1mxbFNhQ28iwMGxNJvvQ5x9AdsSuDzCRhAax4Yjwy7l8MICNAZKwpuY4r_yxTjbpXEGokBExiqD_4yeA8d1Gh7L2HFpsrH_6YtW_C69is2bKtqMuuTemGWb8HShTKWsdIZGWUhpswWfWdE7_7PZJ9C6z1WBnA
+GET http://localhost:8081/api/v1/auth/inscription/fred@univ-orleans.fr
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiZnJlZEB1bml2LW9ybGVhbnMuZnIiLCJleHAiOjE2NzgwNzA3NjAsImlhdCI6MTY3ODAzNDc2MCwic2NvcGUiOiIifQ.fdiIVIeiQESE3LVuR1BFHmDBB5J5inS-GWmePwQbkx3cY2Lgd0RITCVHt8tgLew6lottQXyzo3k3MIvDS4Kl5sj4_U1HLH1LxyFMnTYL1m2UV7M4KwfOULjxyRHt5CvpHfOzEPDidWUxAs0geHdecz-Qz1qa24ZKlAHzBhr_lN2ZXxppfgFtYOJoq6XGc0Y3tWz_4zgKSJZzXe0BHSzMMKQmWhVNWsztMd-r5Mo6U2_g0kSTXPtY4UGiMI5Y9UyKtsAZoNc1NBVs-FRO2w8czDwkT8QN3buvIODz32GBjFjOaWxiD9nZS7880_xyp6jDie_sUglMSBsUv-xVngGMWQ
 
 
 > {%
@@ -40,8 +40,25 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiZnJlZEB1b
     });
 %}
 
+
 ###
-GET http://localhost:8081/api/v1/authent/inscription/fred
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "yohand@univ-orleans.fr",
+  "password": "pass"
+}
+
+> {%
+    client.global.set("fred_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+###
+GET http://localhost:8081/api/v1/auth/inscription/fred
 Authorization: {{yoh_token}}
 
 > {%
@@ -50,8 +67,20 @@ Authorization: {{yoh_token}}
     });
 %}
 
+
 ###
-GET http://localhost:8081/api/v1/authent/inscription/yohan.boichut@gmail.com
+GET http://localhost:8081/api/v1/auth/inscription/yohan.boichut@univ-orleans.fr
+Authorization: {{yoh_token}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+###
+GET http://localhost:8081/api/v1/auth/inscription/yohan.boichut@univ-orleans.fr
 Authorization: {{yoh_token}}
 
 > {%
