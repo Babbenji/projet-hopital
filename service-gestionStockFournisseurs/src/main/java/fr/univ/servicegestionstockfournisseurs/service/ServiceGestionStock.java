@@ -12,16 +12,34 @@ import java.util.*;
 @Component("serviceGestionStock")
 public class ServiceGestionStock implements FacadeServiceGestionStock {
 
+        //Ma Fake base de données
         private Map<Integer, Fournisseur> fournisseurs;
         private Map<Integer, Commande> commandes;
-        private Map<Integer, Map<ProduitMedical,Integer>> produitsEnStock;
-        private Map<ProduitMedical,Integer> panier;
+        private Map<ProduitMedical,Integer> stock;
+        private Map<Integer,Integer> panier;
 
         @Override
         public void passerCommande()
         {
                 Commande commande = new Commande(panier, new Date());
+                commandes.put(commande.getIdCommande(), commande);
+                for (Map.Entry<Integer, Integer> entry : panier.entrySet())
+                {
+                        for (Fournisseur fournisseur: fournisseurs.values()) {
+                                if (!fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
+                                {
+                                        stock.put(fournisseur.getCatalogueFournisseur().get(entry.getKey()), entry.getValue());
+                                }
+                                else
+                                {
+                                        stock.put(fournisseur.getCatalogueFournisseur().get(entry.getKey()), stock.get(fournisseur.getCatalogueFournisseur().get(entry.getKey()))+entry.getValue());
+                                }
+                        }
+                }
+
+                panier.clear();
         }
+
 
         @Override
         public void ajouterFournisseur(Fournisseur fournisseur) throws FournisseurDejaExistantException
@@ -37,18 +55,32 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void ajouterProduitPanier(ProduitMedical produit)
+        public void ajouterProduitPanier(int idProduit)
         {
-                if(panier.containsKey(produit))
+                if(panier.containsKey(idProduit))
                 {
-                        panier.put(produit, panier.get(produit)+1);
+                        panier.put(idProduit, panier.get(idProduit)+1);
                 }
                 else
                 {
-                        panier.put(produit, 1);
+                        panier.put(idProduit, 1);
+                }
+        }
+
+        @Override
+        public void supprimerProduitPanier(int idProduit) throws ProduitInexistantException
+        {
+                if(panier.containsKey(idProduit))
+                {
+                        panier.remove(idProduit);
+                }
+                else
+                {
+                        throw new ProduitInexistantException();
                 }
 
         }
+
 
         @Override
         public void annulerCommande(int idCommande) throws CommandeInexistanteException
@@ -78,11 +110,11 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void supprimerProduit(int idProduit) throws ProduitInexistantException
+        public void supprimerProduitFromCatalogue(int idProduit,int idFournisseur) throws ProduitInexistantException
         {
-                if(produitsEnStock.containsKey(idProduit))
+                if(fournisseurs.containsKey(idFournisseur))
                 {
-                        produitsEnStock.remove(idProduit);
+                        fournisseurs.get(idFournisseur).deleteProduit(idProduit);
                 }
                 else
                 {
@@ -96,8 +128,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         {
                 if(fournisseurs.containsKey(fournisseur.getIdFournisseur()))
                 {
-
-                        fournisseurs.put(fournisseurs.get(fournisseur.getIdFournisseur()), fournisseur);
+                        fournisseurs.put(fournisseur.getIdFournisseur(), fournisseur);
                 }
                 else
                 {
@@ -106,11 +137,11 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void modifierProduit(int idProduit) throws ProduitInexistantException
+        public void modifierProduitFromCatalogue(ProduitMedical produitMedicalPatcher,int idProduit,int idFournisseur) throws ProduitInexistantException
         {
-                if(produitsEnStock.containsKey(produit.getIdProduitMedical()))
+                if(fournisseurs.containsKey(idFournisseur))
                 {
-                        produitsEnStock.put(produit.getIdProduitMedical(), produitsEnStock.get(produit.getIdProduitMedical()));
+                        fournisseurs.get(idFournisseur).updateProduit(idProduit,produitMedicalPatcher);
                 }
                 else
                 {
@@ -119,17 +150,16 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void afficherCommande(int idCommande) throws CommandeInexistanteException
+        public Commande getCommande(int idCommande) throws CommandeInexistanteException
         {
                 if(commandes.containsKey(idCommande))
                 {
-                        System.out.println(commandes.get(idCommande).toString());
+                        return commandes.get(idCommande);
                 }
                 else
                 {
                         throw new CommandeInexistanteException();
                 }
-
         }
 
         @Override
@@ -141,31 +171,17 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 }
 
                 return fournisseurs.get(idFournisseur);
-
-
         }
 
         @Override
-        public void getProduit(int idProduit) throws ProduitInexistantException
-        {
-                if(produitsEnStock.containsKey(idProduit))
-                {
-                        System.out.println(produitsEnStock.get(idProduit).toString());
-                }
-                else
-                {
-                        throw new ProduitInexistantException();
-                }
-
-        }
-
-        @Override
-        public void getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException
-        {
-
+        public ProduitMedical getProduitFromCatalogueFournisseur(int idProduit,int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException {
                 if(fournisseurs.containsKey(idFournisseur))
                 {
-                        System.out.println(fournisseurs.get(idFournisseur).getCatalogueFournisseur());
+                        if (!fournisseurs.get(idFournisseur).getCatalogueFournisseur().containsKey(idProduit))
+                        {
+                                throw new ProduitInexistantException();
+                        }
+                        return fournisseurs.get(idFournisseur).getCatalogueFournisseur().get(idProduit);
                 }
                 else
                 {
@@ -174,11 +190,42 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void getPanierCommande(int idCommande) throws CommandeInexistanteException
+        public ProduitMedical getProduitFromStock(int idProduit) throws ProduitInexistantException
+        {
+                for (ProduitMedical produitMedical : stock.keySet())
+                {
+                        if(produitMedical.getIdProduitMedical() == idProduit)
+                        {
+                                return produitMedical;
+                        }
+                        else
+                        {
+                                throw new ProduitInexistantException();
+                        }
+                }
+                return null;
+        }
+
+        @Override
+        public Map<Integer,ProduitMedical> getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException
+        {
+
+                if(fournisseurs.containsKey(idFournisseur))
+                {
+                        return fournisseurs.get(idFournisseur).getCatalogueFournisseur();
+                }
+                else
+                {
+                        throw new FournisseurInexistantException();
+                }
+        }
+
+        @Override
+        public Map<Integer, Integer> getPanierCommande(int idCommande) throws CommandeInexistanteException
         {
                 if(commandes.containsKey(idCommande))
                 {
-                        System.out.println(commandes.get(idCommande).getPanierCommande());
+                        return commandes.get(idCommande).getPanierCommande();
                 }
                 else
                 {
@@ -188,35 +235,54 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void getCommandesDejaPassees()
+        public Collection<Commande> getCommandesDejaPassees()
         {
-                commandes.values().forEach(System.out::println);
+                return commandes.values();
         }
 
         @Override
-        public void getFournisseurs()
+        public Collection<Fournisseur> getFournisseurs()
         {
-                fournisseurs.values().forEach(System.out::println);
+                return fournisseurs.values();
         }
 
         @Override
-        public void getStock()
+        public Collection<ProduitMedical> getStock()
         {
-                produitsEnStock.values().forEach(System.out::println);
+                return stock.keySet();
 
         }
 
         @Override
-        public void getStockProduit(int idProduit) throws ProduitInexistantException
+        public Integer getStockProduit(int idProduit) throws ProduitInexistantException
         {
-                if(produitsEnStock.containsKey(idProduit))
+                if(stock.containsKey(idProduit))
                 {
-                        System.out.println(produitsEnStock.get(idProduit).get());
+                        return stock.get(idProduit);
                 }
                 else
                 {
                         throw new ProduitInexistantException();
                 }
         }
+
+        @Override
+        public Map<ProduitMedical,Integer> getAllProduitsFromPanier(Map<Integer,Integer> panier)
+        {
+                Map<ProduitMedical,Integer> nomProduits = new HashMap<>();
+                for (Map.Entry<Integer, Integer> entry : panier.entrySet())
+                {
+                        for (Fournisseur fournisseur: fournisseurs.values()) {
+                                if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
+                                {
+                                        nomProduits.put(fournisseur.getCatalogueFournisseur().get(entry.getKey()),entry.getValue());
+                                }
+                        }
+                }
+                return nomProduits;
+        }
+
+
+
 
 }

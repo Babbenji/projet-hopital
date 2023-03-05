@@ -1,16 +1,21 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
+import org.springframework.data.annotation.Id;
+
+import javax.annotation.processing.Generated;
 import java.util.Date;
 import java.util.Map;
 
 public class Commande {
 
+    @Id
+    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idCommande;
-    private Map<ProduitMedical,Integer> panierCommande;
+    private Map<Integer,Integer> panierCommande;
     private Date dateCommande;
     private float prixCommande;
 
-    public Commande(Map<ProduitMedical,Integer> panierCommande, Date dateCommande) {
+    public Commande(Map<Integer,Integer> panierCommande, Date dateCommande) {
         this.panierCommande = panierCommande;
         this.dateCommande = dateCommande;
     }
@@ -23,11 +28,11 @@ public class Commande {
         this.idCommande = idCommande;
     }
 
-    public Map<ProduitMedical, Integer> getPanierCommande() {
+    public Map<Integer, Integer> getPanierCommande() {
         return panierCommande;
     }
 
-    public void setPanierCommande(Map<ProduitMedical, Integer> panierCommande) {
+    public void setPanierCommande(Map<Integer, Integer> panierCommande) {
         this.panierCommande = panierCommande;
     }
 
@@ -45,5 +50,14 @@ public class Commande {
 
     public void setPrixCommande(float prixCommande) {
         this.prixCommande = prixCommande;
+    }
+
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "panierCommande=" + panierCommande.toString() +
+                ", dateCommande=" + dateCommande +
+                ", prixCommande=" + prixCommande +
+                '}';
     }
 }

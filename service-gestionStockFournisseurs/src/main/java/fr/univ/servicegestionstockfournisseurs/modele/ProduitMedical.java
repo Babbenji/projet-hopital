@@ -48,4 +48,13 @@ public class ProduitMedical {
     public void setPrixProduitMedical(float prixProduitMedical) {
         this.prixProduitMedical = prixProduitMedical;
     }
+
+    @Override
+    public String toString() {
+        return "ProduitMedical{" +
+                "prixProduitMedical=" + prixProduitMedical +
+                ", nomProduitMedical='" + nomProduitMedical + '\'' +
+                ", descriptionProduitMedical='" + descriptionProduitMedical + '\'' +
+                '}';
+    }
 }
