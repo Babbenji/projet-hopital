@@ -1,5 +1,7 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
+
+
 public class ProduitMedical {
 
     private int idProduitMedical;

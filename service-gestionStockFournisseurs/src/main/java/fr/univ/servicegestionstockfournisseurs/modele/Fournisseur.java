@@ -1,15 +1,10 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
-import org.springframework.data.annotation.Id;
 
-import javax.annotation.processing.Generated;
-import java.util.List;
 import java.util.Map;
 
 public class Fournisseur {
 
-    @Id
-    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idFournisseur;
     private String nomFournisseur;
     private Map<Integer,ProduitMedical> catalogueFournisseur;
