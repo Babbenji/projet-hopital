@@ -28,11 +28,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
 
     @Override
-    public int ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
+    public String ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
         Patient patient =  new Patient(prenom, nom, email, numeroSecu, numeroTel, LocalDate.parse(dateNaissance), genre);
         patientRepository.save(patient);
 
-        return patient.getId_uti();
+        return patient.getNumsecu_pat();
 
     }
 
@@ -110,7 +110,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
     @Override
     public void demanderAnnulation(int idConsultation, String motifAnnulation) {
-        //Generer notif avec message
+        //Generer notif avec message vers le medecin
         System.out.println(motifAnnulation);
     }
 

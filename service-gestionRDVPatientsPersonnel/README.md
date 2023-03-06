@@ -52,6 +52,7 @@ _Service gestion de stock :_
 ````
 
 ````
+
 ### Idées fonctionnalités supplémentaires
 
 **Notification**
@@ -129,3 +130,5 @@ git log
 ### Diagramme de déploiement
 
 à venir
+
+### Commandes 
