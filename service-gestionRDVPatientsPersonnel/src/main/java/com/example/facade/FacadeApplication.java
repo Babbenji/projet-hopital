@@ -12,7 +12,7 @@ public interface FacadeApplication {
     /***
      * Ajouter un patient
      * */
-    public int ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre);
+    public String ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre);
     /***
      * Ajouter un médecin
      * */
