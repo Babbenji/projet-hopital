@@ -1,17 +1,16 @@
 package fr.univ.orleans.miage.serviceauthentification.facade;
 
 
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UtilisateurDejaExistantException;
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.UtilisateurInexistantException;
+import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.*;
+import fr.univ.orleans.miage.serviceauthentification.modele.Role;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 
 import java.util.Collection;
-import java.util.Optional;
 
 public interface FacadeUtilisateur {
 
     /**
-     * Permet de créer un compte utilisateur
+     * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email
      * @param email
      * @param mdp
      * @return Utilisateur
@@ -44,31 +43,33 @@ public interface FacadeUtilisateur {
 
 
     /**
-     * Permet de vérifier si un utilisateur est connecté
-     * @param email
-     * @return
+     * Permet de récupérer la liste des utilisateurs du système
+     * @return Collection<Utilisateur> Liste des utilisateurs
      */
-    boolean isUtilisateurConnected(String email);
+    Collection<Utilisateur> getAllUtilisateurs() throws DonneesIntrouvablesException;
 
     /**
-     * Permet de récupérer la liste des utilisateurs du système
-     * @return Collection<Utilisateur>
-     *     Liste des utilisateurs
-     *     null si aucun utilisateur n'est trouvé
-     *     null si une erreur est survenue
-     *     null si le système est indisponible
+     * Vérifie si le rôle fourni correspond à l'un des rôles définis dans l'énumération de rôles
+     * @param role Rôle à vérifier
+     * @return true si le rôle est valide, false sinon
      */
-    Collection<Utilisateur> getAllUtilisateurs();
-
+     boolean verifierRole(String role);
 
     /**
      * Permet de récupérer la liste des utilisateurs par rôle
-     * @param role
-     * @return Collection<Utilisateur>
-     *     Liste des utilisateurs
-     *     null si aucun utilisateur n'est trouvé
-     *     null si une erreur est survenue
+     * @param role Rôle de l'utilisateur
+     * @return Collection<Utilisateur> Liste des utilisateurs
+     * @throws InformationsFourniesIncorrectesException si erreur de saisie
+     * @throws DonneesIntrouvablesException si aucun utilisateur n'est trouvé
+     * @throws RoleInvalideException si rôle invalide
      */
-    Collection<Utilisateur> getUtilisateursByRole(String role);
+    Collection<Utilisateur> getUtilisateursByRole(String role) throws InformationsFourniesIncorrectesException, DonneesIntrouvablesException, RoleInvalideException;
 
+
+    /**
+     * Permet de modifier le mot de passe d'un utilisateur
+     * @param email email de l'utilisateur
+     * @param nouveauPassword le nouveau mot de passe encodé
+     */
+    void modifierMotDePasse(String email, String nouveauPassword) throws UtilisateurInexistantException;
 }

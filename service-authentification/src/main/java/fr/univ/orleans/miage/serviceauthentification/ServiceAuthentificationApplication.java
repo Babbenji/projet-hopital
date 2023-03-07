@@ -11,9 +11,5 @@ public class ServiceAuthentificationApplication {
         SpringApplication.run(ServiceAuthentificationApplication.class, args);
     }
 
-//    @Bean
-//    public CommandLineRunner init(FacadeUser facadeUser, PasswordEncoder passwordEncoder) {
-//        return args -> facadeUser.inscription("yohan.boichut@gmail.com", passwordEncoder.encode("pass"));
-//    }
 
 }

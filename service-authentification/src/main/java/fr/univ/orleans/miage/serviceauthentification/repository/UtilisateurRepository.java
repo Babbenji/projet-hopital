@@ -1,18 +1,19 @@
 package fr.univ.orleans.miage.serviceauthentification.repository;
 
+import fr.univ.orleans.miage.serviceauthentification.modele.Role;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
-import java.util.Optional;
 
+@Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
 
     Utilisateur findByEmail(String email);
     
     Boolean existsByEmail(String email);
 
-    void deleteByEmail(String email);
-
-    Collection<Utilisateur> findByRole(String role);
+    Collection<Utilisateur> findByRole(@NonNull Role role);
 }

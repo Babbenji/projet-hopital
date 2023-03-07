@@ -6,7 +6,8 @@ public enum Role {
     MEDECIN,
     SECRETAIRE,
     COMPTABLE,
-    ADMIN,
+    ADMIN;
+
 
 }
 
