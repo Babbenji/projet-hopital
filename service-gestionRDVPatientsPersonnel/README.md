@@ -31,18 +31,23 @@ _Service gestion de stock :_
 
 ### API Design - Tableau des URIs
 
-| Méthode | URI                                                           | Description                                                                           |
-|:--------|---------------------------------------------------------------|---------------------------------------------------------------------------------------|
-| POST    | /rdvpatients/medecin/nouveau                                  | Créer un nouvel utilisateur de type médecin                                           |
-| POST    | /rdvpatients/patient/nouveau                                  | Créer un nouvel utilisateur de type patient                                           |
-| PATCH   | /rdvpatients/personnel/modifpatient/{numSecu}/antecedents     | Modifier les antécédents d'un patient                                                 |
-| PATCH   | /rdvpatients/personnel/modifpatient/{numSecu}/medecintraitant | Modifier le médecin traitant d'un patient                                             |
-| PUT     | /rdvpatients/consultation/{id}/confirmer                      | Confirmer une consultation (notification)                                             |
-| GET     | /rdvpatients/medecin/{id}/consultations                       | Voir les consultations d'un medecin                                                   |
-| PUT     | /rdvpatients/consultation/{id}/compterendu	                   | Modifier le compte-rendu d'une consultation                                           |
-| DELETE  | /rdvpatients/consultation/{id}/annuler	                       | Annuler une consultation (notification)                                               |
-| POST    | /rdvpatients/consultation/nouveau	                            | Créer une nouvelle consultation (notification)                                        |
-| POST    | /rdvpatients/consultation/{id}/demandeannulation	             | Le patient fait une demande d'annulation pour une de ses consultations (notification) |
+| Méthode    | URI                                                                  | Description                                                                                         |
+|:-----------|----------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
+| POST       | /rdvpatients/medecin/nouveau                                         | Créer un nouvel utilisateur de type médecin                                                         |
+| POST       | /rdvpatients/patient/nouveau                                         | Créer un nouvel utilisateur de type patient                                                         |
+| PATCH      | /rdvpatients/personnel/modifpatient/{numSecu}/antecedents            | Modifier les antécédents d'un patient                                                               |
+| PATCH      | /rdvpatients/personnel/modifpatient/{numSecu}/medecintraitant        | Modifier le médecin traitant d'un patient                                                           |
+| PATCH      | /rdvpatients/consultation/{id}/confirmer                             | Confirmer une consultation (notification)                                                           |
+| GET        | /rdvpatients/medecin/{id}/consultations                              | Voir les consultations d'un medecin                                                                 |
+| PATCH      | /rdvpatients/consultation/{id}/compterendu	                          | Modifier le compte-rendu d'une consultation                                                         |
+| DELETE     | /rdvpatients/consultation/{id}/annuler	                              | Annuler une consultation (notification)                                                             |
+| POST       | /rdvpatients/consultation/nouveau	                                   | Créer une nouvelle consultation (notification)                                                      |
+| POST??     | /rdvpatients/consultation/{id}/demandeannulation	                    | Le patient fait une demande d'annulation pour une de ses consultations (notification)               |
+| PATCH      | /rdvpatients/consultation/{id}/modifcreneau	                         | Le patient fait une demande de changement de créneau pour une de consultations (notification)       |
+
+//Modifier la date d'un RDV
+
+//Liste de Médicaments utilisés dans un RDV
 
 ### API Design - Détails des URIs
 
