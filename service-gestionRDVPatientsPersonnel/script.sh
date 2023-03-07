@@ -1,0 +1,4 @@
+sudo docker stop service-gestionrdvpatientspersonnel_api_service_1
+sudo docker stop service-gestionrdvpatientspersonnel_mongo_db_1
+sudo docker rm service-gestionrdvpatientspersonnel_api_service_1
+sudo docker rm service-gestionrdvpatientspersonnel_mongo_db_1
