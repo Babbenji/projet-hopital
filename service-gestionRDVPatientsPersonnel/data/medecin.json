@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "63f3e4ad6d1044022387df2c"
+  },
+  "id_uti": 0,
+  "prenom_uti": "David",
+  "nom_uti": "Fichot",
+  "email_uti": "david.fichon@hotmail.fr",
+  "listecreneaux_med": [],
+  "listepatients_med": []
+}]

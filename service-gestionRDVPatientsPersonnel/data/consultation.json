@@ -1,0 +1,17 @@
+[{
+  "_id": {
+    "$oid": "63f3ea01a6eded98cf113939"
+  },
+  "id_cons": 0,
+  "creneau_cons": {},
+  "motif_cons": "Mal de tete",
+  "cr_cons": "Boire plus d eau",
+  "ordo_cons": "Prescrire 2 antibiotique",
+  "medecin_cons": {},
+  "confirm_cons": false,
+  "patient_cons": {},
+  "type_cons": {},
+  "datecrea_cons": {},
+  "datemotif_cons": {},
+  "dateannul_cons": {}
+}]

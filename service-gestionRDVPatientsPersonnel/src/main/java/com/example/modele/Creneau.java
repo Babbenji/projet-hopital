@@ -1,6 +1,10 @@
 package com.example.modele;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
+
+@Document(collection = "creneau")
 
 public class Creneau {
     private LocalDate date_cren;
