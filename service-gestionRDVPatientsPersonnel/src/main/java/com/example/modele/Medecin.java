@@ -1,5 +1,8 @@
 package com.example.modele;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
+@Document(collection = "medecin")
 public class Medecin extends Utilisateur {
     private List<Consultation> listeconsultations_med;
     private List<Patient> listepatients_med;

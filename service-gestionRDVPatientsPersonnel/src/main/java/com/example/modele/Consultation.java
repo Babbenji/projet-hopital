@@ -1,8 +1,11 @@
 package com.example.modele;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDate;
 import java.util.Date;
 
+@Document(collection = "consultation")
 public class Consultation {
     private int id_cons;
     private Creneau creneau_cons;
