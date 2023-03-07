@@ -40,6 +40,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>projet-hopital</finalName>
+
 	</build>
 
 </project>
