@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PatientRepository extends MongoRepository<Patient, Integer>, CrudRepository<Patient,Integer> {
 
-    Patient findByNumsecuPat(String numsecuPat);
+    Patient findByNumSecuPat(String numSecuPat);
     Patient findByIdUti(int idUti);
 
     void removeByIdUti(int idUti);

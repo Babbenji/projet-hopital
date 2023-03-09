@@ -33,13 +33,13 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
     @Override
     public void modifierAntecedentsPatient(String numeroSecu, String antecedents) {
-        Patient pa = patientRepository.findByNumsecuPat(numeroSecu);
+        Patient pa = patientRepository.findByNumSecuPat(numeroSecu);
         pa.setAntecedentsPat(antecedents);
         patientRepository.save(pa);
     }
     @Override
     public void assignerMedecinTraitant(String numeroSecu, String prenomMedecin, String nomMedecin) {
-        Patient p = patientRepository.findByNumsecuPat(numeroSecu);
+        Patient p = patientRepository.findByNumSecuPat(numeroSecu);
         Medecin m = medecinRepository.findByPrenomUtiAndNomUti(prenomMedecin, nomMedecin);
         p.setMedecinTrPat(m);
         m.ajouterPatient(p);
@@ -86,7 +86,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
     @Override
     public Medecin getMedecinTraitant(String numeroSecu) {
-        Patient p = patientRepository.findByNumsecuPat(numeroSecu);
+        Patient p = patientRepository.findByNumSecuPat(numeroSecu);
         return p.getMedecinTrPat();
     }
     @Override

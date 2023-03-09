@@ -2,14 +2,14 @@
   "_id": {
     "$oid": "63f3e862a6eded98cf113937"
   },
-  "id_uti": 1,
-  "prenom_uti": "Martin",
-  "nom_uti": "Gari",
-  "email_uti": "martin.gari@hotmail.fr",
-  "numsecu_pat": "65413218463515",
-  "numtel_pat": "0507896547",
-  "age_pat": "56",
+  "idUti": 1,
+  "prenomUti": "Martin",
+  "nomUti": "Gari",
+  "emailUti": "martin.gari@hotmail.fr",
+  "numSecuPat": "65413218463515",
+  "numTelPat": "0507896547",
+  "dateNaisPat": "56",
   "genre_pat": "Femme",
-  "medecintr_pat": null,
-  "antecedent_pat": "Alergie"
+  "medecinTrPat": null,
+  "antecedentsPat": "Allergie"
 }]
