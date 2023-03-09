@@ -6,6 +6,4 @@ public enum TypeCons {
     HOSPITALISATION,
     SOINS_DIVERS,
     VISITE_MEDICALE
-
-    
 }

@@ -2,45 +2,38 @@ package com.example.modele;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Document(collection = "creneau")
 
 public class Creneau {
-    private LocalDate date_cren;
-    private String heure_cren;
-    private boolean dispo_cren;
+    private Date dateCren;
+    private String heureCren;
+    private boolean dispoCren;
 
-    public Creneau(LocalDate date_cren, String heure_cren) {
-        this.date_cren = date_cren;
-        this.heure_cren = heure_cren;
-        this.dispo_cren=true;
+    public Creneau() {}
+    public Creneau(Date dateCren, String heureCren) {
+        this.dateCren = dateCren;
+        this.heureCren = heureCren;
+        this.dispoCren =true;
     }
 
-    public LocalDate getDate_cren() {
-        return date_cren;
+    public Date getDateCren() {
+        return dateCren;
     }
-
-    public void setDate_cren(LocalDate date_cren) {
-        this.date_cren = date_cren;
+    public void setDateCren(Date dateCren) {
+        this.dateCren = dateCren;
     }
-
-    public String getHeure_cren() {
-        return heure_cren;
+    public String getHeureCren() {
+        return heureCren;
     }
-
-    public void setHeure_cren(String heure_cren) {
-        this.heure_cren = heure_cren;
+    public void setHeureCren(String heureCren) {
+        this.heureCren = heureCren;
     }
-
-    public boolean isDispo_cren() {
-        return dispo_cren;
+    public boolean estDispo() {
+        return dispoCren;
     }
-
-    public void setDispo_cren(boolean dispo_cren) {
-        this.dispo_cren = dispo_cren;
-    }
-
-    public Creneau() {
+    public void setDispoCren(boolean dispoCren) {
+        this.dispoCren = dispoCren;
     }
 }

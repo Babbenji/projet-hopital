@@ -15,22 +15,23 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
 public class Controleur {
+
     @Autowired
     FacadeApplication facadeApplication;
 
     @PostMapping("/medecin/nouveau")
     public ResponseEntity<Medecin> ajouterMedecin(@RequestBody String prenom, @RequestBody String nom, @RequestBody String email) throws AdresseMailDejaUtiliseeException {
         Medecin medecin = facadeApplication.ajouterMedecin(prenom, nom, email);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idMedecin}").buildAndExpand(medecin.getId_uti()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idMedecin}").buildAndExpand(medecin.getIdUti()).toUri();
         return ResponseEntity.created(location).body(medecin);
     }
 
     @PostMapping("/patient/nouveau")
-    public ResponseEntity<Patient> ajouterPatient(@RequestBody String prenom, @RequestBody String nom, @RequestBody String email, @RequestBody String numsecu, @RequestBody String numtel, @RequestBody String datenais, @RequestBody String genre) throws AdresseMailDejaUtiliseeException {
-        Patient nouveauPatient = facadeApplication.ajouterPatient(prenom, nom, email, numsecu, numtel, datenais, genre);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{numSecuPatient}").buildAndExpand(nouveauPatient.getNumsecu_pat()).toUri();
+    public ResponseEntity<Patient> ajouterPatient(@RequestBody String prenom, @RequestBody String nom, @RequestBody String email, @RequestBody String numSecu, @RequestBody String numTel, @RequestBody String dateNais, @RequestBody String genre) throws AdresseMailDejaUtiliseeException {
+        Patient nouveauPatient = facadeApplication.ajouterPatient(prenom, nom, email, numSecu, numTel, dateNais, genre);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{numSecuPatient}").buildAndExpand(nouveauPatient.getNumSecuPat()).toUri();
         return ResponseEntity.created(location).body(nouveauPatient);
     }
 
@@ -59,15 +60,15 @@ public class Controleur {
     }
 
     @PatchMapping("/consultation/{idConsultation}/compterendu")
-    public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation,@RequestBody String compterendu) {
-        facadeApplication.modifierCRConsultation(idConsultation,compterendu);
-        return ResponseEntity.ok().body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+compterendu);
+    public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation,@RequestBody String compteRendu) {
+        facadeApplication.modifierCRConsultation(idConsultation,compteRendu);
+        return ResponseEntity.ok().body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+compteRendu);
     }
     @PostMapping("/consultation/nouveau")
-    public ResponseEntity<Consultation> prendreRDV(@RequestBody String motif, @RequestBody String ordonnance, @RequestBody String dateRDV,@RequestBody String heureRDV, @RequestBody String type, Principal principal) {
+    public ResponseEntity<Consultation> prendreRDV(@RequestBody String motif, @RequestBody String type, @RequestBody String ordonnance, @RequestBody String dateRDV,@RequestBody String heureRDV, Principal principal) {
         Patient patient = facadeApplication.getPatientByEmail(principal.getName());
         Consultation consultation = facadeApplication.prendreRDV(patient, dateRDV, heureRDV, motif, ordonnance, type);
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idConsultation}").buildAndExpand(consultation.getId_cons()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idConsultation}").buildAndExpand(consultation.getIdCons()).toUri();
         return ResponseEntity.created(location).body(consultation);
     }
 

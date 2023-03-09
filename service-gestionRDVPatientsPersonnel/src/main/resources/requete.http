@@ -1,5 +1,5 @@
 ### Cette requete permet de creer un medecin (que pr la secretaire) ###
-POST http://localhost:8080/api/rdvpatients/medecin/nouveau
+POST http://localhost:8080/rdvpatients/medecin/nouveau
 Content-Type: application/json
 
 {
@@ -16,9 +16,9 @@ Content-Type: application/json
   "prenom": "Hind",
   "nom": "HACHEMI",
   "email": "hind.hachemi@etu.univ-orleans.fr",
-  "numsecu": "15",
-  "numtel": "15",
-  "datenais": "22-01-2001",
+  "numSecu": "15",
+  "numTel": "15",
+  "dateNais": "22-01-2001",
   "genre": "Homme"
 }
 
@@ -34,8 +34,9 @@ Content-Type: application/json
 PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/65413218463515/medecintraitant
 Content-Type: application/json
 
-{ "prenom_uti": "Eric",
-  "nom_uti": "DAVID"
+{
+  "prenomMedecin": "Eric",
+  "nomMedecin": "DAVID"
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
@@ -48,24 +49,25 @@ GET http://localhost:8080/rdvpatients/medecin/2/consultations
 PATCH http://localhost:8080/rdvpatients/consultation/7/compterendu
 Content-Type: application/json
 
-{ "cr_cons" : "Rhume nécessitant du repos" }
-
+{
+  "compteRendu" : "Rhume nécessitant du repos"
+}
 
 ### Cette requete permet de prendre un rendez vous pour un patient
 PATCH http://localhost:8080/rdvpatients/consultation/nouveau
 Content-Type: application/json
 
 {
-  "motif_cons": "Douleur au dos",
-  "type_cons": "VISITE_MEDICALE",
-  "ordo_cons": " Doliprane 2 fois par jour",
+  "motif": "Douleur au dos",
+  "type": "VISITE_MEDICALE",
+  "ordonnance": " Doliprane 2 fois par jour",
   "heureRDV": "14H20",
   "dateRDV": "15-07-2022"
 }
 ### Cette requete permet de demander d'annuler un RDV pour un patient
 POST http://localhost:8080/rdvpatients/consultation/5/demandeannulation
 Content-Type: application/json
+
 {
   "motif" : "Imprevu"
 }
-

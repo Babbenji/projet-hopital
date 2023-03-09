@@ -1,57 +1,42 @@
 package com.example.modele;
 
 public class Utilisateur {
-    private int id_uti;
-    private String prenom_uti;
-    private String nom_uti;
-    private String email_uti;
     private static int IDS = 1;
+    private int idUti;
+    private String prenomUti;
+    private String nomUti;
+    private String emailUti;
 
-    public Utilisateur(int id_uti, String prenom_uti, String nom_uti, String email_uti) {
-        this.id_uti = IDS++;
-        this.prenom_uti = prenom_uti;
-        this.nom_uti = nom_uti;
-        this.email_uti = email_uti;
+    public Utilisateur() {}
+    public Utilisateur(String prenomUti, String nomUti, String emailUti) {
+        this.idUti = IDS++;
+        this.prenomUti = prenomUti;
+        this.nomUti = nomUti;
+        this.emailUti = emailUti;
     }
 
-    public int getId_uti() {
-        return id_uti;
+    public int getIdUti() {
+        return idUti;
     }
-
-    public void setId_uti(int id_uti) {
-        this.id_uti = id_uti;
+    public void setIdUti(int idUti) {
+        this.idUti = idUti;
     }
-
-    public String getPrenom_uti() {
-        return prenom_uti;
+    public String getPrenomUti() {
+        return prenomUti;
     }
-
-    public void setPrenom_uti(String prenom_uti) {
-        this.prenom_uti = prenom_uti;
+    public void setPrenomUti(String prenomUti) {
+        this.prenomUti = prenomUti;
     }
-
-    public String getNom_uti() {
-        return nom_uti;
+    public String getNomUti() {
+        return nomUti;
     }
-
-    public void setNom_uti(String nom_uti) {
-        this.nom_uti = nom_uti;
+    public void setNomUti(String nomUti) {
+        this.nomUti = nomUti;
     }
-
-    public String getEmail_uti() {
-        return email_uti;
+    public String getEmailUti() {
+        return emailUti;
     }
-
-    public void setEmail_uti(String email_uti) {
-        this.email_uti = email_uti;
-    }
-
-    public Utilisateur() {
-    }
-
-    public Utilisateur(String prenom_uti, String nom_uti, String email_uti) {
-        this.prenom_uti = prenom_uti;
-        this.nom_uti = nom_uti;
-        this.email_uti = email_uti;
+    public void setEmailUti(String emailUti) {
+        this.emailUti = emailUti;
     }
 }

@@ -4,36 +4,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 @Document(collection = "medecin")
 public class Medecin extends Utilisateur {
-    private List<Consultation> listeconsultations_med;
-    private List<Patient> listepatients_med;
-
+    private List<Consultation> listeConsultationsMed;
+    private List<Patient> listePatientsMed;
+    public Medecin() {}
     public Medecin(String prenom, String nom, String email) {
         super(prenom, nom, email);
     }
-
-    public List<Consultation> getListeconsultations_med() {
-        return listeconsultations_med;
+    public List<Consultation> getListeConsultationsMed() {
+        return listeConsultationsMed;
     }
-
-    public void setListeconsultations_med(List<Consultation> listeconsultations_med) {
-        this.listeconsultations_med = listeconsultations_med;
+    public void setListeConsultationsMed(List<Consultation> listeConsultationsMed) {
+        this.listeConsultationsMed = listeConsultationsMed;
     }
-
-    public List<Patient> getListepatients_med() {
-        return listepatients_med;
+    public List<Patient> getListePatientsMed() {
+        return listePatientsMed;
     }
-
-    public void setListepatients_med(List<Patient> listepatients_med) {
-        this.listepatients_med = listepatients_med;
+    public void setListePatientsMed(List<Patient> listePatientsMed) {
+        this.listePatientsMed = listePatientsMed;
     }
-
     public void ajouterConsultation(Consultation consultation){
-        this.listeconsultations_med.add(consultation);
+        this.listeConsultationsMed.add(consultation);
     }
     public void ajouterPatient(Patient patient){
-        this.listepatients_med.add(patient);
+        this.listePatientsMed.add(patient);
     }
 
-    public Medecin() {
-    }
 }
