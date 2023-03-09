@@ -1,10 +1,8 @@
 package com.example.controleur;
 
-import com.example.exceptions.AdresseMailDejaUtiliseeException;
+import com.example.exceptions.*;
+import com.example.modele.*;
 import com.example.facade.FacadeApplication;
-import com.example.modele.Consultation;
-import com.example.modele.Medecin;
-import com.example.modele.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,30 +15,23 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
 public class Controleur {
     @Autowired
     FacadeApplication facadeApplication;
 
     @PostMapping("/medecin/nouveau")
-    public ResponseEntity<Medecin> ajouterMedecin(@RequestBody Medecin medecin) throws AdresseMailDejaUtiliseeException {
-        int idMedecin = facadeApplication.ajouterMedecin(medecin.getPrenom_uti(), medecin.getNom_uti(),medecin.getEmail_uti());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idMedecin}").buildAndExpand(idMedecin).toUri();
+    public ResponseEntity<Medecin> ajouterMedecin(@RequestBody String prenom, @RequestBody String nom, @RequestBody String email) throws AdresseMailDejaUtiliseeException {
+        Medecin medecin = facadeApplication.ajouterMedecin(prenom, nom, email);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idMedecin}").buildAndExpand(medecin.getId_uti()).toUri();
         return ResponseEntity.created(location).body(medecin);
     }
 
     @PostMapping("/patient/nouveau")
-    public ResponseEntity<Patient> ajouterPatient(@RequestBody Patient patient) throws AdresseMailDejaUtiliseeException {
-        String numSecuPatient = facadeApplication.ajouterPatient(
-                patient.getPrenom_uti(),
-                patient.getNom_uti(),
-                patient.getEmail_uti(),
-                patient.getNumsecu_pat(),
-                patient.getNumtel_pat(),
-                String.valueOf(patient.getDatenais_pat()),
-                patient.getGenre_pat());
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{numSecuPatient}").buildAndExpand(numSecuPatient).toUri();
-        return ResponseEntity.created(location).body(patient);
+    public ResponseEntity<Patient> ajouterPatient(@RequestBody String prenom, @RequestBody String nom, @RequestBody String email, @RequestBody String numsecu, @RequestBody String numtel, @RequestBody String datenais, @RequestBody String genre) throws AdresseMailDejaUtiliseeException {
+        Patient nouveauPatient = facadeApplication.ajouterPatient(prenom, nom, email, numsecu, numtel, datenais, genre);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{numSecuPatient}").buildAndExpand(nouveauPatient.getNumsecu_pat()).toUri();
+        return ResponseEntity.created(location).body(nouveauPatient);
     }
 
     @PatchMapping("/personnel/modif/patient/{numSecuPatient}/antecedents")
@@ -81,9 +72,9 @@ public class Controleur {
     }
 
     // A modifier
-    @PostMapping("/consultation/{idConsultation}/demandeannulation")
-    public ResponseEntity<String> demandeAnnulation(@PathVariable("idConsultation") int idConsultation, @RequestBody String motif) {
-        facadeApplication.demanderAnnulation(idConsultation, motif);
-        return ResponseEntity.ok().body("Demande d'annulation effectué pour la consultation n°"+idConsultation);
+    @PostMapping("/consultation/{idConsultation}/annulation")
+    public ResponseEntity<String> annulationRDV(@PathVariable("idConsultation") int idConsultation, @RequestBody String motif) {
+        facadeApplication.annulerConsultation(idConsultation, motif);
+        return ResponseEntity.ok().body("Annulation de la consultation n°"+idConsultation+" - Motif : "+motif);
     }
 }

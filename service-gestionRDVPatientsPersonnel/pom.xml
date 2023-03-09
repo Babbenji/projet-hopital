@@ -15,7 +15,6 @@
 	<description>service-gestionRDVPatientsPersonnel</description>
 	<properties>
 		<java.version>17</java.version>
-
 	</properties>
 	<dependencies>
 		<dependency>
@@ -41,7 +40,5 @@
 			</plugin>
 		</plugins>
 		<finalName>projet-hopital</finalName>
-
 	</build>
-
 </project>

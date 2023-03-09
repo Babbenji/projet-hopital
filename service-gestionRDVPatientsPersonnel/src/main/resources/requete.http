@@ -1,11 +1,11 @@
 ### Cette requete permet de creer un medecin (que pr la secretaire) ###
-POST http://localhost:8080/rdvpatients/medecin/nouveau
+POST http://localhost:8080/api/rdvpatients/medecin/nouveau
 Content-Type: application/json
 
 {
-  "prenom_uti": "Hind",
-  "nom_uti": "HACHEMI",
-  "email_uti": "hind.hachemi@etu.univ-orleans.fr"
+  "prenom": "Hind",
+  "nom": "HACHEMI",
+  "email": "hind.hachemi@etu.univ-orleans.fr"
 }
 
 ### Cette requete permet de creer un patient (que pr la secretaire) ###
@@ -13,25 +13,25 @@ POST http://localhost:8080/rdvpatients/patient/nouveau
 Content-Type: application/json
 
 {
-  "prenom_uti": "Hind",
-  "nom_uti": "HACHEMI",
-  "email_uti": "hind.hachemi@etu.univ-orleans.fr",
-  "numsecu_pat": "15",
-  "numtel_pat": "15",
-  "datenais_pat": "22-01-2001",
-  "genre_pat": "Homme"
+  "prenom": "Hind",
+  "nom": "HACHEMI",
+  "email": "hind.hachemi@etu.univ-orleans.fr",
+  "numsecu": "15",
+  "numtel": "15",
+  "datenais": "22-01-2001",
+  "genre": "Homme"
 }
 
 ### Cette requete permet d'ajouter les antécédents d'un patient à son profil
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patent/15/antecedents
+PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/65413218463515/antecedents
 Content-Type: application/json
 
 {
-  "antecedents_pat": "Allergique au gluten"
+  "antecedents": "Allergique au gluten"
 }
 
 ### Cette requete permet d'assigner un medecin à un patient
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/medecintraitant
+PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/65413218463515/medecintraitant
 Content-Type: application/json
 
 { "prenom_uti": "Eric",

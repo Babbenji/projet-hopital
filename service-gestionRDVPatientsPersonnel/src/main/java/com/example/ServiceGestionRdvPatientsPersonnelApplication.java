@@ -1,4 +1,4 @@
-package com.example.servicegestionrdvpatientspersonnel;
+package com.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
-
 public class ServiceGestionRdvPatientsPersonnelApplication {
 
 	public static void main(String[] args) {

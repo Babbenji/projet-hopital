@@ -1,10 +1,7 @@
 package com.example.facade;
 
 import com.example.modele.*;
-import com.example.repository.ConsultationRepository;
-import com.example.repository.CreneauRepository;
-import com.example.repository.MedecinRepository;
-import com.example.repository.PatientRepository;
+import com.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,34 +10,29 @@ import java.util.List;
 
 @Component
 public class FacadeApplicationImpl implements FacadeApplication{
-
     @Autowired
     ConsultationRepository consultationRepository;
-
     @Autowired
     CreneauRepository creneauRepository;
-
     @Autowired
     MedecinRepository medecinRepository;
-
     @Autowired
     PatientRepository patientRepository;
 
+    public FacadeApplicationImpl() {}
 
     @Override
-    public String ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
-        Patient patient =  new Patient(prenom, nom, email, numeroSecu, numeroTel, LocalDate.parse(dateNaissance), genre);
-        patientRepository.save(patient);
-
-        return patient.getNumsecu_pat();
-
+    public Medecin ajouterMedecin(String prenom, String nom, String email) {
+        Medecin medecin =  new Medecin(prenom, nom, email);
+        medecinRepository.save(medecin);
+        return medecin;
     }
 
     @Override
-    public int ajouterMedecin(String prenom, String nom, String email) {
-        Medecin medecin =  new Medecin(prenom, nom, email);
-        medecinRepository.save(medecin);
-        return medecin.getId_uti();
+    public Patient ajouterPatient(String prenom, String nom, String email, String numeroSecu, String numeroTel, String dateNaissance, String genre) {
+        Patient patient =  new Patient(prenom, nom, email, numeroSecu, numeroTel, LocalDate.parse(dateNaissance), genre);
+        patientRepository.save(patient);
+        return patient;
     }
 
     @Override
@@ -76,52 +68,36 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Override
     public void modifierCRConsultation(int idConsultation, String compteRendu) {
         Consultation consultation = consultationRepository.findConsultationById_cons(idConsultation);
-
         consultation.setCr_cons(compteRendu);
         consultationRepository.save(consultation);
     }
     @Override
-    public void annulerConsultation(int idConsultation) {
-        Consultation consultation = consultationRepository.findConsultationById_cons( idConsultation);
+    public void annulerConsultation(int idConsultation, String motif) {
+        Consultation consultation = consultationRepository.findConsultationById_cons(idConsultation);
         Creneau creneau = consultation.getCreneau_cons();
-
+        Medecin medecin = consultation.getMedecin_cons();
         creneau.setDispo_cren(true);
         consultationRepository.removeById_cons(idConsultation);
-
+        //Envoyer notif à Medecin(email+motif)
     }
-
-
-//Si le creneau existe déjà, erreur : a faire
     @Override
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) {
         Creneau creneau = new Creneau(LocalDate.parse(dateRDV), heureRDV);
         creneau.setDispo_cren(false);
         creneauRepository.save(creneau);
-
         Medecin medecin = getMedecinTraitant(patient.getNumsecu_pat());
-
         Consultation consultation = new Consultation(creneau, motif, ordonnance, medecin, patient, TypeCons.valueOf(type));
         medecin.ajouterConsultation(consultation);
         consultationRepository.save(consultation);
         medecinRepository.save(medecin);
-
         return consultation;
     }
-
-    @Override
-    public void demanderAnnulation(int idConsultation, String motifAnnulation) {
-        //Generer notif avec message vers le medecin
-        System.out.println(motifAnnulation);
-    }
-
-
 
     @Override
     public Medecin getMedecinTraitant(String numeroSecu) {
         Patient p = patientRepository.findByNumsecu_pat(numeroSecu);
         return p.getMedecintr_pat();
     }
-
     @Override
     public void deleteConsultationByID(int idConsultation) {
         consultationRepository.removeById_cons(idConsultation);
@@ -134,7 +110,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
     public void deletePatientByID(int idPatient) {
         patientRepository.removeById_cons(idPatient);
     }
-
     @Override
     public Patient getPatientByEmail(String email) {
         return patientRepository.findPatientByEmail_uti(email);
