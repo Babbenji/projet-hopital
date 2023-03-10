@@ -1,5 +1,3 @@
-FROM openjdk:17-jdk-alpine
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} service-gestionStockFournisseurs.jar
-EXPOSE 8082
-ENTRYPOINT ["java","-jar","/service-gestionstockfournisseurs.jar"]
+FROM openjdk:17
+ADD target/projet-hopital.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
