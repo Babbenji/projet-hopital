@@ -1,10 +1,14 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.annotation.processing.Generated;
 import java.util.Date;
 import java.util.Map;
+
+@Document(collection = "commande")
 
 public class Commande {
 
@@ -13,7 +17,7 @@ public class Commande {
     private int idCommande;
     private Map<Integer,Integer> panierCommande;
     private Date dateCommande;
-    private float prixCommande;
+    private Double prixCommande;
 
     public Commande(Map<Integer,Integer> panierCommande, Date dateCommande) {
         this.panierCommande = panierCommande;
@@ -44,11 +48,11 @@ public class Commande {
         this.dateCommande = dateCommande;
     }
 
-    public float getPrixCommande() {
+    public Double getPrixCommande() {
         return prixCommande;
     }
 
-    public void setPrixCommande(float prixCommande) {
+    public void setPrixCommande(Double prixCommande) {
         this.prixCommande = prixCommande;
     }
 

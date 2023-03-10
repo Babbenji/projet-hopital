@@ -61,11 +61,10 @@ public class ControlleurService {
     {
         String identifiant = authentication.getName();
         try {
-            facadeServiceGestionStock.ajouterFournisseur(fournisseur);
+            facadeServiceGestionStock.ajouterFournisseur(fournisseur.getNomFournisseur(), fournisseur.getCatalogueFournisseur());
             return ResponseEntity.ok("Fournisseur ajouté");
         } catch (FournisseurDejaExistantException e) {
-            facadeServiceGestionStock.ajouterFournisseur(fournisseur);
-            return ResponseEntity.ok("Fournisseur déjà existant");
+            return ResponseEntity.badRequest().body("Fournisseur déjà existant");
         }
     }
 

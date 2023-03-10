@@ -1,8 +1,10 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
 
-import java.util.Map;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
+@Document(collection = "fournisseur")
 public class Fournisseur {
 
     private int idFournisseur;

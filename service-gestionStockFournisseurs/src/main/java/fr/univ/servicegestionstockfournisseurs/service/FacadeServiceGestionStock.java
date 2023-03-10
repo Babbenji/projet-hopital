@@ -12,7 +12,7 @@ import java.util.Map;
 public interface FacadeServiceGestionStock {
     void passerCommande();
 
-    void ajouterFournisseur(Fournisseur fournisseur) throws FournisseurDejaExistantException;
+    void ajouterFournisseur( String nomFournisseur, Map<Integer,ProduitMedical> catalogueFournisseur) throws FournisseurDejaExistantException;
 
     void ajouterProduitPanier(int idProduit) throws ProduitDejaExistantException;
 

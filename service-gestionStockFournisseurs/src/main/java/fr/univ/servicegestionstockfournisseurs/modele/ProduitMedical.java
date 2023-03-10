@@ -1,18 +1,20 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
 
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "produitMedical")
 public class ProduitMedical {
 
     private int idProduitMedical;
 
-    private float prixProduitMedical;
+    private Double prixProduitMedical;
 
     private String nomProduitMedical;
 
     private String descriptionProduitMedical;
 
-    public ProduitMedical(int idProduitMedical, float prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical) {
+    public ProduitMedical(int idProduitMedical, Double prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical) {
         this.idProduitMedical = idProduitMedical;
         this.prixProduitMedical = prixProduitMedical;
         this.nomProduitMedical = nomProduitMedical;
@@ -43,11 +45,11 @@ public class ProduitMedical {
         this.descriptionProduitMedical = descriptionProduitMedical;
     }
 
-    public float getPrixProduitMedical() {
+    public Double getPrixProduitMedical() {
         return prixProduitMedical;
     }
 
-    public void setPrixProduitMedical(float prixProduitMedical) {
+    public void setPrixProduitMedical(Double prixProduitMedical) {
         this.prixProduitMedical = prixProduitMedical;
     }
 
