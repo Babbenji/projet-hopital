@@ -8,6 +8,7 @@ import java.util.Map;
 public class Fournisseur {
 
     private int idFournisseur;
+    private static int IDS = 1;
     private String nomFournisseur;
     private Map<Integer,ProduitMedical> catalogueFournisseur;
 
@@ -15,6 +16,7 @@ public class Fournisseur {
     public Fournisseur(String nomFournisseur, Map<Integer,ProduitMedical> catalogueFournisseur) {
         this.nomFournisseur = nomFournisseur;
         this.catalogueFournisseur = catalogueFournisseur;
+        this.idFournisseur = IDS++;
     }
 
     public int getIdFournisseur() {

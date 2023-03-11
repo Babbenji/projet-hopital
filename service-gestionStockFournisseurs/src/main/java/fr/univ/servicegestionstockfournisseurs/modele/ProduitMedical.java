@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class ProduitMedical {
 
     private int idProduitMedical;
+    private static int IDS = 1;
 
     private Double prixProduitMedical;
 
@@ -14,11 +15,25 @@ public class ProduitMedical {
 
     private String descriptionProduitMedical;
 
-    public ProduitMedical(int idProduitMedical, Double prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical) {
-        this.idProduitMedical = idProduitMedical;
+    private int stockProduitMedical;
+
+
+
+    public ProduitMedical( Double prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical, int stockProduitMedical) {
+        this.idProduitMedical = IDS++;
         this.prixProduitMedical = prixProduitMedical;
         this.nomProduitMedical = nomProduitMedical;
         this.descriptionProduitMedical = descriptionProduitMedical;
+        this.stockProduitMedical = stockProduitMedical;
+
+    }
+
+    public int getStockProduitMedical() {
+        return stockProduitMedical;
+    }
+
+    public void setStockProduitMedical(int stockProduitMedical) {
+        this.stockProduitMedical = stockProduitMedical;
     }
 
     public int getIdProduitMedical() {

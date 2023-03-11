@@ -13,4 +13,5 @@ public interface ProduitMedicalRepository extends MongoRepository<ProduitMedical
     ProduitMedical findByIdProduitMedical(int idProduitMedical);
     boolean existsByIdProduitMedical(int idProduitMedical);
     void deleteByIdProduitMedical(int idProduitMedical);
+    ProduitMedical findProduitMedicalByNomProduitMedical(String nomProduit);
 }

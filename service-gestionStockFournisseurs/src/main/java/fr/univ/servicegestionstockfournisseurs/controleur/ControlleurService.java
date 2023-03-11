@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -68,11 +67,12 @@ public class ControlleurService {
         }
     }
 
-    @PostMapping(value = "/panier/ajouterProduitPanier")
-    public ResponseEntity<String> addProduitPanier(@RequestParam int id, Authentication authentication) throws ProduitDejaExistantException {
+    @PostMapping(value = "/panier/{idPanier}/ajouterProduitPanier")
+    public ResponseEntity<String> addProduitPanier(@PathVariable ("idPanier") int idPanier, @RequestBody ProduitMedical produitMedical, Authentication authentication) throws ProduitDejaExistantException {
         try {
             String identifiant = authentication.getName();
-            facadeServiceGestionStock.ajouterProduitPanier(id);
+            ProduitMedical p = facadeServiceGestionStock.getProduitMedicaleByNom(produitMedical.getNomProduitMedical());
+            facadeServiceGestionStock.ajouterProduitPanier(idPanier, produitMedical);
             return ResponseEntity.ok("Produit ajouté au panier");
         }catch (ProduitDejaExistantException e) {
             return ResponseEntity.badRequest().body("Produit déjà existant");
@@ -80,11 +80,11 @@ public class ControlleurService {
     }
 
     @DeleteMapping(value = "/panier/supprimerProduitPanier")
-    public ResponseEntity<String> deleteProduitPanier(@RequestParam int id, Authentication authentication)
+    public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idPanier") int idPanier, @RequestParam int idProduit, Authentication authentication)
     {
         try {
             String identifiant = authentication.getName();
-            facadeServiceGestionStock.supprimerProduitPanier(id);
+            facadeServiceGestionStock.supprimerProduitPanier(idPanier, idProduit);
             return ResponseEntity.ok("Produit supprimé du panier");
         } catch (ProduitInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant dans panier");
@@ -197,12 +197,12 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/stock/{idProduit}")
-    public ResponseEntity<String> getProduitFromStock(@PathVariable int idProduit, Authentication authentication)
+    public ResponseEntity<Integer> getStockdeProduit(@PathVariable int idProduit, Authentication authentication)
     {
         try {
             String identifiant = authentication.getName();
-            ProduitMedical produitMedical = facadeServiceGestionStock.getProduitFromStock(idProduit);
-            return ResponseEntity.ok(produitMedical.toString());
+            int nbProduitStock = facadeServiceGestionStock.getStockProduit(idProduit);
+            return ResponseEntity.ok(nbProduitStock);
         } catch (ProduitInexistantException e) {
             return ResponseEntity.notFound().build();
         }
@@ -221,14 +221,13 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/commandes/{id}/produits")
-    public ResponseEntity<String> getProduitsCommande(@PathVariable int id, Authentication authentication)
+    public ResponseEntity<String> getProduitsCommande(@PathVariable int idPanier, Authentication authentication)
     {
         try {
             String identifiant = authentication.getName();
-            Map<Integer,Integer> produits = facadeServiceGestionStock.getPanierCommande(id);
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(produits).toString());
-        } catch (CommandeInexistanteException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idPanier).toString());
+        } catch (PanierInexistantException e) {
+            throw new RuntimeException(e);
         }
     }
 

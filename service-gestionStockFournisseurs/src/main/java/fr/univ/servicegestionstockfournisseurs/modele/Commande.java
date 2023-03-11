@@ -12,16 +12,16 @@ import java.util.Map;
 
 public class Commande {
 
-    @Id
-    @Generated(value = "org.hibernate.id.IdentityGenerator")
+//    @Id
+//    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idCommande;
-    private Map<Integer,Integer> panierCommande;
+    private static int IDS = 1;
     private Date dateCommande;
     private Double prixCommande;
 
-    public Commande(Map<Integer,Integer> panierCommande, Date dateCommande) {
-        this.panierCommande = panierCommande;
+    public Commande( Date dateCommande) {
         this.dateCommande = dateCommande;
+        this.idCommande = IDS++;
     }
 
     public int getIdCommande() {
@@ -30,14 +30,6 @@ public class Commande {
 
     public void setIdCommande(int idCommande) {
         this.idCommande = idCommande;
-    }
-
-    public Map<Integer, Integer> getPanierCommande() {
-        return panierCommande;
-    }
-
-    public void setPanierCommande(Map<Integer, Integer> panierCommande) {
-        this.panierCommande = panierCommande;
     }
 
     public Date getDateCommande() {
@@ -59,7 +51,6 @@ public class Commande {
     @Override
     public String toString() {
         return "Commande{" +
-                "panierCommande=" + panierCommande.toString() +
                 ", dateCommande=" + dateCommande +
                 ", prixCommande=" + prixCommande +
                 '}';

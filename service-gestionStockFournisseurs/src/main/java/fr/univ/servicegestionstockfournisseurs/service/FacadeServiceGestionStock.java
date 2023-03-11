@@ -6,7 +6,6 @@ import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public interface FacadeServiceGestionStock {
@@ -14,7 +13,7 @@ public interface FacadeServiceGestionStock {
 
     void ajouterFournisseur( String nomFournisseur, Map<Integer,ProduitMedical> catalogueFournisseur) throws FournisseurDejaExistantException;
 
-    void ajouterProduitPanier(int idProduit) throws ProduitDejaExistantException;
+    void ajouterProduitPanier(int idPanier, ProduitMedical produitMedical) throws ProduitDejaExistantException;
 
 
     void annulerCommande(int idCommande) throws CommandeInexistanteException;
@@ -23,7 +22,7 @@ public interface FacadeServiceGestionStock {
 
     void supprimerProduitFromCatalogue(int idProduit,int idFournisseur) throws ProduitInexistantException;
 
-    void supprimerProduitPanier(int idProduit) throws ProduitInexistantException;
+    void supprimerProduitPanier(int idPanier, int idProduit) throws ProduitInexistantException;
 
     void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
 
@@ -35,11 +34,10 @@ public interface FacadeServiceGestionStock {
 
     ProduitMedical getProduitFromCatalogueFournisseur(int idProduit,int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException;
 
-    ProduitMedical getProduitFromStock(int idProduit) throws ProduitInexistantException;
+    int getStockProduit(int idProduit) throws ProduitInexistantException;
 
     Map<Integer,ProduitMedical> getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException;
 
-    Map<Integer,Integer> getPanierCommande(int idCommande) throws CommandeInexistanteException;
 
     Collection<Commande> getCommandesDejaPassees();
 
@@ -47,8 +45,8 @@ public interface FacadeServiceGestionStock {
 
     Collection<ProduitMedical> getStock();
 
-    Integer getStockProduit(int idProduit) throws ProduitInexistantException;
 
-    Map<ProduitMedical,Integer> getAllProduitsFromPanier(Map<Integer,Integer> panierCommande);
+    ProduitMedical getProduitMedicaleByNom(String nomProduit);
 
+    Map<ProduitMedical, Integer> getAllProduitsFromPanier(int idPanier) throws PanierInexistantException;
 }
