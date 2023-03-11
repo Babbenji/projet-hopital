@@ -1,0 +1,40 @@
+### Endpoint for sending an email
+POST http://localhost:8080/api/v1/notif/send-email
+Content-Type: application/json
+
+{
+  "destinataire": "rachida.el-ouariachi@etu.univ-orleans.fr",
+  "objet": "Test du service de messagerie du micro-service Hopital (M2 MIAGE)",
+  "contenu": "Bonjour, ceci est un e-mail de test pour vérifier que notre service de messagerie fonctionne correctement.\n\nCordialement, \n\nDes étudiants en M2 MIAGE de l'Université d'Orléans."
+
+}
+
+
+### Endpoint for sending an email
+POST http://localhost:8080/api/v1/notif/send-email
+Content-Type: application/json
+
+{
+  "destinataire": "noreply.hopital@gmail.com",
+  "objet": "Test Email Microservice",
+  "contenu": "Bonjour, ceci est un email de test. Le microservice de messagerie fonctionne."
+}
+
+### Endpoint for sending an push
+POST http://localhost:8080/api/v1/notif/send-push
+Content-Type: application/json
+
+{
+  "token": "token de l'appareil",
+  "titre": "Test envoi de push",
+  "message": "Bonjour, ceci est un push de test. Le microservice de messagerie fonctionne."
+}
+
+
+### Endpoint for getting all the emails
+GET http://localhost:8080/api/v1/notif/emails
+
+### Endpoint for getting all the pushes
+GET http://localhost:8080/api/v1/notif/pushes
+
+
