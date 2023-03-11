@@ -1,20 +1,20 @@
 package fr.univ.orleans.miage.servicenotification.modele;
 
-
-
 import jakarta.persistence.*;
-import org.hibernate.annotations.Type;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "email_message")
+@Table(name = "emails_envoyes")
 public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+
+    @NotNull
+    @jakarta.validation.constraints.Email
     @Column(name = "destinataire")
     private String destinataire;
 

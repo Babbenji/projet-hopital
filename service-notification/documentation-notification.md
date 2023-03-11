@@ -145,6 +145,21 @@ docker ps
 # Se connecter au serveur de base de données
 docker exec -it postgres psql -U postgres
 
+# Afficher les bases de données
+\l
+
+# Sélectionner une base de données
+\c postgresbd
+
+# Afficher la liste des tables de la base de données
+\dt
+
+# Afficher la description d'une table
+\d <table name>
+
+# Afficher les données d'une table
+SELECT * FROM <table name>;
+
 # Créer la base de données
 CREATE DATABASE postgresbd;
 
