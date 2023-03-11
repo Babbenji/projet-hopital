@@ -10,10 +10,10 @@ import java.util.List;
 
 @Repository
 public interface MedecinRepository extends MongoRepository<Medecin, Integer>, CrudRepository<Medecin,Integer> {
-    Medecin findByPrenomUtiAndNomUti(String prenomUti, String nomUti);
-    Medecin findByIdUti(int idUti);
-    List<Consultation> getByIdUti(int idUti);
-    void removeByIdUti(int idUti);
+    Medecin findByPrenomAndNom(String prenom, String nom);
+    Medecin findById(int id);
+    List<Consultation> getById(int id);
+    void removeById(int id);
 
 
 

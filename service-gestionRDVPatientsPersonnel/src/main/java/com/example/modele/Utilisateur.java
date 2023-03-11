@@ -2,41 +2,37 @@ package com.example.modele;
 
 public class Utilisateur {
     private static int IDS = 1;
-    private int idUti;
-    private String prenomUti;
-    private String nomUti;
-    private String emailUti;
+    private int id;
+    private String prenom;
+    private String nom;
+    private String email;
 
-    public Utilisateur() {}
-    public Utilisateur(String prenomUti, String nomUti, String emailUti) {
-        this.idUti = IDS++;
-        this.prenomUti = prenomUti;
-        this.nomUti = nomUti;
-        this.emailUti = emailUti;
+    public Utilisateur(String prenom, String nom, String email) {
+        this.id = IDS++;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.email = email;
     }
 
-    public int getIdUti() {
-        return idUti;
+    public int getId() {
+        return id;
     }
-    public void setIdUti(int idUti) {
-        this.idUti = idUti;
+    public String getPrenom() {
+        return prenom;
     }
-    public String getPrenomUti() {
-        return prenomUti;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
-    public void setPrenomUti(String prenomUti) {
-        this.prenomUti = prenomUti;
+    public String getNom() {
+        return nom;
     }
-    public String getNomUti() {
-        return nomUti;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
-    public void setNomUti(String nomUti) {
-        this.nomUti = nomUti;
+    public String getEmail() {
+        return email;
     }
-    public String getEmailUti() {
-        return emailUti;
-    }
-    public void setEmailUti(String emailUti) {
-        this.emailUti = emailUti;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

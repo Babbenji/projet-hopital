@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ConsultationRepository extends MongoRepository<Consultation, Integer>, CrudRepository<Consultation,Integer> {
-    Consultation findConsultationByIdCons(int idCons);
-    void removeByIdCons(int idCons);
-
+    Consultation findConsultationById(int id);
+    void removeConsultationById(int id);
 }

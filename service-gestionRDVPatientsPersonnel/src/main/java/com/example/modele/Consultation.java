@@ -1,111 +1,105 @@
 package com.example.modele;
 
-import org.springframework.cglib.core.Local;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Document(collection = "consultation")
 public class Consultation {
     private static int IDS = 1;
-    private int idCons;
-    private Creneau creneauCons;
-    private TypeCons typeCons;
-    private String motifCons;
-    private String compteRenduCons;
-    private String ordoCons;
-    private boolean confirmCons;
-    private Medecin medecinCons;
-    private Patient patientCons;
-    private Date dateCreaCons;
-    private Date dateModifCons;
-    private Date dateAnnulCons;
-
-    public Consultation() {}
-    public Consultation(Creneau creneauCons, String motifCons, TypeCons typeCons, String ordoCons, Medecin medecinCons, Patient patientCons) {
-        this.idCons=IDS++;
-        this.creneauCons = creneauCons;
-        this.motifCons = motifCons;
-        this.typeCons = typeCons;
-        this.ordoCons = ordoCons;
-        this.medecinCons = medecinCons;
-        this.patientCons = patientCons;
-        this.dateCreaCons = Date.from(Instant.now());
-        this.dateModifCons = Date.from(Instant.now());
+    private int id;
+    private Creneau creneau;
+    private TypeCons type;
+    private String motif;
+    private String compteRendu;
+    private String ordonnance;
+    private boolean confirmation;
+    private int idMedecin;
+    private int idPatient;
+    private String dateCreation;
+    private String dateModification;
+    private String dateAnnulation;
+    public Consultation(Creneau creneau, String motif, TypeCons type, String ordonnance, int idMedecin, int idPatient) {
+        this.id=IDS++;
+        this.creneau = creneau;
+        this.type = type;
+        this.motif = motif;
+        this.compteRendu =null;
+        this.ordonnance = ordonnance;
+        this.confirmation = false;
+        this.idMedecin = idMedecin;
+        this.idPatient = idPatient;
+        this.dateCreation = LocalDate.now().toString();
+        this.dateModification = LocalDate.now().toString();
+        this.dateAnnulation = null;
     }
-
-    public int getIdCons() {
-        return idCons;
+    public int getId() {
+        return id;
     }
-    public void setIdCons(int idCons) {
-        this.idCons = idCons;
+    public Creneau getCreneau() {
+        return creneau;
     }
-    public Creneau getCreneauCons() {
-        return creneauCons;
+    public void setCreneau(Creneau creneau) {
+        this.creneau = creneau;
     }
-    public void setCreneauCons(Creneau creneauCons) {
-        this.creneauCons = creneauCons;
+    public String getMotif() {
+        return motif;
     }
-    public String getMotifCons() {
-        return motifCons;
+    public void setMotif(String motif) {
+        this.motif = motif;
     }
-    public void setMotifCons(String motifCons) {
-        this.motifCons = motifCons;
+    public String getCompteRendu() {
+        return compteRendu;
     }
-    public String getCompteRenduCons() {
-        return compteRenduCons;
+    public void setCompteRendu(String compteRendu) {
+        this.compteRendu = compteRendu;
     }
-    public void setCompteRenduCons(String compteRenduCons) {
-        this.compteRenduCons = compteRenduCons;
+    public String getOrdonnance() {
+        return ordonnance;
     }
-    public String getOrdoCons() {
-        return ordoCons;
+    public void setOrdonnance(String ordonnance) {
+        this.ordonnance = ordonnance;
     }
-    public void setOrdoCons(String ordoCons) {
-        this.ordoCons = ordoCons;
+    public int getIdMedecin() {
+        return idMedecin;
     }
-    public Medecin getMedecinCons() {
-        return medecinCons;
-    }
-    public void setMedecinCons(Medecin medecinCons) {
-        this.medecinCons = medecinCons;
+    public void setIdMedecin(int idMedecin) {
+        this.idMedecin = idMedecin;
     }
     public boolean estConfirme() {
-        return confirmCons;
+        return confirmation;
     }
-    public void setConfirmCons(boolean confirmCons) {
-        this.confirmCons = confirmCons;
+    public void setConfirmation(boolean confirmation) {
+        this.confirmation = confirmation;
     }
-    public Patient getPatientCons() {
-        return patientCons;
+    public int getIdPatient() {
+        return idPatient;
     }
-    public void setPatientCons(Patient patientCons) {
-        this.patientCons = patientCons;
+    public void setPatient(int idPatient) {
+        this.idPatient = idPatient;
     }
-    public TypeCons getTypeCons() {
-        return typeCons;
+    public TypeCons getType() {
+        return type;
     }
-    public void setTypeCons(TypeCons typeCons) {
-        this.typeCons = typeCons;
+    public void setType(TypeCons type) {
+        this.type = type;
     }
-    public Date getDateCreaCons() {
-        return dateCreaCons;
+    public String getDateCreation() {
+        return dateCreation;
     }
-    public void setDateCreaCons(Date dateCreaCons) {
-        this.dateCreaCons = dateCreaCons;
+    public void setDateCreation(String dateCreation) {
+        this.dateCreation = dateCreation;
     }
-    public Date getDateModifCons() {
-        return dateModifCons;
+    public String getDateModification() {
+        return dateModification;
     }
-    public void setDateModifCons(Date dateModifCons) {
-        this.dateModifCons = dateModifCons;
+    public void setDateModification(String dateModification) {
+        this.dateModification = dateModification;
     }
-    public Date getDateAnnulCons() {
-        return dateAnnulCons;
+    public String getDateAnnulation() {
+        return dateAnnulation;
     }
-    public void setDateAnnulCons(Date dateAnnulCons) {
-        this.dateAnnulCons = dateAnnulCons;
+    public void setDateAnnulation(String dateAnnulation) {
+        this.dateAnnulation = dateAnnulation;
     }
 }

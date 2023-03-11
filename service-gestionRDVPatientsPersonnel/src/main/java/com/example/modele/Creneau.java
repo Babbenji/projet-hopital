@@ -1,39 +1,41 @@
 package com.example.modele;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.Date;
-
 @Document(collection = "creneau")
-
 public class Creneau {
-    private Date dateCren;
-    private String heureCren;
-    private boolean dispoCren;
-
-    public Creneau() {}
-    public Creneau(Date dateCren, String heureCren) {
-        this.dateCren = dateCren;
-        this.heureCren = heureCren;
-        this.dispoCren =true;
+    private String date;
+    private String heure;
+    private boolean disponibilite;
+    public Creneau(String date, String heure) {
+        this.date = date;
+        this.heure = heure;
+        this.disponibilite =true;
     }
-
-    public Date getDateCren() {
-        return dateCren;
+    public String getDate() {
+        return date;
     }
-    public void setDateCren(Date dateCren) {
-        this.dateCren = dateCren;
+    public void setDate(String date) {
+        this.date = date;
     }
-    public String getHeureCren() {
-        return heureCren;
+    public String getHeure() {
+        return heure;
     }
-    public void setHeureCren(String heureCren) {
-        this.heureCren = heureCren;
+    public void setHeure(String heure) {
+        this.heure = heure;
     }
     public boolean estDispo() {
-        return dispoCren;
+        return disponibilite;
     }
-    public void setDispoCren(boolean dispoCren) {
-        this.dispoCren = dispoCren;
+    public void setDisponibilite(boolean disponibilite) {
+        this.disponibilite = disponibilite;
+    }
+
+    @Override
+    public String toString() {
+        return "Creneau{" +
+                "date='" + date + '\'' +
+                ", heure='" + heure + '\'' +
+                ", disponibilite=" + disponibilite +
+                '}';
     }
 }
