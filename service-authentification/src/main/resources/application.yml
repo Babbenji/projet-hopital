@@ -10,8 +10,13 @@ server:
 spring:
   application:
     name: service-auth
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres_auth
+    url: jdbc:postgresql://localhost:5432/bdd_auth
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

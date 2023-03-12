@@ -1,0 +1,75 @@
+##################   APPLICATION   ###############
+# configuration du serveur d'écoute de l'application
+server:
+  port: 8082
+# configuration de l'application spring boot
+spring:
+  application:
+    name: service-notif
+
+##################   CONSUL   ######################
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+
+##################   RABBIT MQ   ######################
+  rabbitmq:
+    host: localhost
+    port: 15672
+    username: guest
+    password: guest
+    exchange: user.exchange
+    queue: user.queue
+    routingkey: user.routingkey
+
+##################   BASE DE DONNEES   ###############
+
+# configuration de la base de données PostgreSQL
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/bdd_notif
+    username: postgres
+    password: postgres
+
+# JPA config Allows Hibernate to generate SQL optimized for a particular DBMS
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+##################   EMAIL   ######################
+
+# configuration de l'envoi de mail avec gmail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    # version variable d'environnement
+    #username: ${EMAIL}
+    #password: ${PASSWORD}subject
+    # version directe et sécurisée par un mot de passe d'application gmail
+    username: noreply.hopital@gmail.com
+    password: iytmgdoiclzvqbzw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            #starttls:
+            #required: true
+          smtp:
+            ssl:
+              trust: smtp.gmail.com
+
+##################   DEBUG   ######################
+
+  main:
+    banner-mode: off
+#logging.level.org.springframework: DEBUG
+#logging.level.org.hibernate: DEBUG
+#logging.level.org.hibernate.SQL: DEBUG

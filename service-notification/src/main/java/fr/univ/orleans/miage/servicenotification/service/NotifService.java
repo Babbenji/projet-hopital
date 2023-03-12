@@ -1,10 +1,10 @@
 package fr.univ.orleans.miage.servicenotification.service;
 
-import fr.univ.orleans.miage.servicenotification.modele.Push;
+import fr.univ.orleans.miage.servicenotification.modele.Notif;
 
 import java.util.List;
 
-public interface PushService {
+public interface NotifService {
 
     /**
      * Envoie une notification push
@@ -17,7 +17,7 @@ public interface PushService {
 
     /**
      * Récupère toutes les notifications push envoyées
-     * @return List<Push> liste de toutes les notifications envoyées
+     * @return List<Notif> liste de toutes les notifications envoyées
      */
-    List<Push> getAllNotifPush();
+    List<Notif> getAllNotifPush();
 }

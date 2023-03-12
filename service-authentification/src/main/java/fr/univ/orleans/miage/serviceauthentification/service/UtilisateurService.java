@@ -1,13 +1,12 @@
-package fr.univ.orleans.miage.serviceauthentification.facade;
+package fr.univ.orleans.miage.serviceauthentification.service;
 
 
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.*;
-import fr.univ.orleans.miage.serviceauthentification.modele.Role;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 
 import java.util.Collection;
 
-public interface FacadeUtilisateur {
+public interface UtilisateurService {
 
     /**
      * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email

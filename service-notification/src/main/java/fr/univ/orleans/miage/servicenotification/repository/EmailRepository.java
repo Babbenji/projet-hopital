@@ -5,9 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Repository
-public interface EmailRepository extends JpaRepository<Email, Long>, Serializable {
+public interface EmailRepository extends JpaRepository<Email, UUID>, Serializable {
 //
 //    Email findByDestinataire(String destinataire);
 //

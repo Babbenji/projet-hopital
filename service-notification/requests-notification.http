@@ -20,21 +20,21 @@ Content-Type: application/json
   "contenu": "Bonjour, ceci est un email de test. Le microservice de messagerie fonctionne."
 }
 
-### Endpoint for sending an push
-POST http://localhost:8080/api/v1/notif/send-push
+### Endpoint for sending an notif
+POST http://localhost:8080/api/v1/notif/push/send-notif
 Content-Type: application/json
 
 {
   "token": "token de l'appareil",
-  "titre": "Test envoi de push",
-  "message": "Bonjour, ceci est un push de test. Le microservice de messagerie fonctionne."
+  "titre": "Test envoi de notif",
+  "message": "Bonjour, ceci est un notif de test. Le microservice de messagerie fonctionne."
 }
 
 
 ### Endpoint for getting all the emails
 GET http://localhost:8080/api/v1/notif/emails
 
-### Endpoint for getting all the pushes
-GET http://localhost:8080/api/v1/notif/pushes
+### Endpoint for getting all the notifs
+GET http://localhost:8080/api/v1/notif/push/notifs
 
 

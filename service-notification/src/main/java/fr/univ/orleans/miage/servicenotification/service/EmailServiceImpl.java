@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -21,27 +20,24 @@ public class EmailServiceImpl implements EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    /**
-     * Envoie un email à un destinataire et l'enregistre dans la base de données Postgres
-     * @param destinataire
-     * @param objet
-     * @param contenu
-     */
     @Override
-    public void envoyerEmail(String destinataire, String objet, String contenu) {
+    public void envoyerEmail(Email email) {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply.hopital@gmail.com");
-        message.setTo(destinataire);
-        message.setSubject(objet);
-        message.setText(contenu);
+        message.setTo(email.getDestinataire());
+        message.setSubject(email.getObjet());
+        message.setText(email.getContenu());
 
         this.javaMailSender.send(message);
-        this.emailRepository.save(new Email(destinataire, objet, contenu));
+        this.emailRepository.save(new Email(email.getDestinataire(), email.getObjet(), email.getContenu()));
+
     }
 
     public List<Email> getAllEmails() {
         return this.emailRepository.findAll();
     }
+
+
 
 }

@@ -38,7 +38,7 @@ _Service gestion de stock :_
 
 - [x] Stocker les notifications dans la base de données
 
-- [ ] Gestion des notifications par type (email, sms, ~~push~~)
+- [ ] Gestion des notifications par type (email, sms, ~~notif~~)
 - [ ] Gestion des notifications par statut (envoyée, en attente, erreur)
 - [ ] Gestion des notifications par contenu (texte, html, json, xml)
 - [ ] Gestion des notifications par destinataire
@@ -101,7 +101,7 @@ Durée conservation des données : https://www.cnil.fr/fr/les-durees-de-conserva
 - Politique de confidentialité
 - Archivage et suppression des notifications après un certain temps
 - Statistiques
-- Spécifier le type de notification (email, sms, push)
+- Spécifier le type de notification (email, sms, notif)
 - Spécifier le statut de la notification (envoyée, en attente, erreur)
 - Spécifier le type de contenu (texte, html, json, xml)
 - Spam protection
@@ -208,13 +208,13 @@ git add README.md
 git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/rachy-da/micro-services.git
-git push -u origin main
+git notif -u origin main
 
-#push an existing repository from the command line :
+#notif an existing repository from the command line :
 git remote add origin https://github.com/rachy-da/micro-services.git
 git branch -M main
-git push -u origin main
-git push origin master
+git notif -u origin main
+git notif origin master
 
 # create a new branch :
 git checkout -b feature_x 
@@ -227,9 +227,9 @@ git switch feature_x
 # remove a branch :
 git branch -d feature_x
  
-# push a branch to remote :
-git push origin feature_x
-git push --set-upstream origin feature_x
+# notif a branch to remote :
+git notif origin feature_x
+git notif --set-upstream origin feature_x
 
 # renommer une branche
 git branch -m feature_x feature_y 

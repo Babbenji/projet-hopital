@@ -7,16 +7,16 @@ import java.util.List;
 public interface EmailService {
 
     /**
-     * Envoie un email à un destinataire
-     * @param destinataire
-     * @param objet
-     * @param contenu
+     * Envoie un email à un destinataire et l'enregistre dans la base de données
+     * @param email à envoyer
      */
-    void envoyerEmail(String destinataire, String objet, String contenu);
+    void envoyerEmail(Email email);
 
     /**
      * Récupère tous les emails envoyés
-     * @return List<Email> liste de tous les emails envoyés
+     * @return liste de tous les emails envoyés
      */
     List<Email> getAllEmails();
+
+
 }

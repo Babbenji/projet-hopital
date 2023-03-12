@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "notif_push")
-public class Push {
+@Table(name = "notifs_push")
+public class Notif {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,16 +31,16 @@ public class Push {
         dateEnvoi = LocalDateTime.now();
     }
 
-    public Push(String token, String titre, String message) {
+    public Notif(String token, String titre, String message) {
         this.token = token;
         this.titre = titre;
         this.message = message;
     }
 
-    public Push() {
+    public Notif() {
     }
 
-    public Push(Long id, String token, String titre, String message) {
+    public Notif(Long id, String token, String titre, String message) {
         this.id = id;
         this.token = token;
         this.titre = titre;
@@ -93,7 +93,7 @@ public class Push {
 
     @Override
     public String toString() {
-        return "Push { " +
+        return "Notif { " +
                 "id = " + id +
                 ", destinataire = '" + token + '\'' +
                 ", objet = '" + titre + '\'' +

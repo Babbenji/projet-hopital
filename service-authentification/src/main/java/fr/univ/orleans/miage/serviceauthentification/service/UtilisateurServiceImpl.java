@@ -1,16 +1,19 @@
-package fr.univ.orleans.miage.serviceauthentification.facade;
+package fr.univ.orleans.miage.serviceauthentification.service;
 
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.*;
-import fr.univ.orleans.miage.serviceauthentification.modele.Role;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
+import fr.univ.orleans.miage.serviceauthentification.modele.ERole;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 import fr.univ.orleans.miage.serviceauthentification.repository.UtilisateurRepository;
+import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.UUID;
 
-@Service("facadeUtilisateur")
-public class FacadeUtilisateurImpl implements FacadeUtilisateur {
+@Service("utilisateurService")
+public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
@@ -20,29 +23,81 @@ public class FacadeUtilisateurImpl implements FacadeUtilisateur {
         if(utilisateurRepository.existsByEmail(email))
             throw new UtilisateurDejaExistantException();
 
+
         // Détermination du rôle de l'utilisateur en fonction du domaine de l'email
         String[] res = email.split("@");
-        Role role;
+
+        ERole role;
 
         if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin"))
         {
-            role = Role.MEDECIN;
+            role = ERole.MEDECIN;
         }
         else if(res[1].equals("hopital-secretaire.fr"))
         {
-            role = Role.SECRETAIRE;
+            role = ERole.SECRETAIRE;
         }
         else if(res[1].equals("hopital-comptable.fr"))
         {
-            role = Role.COMPTABLE;
+            role = ERole.COMPTABLE;
         }
         else {
-            role = Role.PATIENT;
+            role = ERole.PATIENT;
         }
 
-        Utilisateur u = new Utilisateur(email, mdp,role);
-        this.utilisateurRepository.save(u);
-        return u;
+
+//        Role role;
+//        if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin")) {
+//            role = new Role(ERole.MEDECIN,"Compte médecin");
+//        }
+//        else if (res[1].equals("hopital-secretaire.fr")) {
+//            role = new Role(ERole.SECRETAIRE,"Compte secrétaire médicale");
+//        }
+//        else if (res[1].equals("hopital-comptable.fr")) {
+//            role = new Role(ERole.COMPTABLE,"Compte comptable pour le service facturation");
+//        }
+//        else {
+//            role = new Role(ERole.PATIENT,"Compte utilisateur simple");
+//        }
+
+
+//        // Détermination du rôle de l'utilisateur en fonction du domaine de l'email
+//        String[] res = email.split("@");
+//        Role role = new Role();
+//
+//        if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin"))
+//        {
+//            role.setERole(ERole.MEDECIN);
+//        }
+//        else if(res[1].equals("hopital-secretaire.fr"))
+//        {
+//            role.setERole(ERole.SECRETAIRE);
+//        }
+//        else if(res[1].equals("hopital-comptable.fr"))
+//        {
+//            role.setERole(ERole.COMPTABLE);
+//        }
+//        else {
+//            role.setERole(ERole.PATIENT);
+//        }
+
+        Utilisateur user = new Utilisateur(email,mdp,role);
+        this.utilisateurRepository.save(user);
+//        return user;
+
+        //TOKEN DE CONFIRMATION
+
+        String token = UUID.randomUUID().toString();
+        //TODO Envoie du token de confirmation
+        TokenConfirmation tokenConfirmation = new TokenConfirmation(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(5),
+                user
+        );
+
+        return user;
+
     }
 
 
@@ -79,7 +134,7 @@ public class FacadeUtilisateurImpl implements FacadeUtilisateur {
 
     @Override
     public boolean verifierRole(String role) {
-        for (Role r : Role.values()) {
+        for (ERole r : ERole.values()) {
             if (r.name().equalsIgnoreCase(role)) {
                 return true;
             }
@@ -96,7 +151,7 @@ public class FacadeUtilisateurImpl implements FacadeUtilisateur {
         if (!verifierRole(role)) {
             throw new RoleInvalideException("Le rôle fourni est invalide : " + role);
         }
-        Collection <Utilisateur> utilisateurs = utilisateurRepository.findByRole(Role.valueOf(role));
+        Collection <Utilisateur> utilisateurs = utilisateurRepository.findByRole(ERole.valueOf(role));
 
         if (utilisateurs == null || utilisateurs.isEmpty()) {
             throw new DonneesIntrouvablesException("Aucun utilisateur trouvé pour le rôle : " + role);
