@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Map;
 
 public interface FacadeServiceGestionStock {
-    void passerCommande();
+    void passerCommande(int idPanier) throws ProduitNonDisponibleException;
 
     void ajouterFournisseur( String nomFournisseur, Map<Integer,ProduitMedical> catalogueFournisseur) throws FournisseurDejaExistantException;
 

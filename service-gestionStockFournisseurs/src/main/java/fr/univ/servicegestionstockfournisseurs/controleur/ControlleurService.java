@@ -47,11 +47,10 @@ public class ControlleurService {
         return ResponseEntity.ok(authentication.getName());
     }
 
-    @PostMapping(value = "/passerCommande")
-    public ResponseEntity<String> passerCommande(Authentication authentication)
-    {
+    @PostMapping(value = "/panier/{idPanier}/passerCommande")
+    public ResponseEntity<String> passerCommande(@PathVariable("idPanier")int idPanier, Authentication authentication) throws ProduitNonDisponibleException {
         String identifiant = authentication.getName();
-        facadeServiceGestionStock.passerCommande();
+        facadeServiceGestionStock.passerCommande(idPanier);
         return ResponseEntity.ok("Commande passée");
     }
 
