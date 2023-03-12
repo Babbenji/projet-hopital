@@ -11,7 +11,19 @@
   "medecinCons": {},
   "patientCons": {},
   "typeCons": {},
-  "dateCreaCons": {},
-  "dateMotifCons": {},
-  "dateAnnulCons": {}
+  "dateCreaCons": {
+    "$date": {
+      "$numberLong": "1578700239000"
+    }
+  },
+  "dateMotifCons": {
+    "$date": {
+      "$numberLong": "1578700239000"
+    }
+  },
+  "dateAnnulCons": {
+    "$date": {
+      "$numberLong": "1578700239000"
+    }
+  }
 }]

@@ -1,46 +1,41 @@
 package com.example.modele;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.time.LocalDate;
-
 @Document(collection = "creneau")
-
 public class Creneau {
-    private LocalDate date_cren;
-    private String heure_cren;
-    private boolean dispo_cren;
-
-    public Creneau(LocalDate date_cren, String heure_cren) {
-        this.date_cren = date_cren;
-        this.heure_cren = heure_cren;
-        this.dispo_cren=true;
+    private String date;
+    private String heure;
+    private boolean disponibilite;
+    public Creneau(String date, String heure) {
+        this.date = date;
+        this.heure = heure;
+        this.disponibilite =true;
+    }
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+    public String getHeure() {
+        return heure;
+    }
+    public void setHeure(String heure) {
+        this.heure = heure;
+    }
+    public boolean estDispo() {
+        return disponibilite;
+    }
+    public void setDisponibilite(boolean disponibilite) {
+        this.disponibilite = disponibilite;
     }
 
-    public LocalDate getDate_cren() {
-        return date_cren;
-    }
-
-    public void setDate_cren(LocalDate date_cren) {
-        this.date_cren = date_cren;
-    }
-
-    public String getHeure_cren() {
-        return heure_cren;
-    }
-
-    public void setHeure_cren(String heure_cren) {
-        this.heure_cren = heure_cren;
-    }
-
-    public boolean isDispo_cren() {
-        return dispo_cren;
-    }
-
-    public void setDispo_cren(boolean dispo_cren) {
-        this.dispo_cren = dispo_cren;
-    }
-
-    public Creneau() {
+    @Override
+    public String toString() {
+        return "Creneau{" +
+                "date='" + date + '\'' +
+                ", heure='" + heure + '\'' +
+                ", disponibilite=" + disponibilite +
+                '}';
     }
 }

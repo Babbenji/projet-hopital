@@ -2,72 +2,71 @@ package com.example.modele;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 @Document(collection = "patient")
-
 public class Patient extends Utilisateur{
-    private String numsecu_pat;
-    private String numtel_pat;
-    private LocalDate datenais_pat;
-    private String genre_pat;
-    private Medecin medecintr_pat;
-    private String antecedents_pat;
-
-    public Patient(String prenom, String nom, String email, String numeroSecu, String numeroTel, LocalDate dateNaissance, String genre) {
-        super(nom, prenom, email);
-        this.numsecu_pat = numeroSecu;
-        this.numtel_pat = numeroTel;
-        this.datenais_pat = dateNaissance;
-        this.genre_pat = genre;
+    private String numSecu;
+    private String numTel;
+    private String dateNaissance;
+    private String genre;
+    private int idMedecinTraitant;
+    private String antecedents;
+    public Patient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) {
+        super(prenom, nom, email);
+        this.numSecu = numSecu;
+        this.numTel = numTel;
+        this.dateNaissance = dateNaissance;
+        this.genre = genre;
+    }
+    public String getNumSecu() {
+        return numSecu;
+    }
+    public void setNumSecu(String numSecu) {
+        this.numSecu = numSecu;
+    }
+    public String getNumTel() {
+        return numTel;
+    }
+    public void setNumTel(String numTel) {
+        this.numTel = numTel;
+    }
+    public String getDateNaissance() {
+        return dateNaissance;
+    }
+    public void setDateNaissance(String dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
+    public String getGenre() {
+        return genre;
+    }
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+    public int getIdMedecinTraitant() {
+        return idMedecinTraitant;
+    }
+    public void setIdMedecinTraitant(int idMedecinTraitant) {
+        this.idMedecinTraitant = idMedecinTraitant;
+    }
+    public String getAntecedents() {
+        return antecedents;
+    }
+    public void setAntecedents(String antecedents) {
+        this.antecedents = antecedents;
     }
 
-    public String getNumsecu_pat() {
-        return numsecu_pat;
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + this.getId() +
+                ", prenom='" + this.getPrenom() + '\'' +
+                ", nom='" + this.getNom() + '\'' +
+                ", email='" + this.getEmail() + '\'' +
+                ", numSecu='" + numSecu + '\'' +
+                ", numTel='" + numTel + '\'' +
+                ", dateNaissance='" + dateNaissance + '\'' +
+                ", genre='" + genre + '\'' +
+                ", idMedecinTraitant=" + idMedecinTraitant +
+                ", antecedents='" + antecedents + '\'' +
+                '}';
     }
-
-    public void setNumsecu_pat(String numsecu_pat) {
-        this.numsecu_pat = numsecu_pat;
-    }
-
-    public String getNumtel_pat() {
-        return numtel_pat;
-    }
-
-    public void setNumtel_pat(String numtel_pat) {
-        this.numtel_pat = numtel_pat;
-    }
-
-    public LocalDate getDatenais_pat() {
-        return datenais_pat;
-    }
-
-    public void setDatenais_pat(LocalDate datenais_pat) {
-        this.datenais_pat = datenais_pat;
-    }
-
-    public String getGenre_pat() {
-        return genre_pat;
-    }
-
-    public void setGenre_pat(String genre_pat) {
-        this.genre_pat = genre_pat;
-    }
-
-    public Medecin getMedecintr_pat() {
-        return medecintr_pat;
-    }
-
-    public void setMedecintr_pat(Medecin medecintr_pat) {
-        this.medecintr_pat = medecintr_pat;
-    }
-
-    public String getAntecedents_pat() {
-        return antecedents_pat;
-    }
-
-    public void setAntecedents_pat(String antecedents_pat) {
-        this.antecedents_pat = antecedents_pat;
-    }
-
-    public Patient() {}
 }

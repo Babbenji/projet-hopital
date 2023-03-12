@@ -1,39 +1,42 @@
 package com.example.modele;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 @Document(collection = "medecin")
 public class Medecin extends Utilisateur {
-    private List<Consultation> listeconsultations_med;
-    private List<Patient> listepatients_med;
-
+    private List<Integer> listeConsultations;
+    private List<Integer> listePatients;
     public Medecin(String prenom, String nom, String email) {
         super(prenom, nom, email);
+        this.listeConsultations = new ArrayList<>();
+        this.listePatients = new ArrayList<>();
     }
-
-    public List<Consultation> getListeconsultations_med() {
-        return listeconsultations_med;
+    public List<Integer> getListeConsultations() {
+        return listeConsultations;
     }
-
-    public void setListeconsultations_med(List<Consultation> listeconsultations_med) {
-        this.listeconsultations_med = listeconsultations_med;
+    public List<Integer> getListePatients() {
+        return listePatients;
     }
-
-    public List<Patient> getListepatients_med() {
-        return listepatients_med;
-    }
-
-    public void setListepatients_med(List<Patient> listepatients_med) {
-        this.listepatients_med = listepatients_med;
-    }
-
     public void ajouterConsultation(Consultation consultation){
-        this.listeconsultations_med.add(consultation);
+        this.listeConsultations.add(consultation.getId());
     }
     public void ajouterPatient(Patient patient){
-        this.listepatients_med.add(patient);
+        this.listePatients.add(patient.getId());
     }
 
-    public Medecin() {
+    //Retirer un patient
+    //Retirer une consultation
+
+    @Override
+    public String toString() {
+        return "Medecin{" +
+                "id=" + this.getId() +
+                ", prenom='" + this.getPrenom() + '\'' +
+                ", nom='" + this.getNom() + '\'' +
+                ", email='" + this.getEmail() + '\'' +
+                ", listeConsultations=" + listeConsultations +
+                ", listePatients=" + listePatients +
+                '}';
     }
 }

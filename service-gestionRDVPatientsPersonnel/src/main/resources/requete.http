@@ -1,0 +1,73 @@
+### Cette requete permet de creer un medecin (que pr la secretaire)
+POST http://localhost:8080/rdvpatients/medecin
+Content-Type: application/json
+
+{
+  "prenom": "Hind",
+  "nom": "HACHEMI",
+  "email": "hind.hachemi@etu.univ-orleans.fr"
+}
+
+### Cette requete permet de creer un patient (que pr la secretaire)
+POST http://localhost:8080/rdvpatients/patient
+Content-Type: application/json
+
+{
+  "prenom": "Aaron",
+  "nom": "BROSSEAU",
+  "email": "brosseau.aaron@gmail.com",
+  "numSecu": "15",
+  "numTel": "0123456789",
+  "dateNaissance": "14-02-2000",
+  "genre": "Homme"
+}
+
+### Cette requete permet d'ajouter les antécédents d'un patient à son profil
+PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/antecedents
+Content-Type: application/json
+
+{
+  "antecedents": "Fragile"
+}
+
+### Cette requete permet d'ajouter les antécédents d'un patient à son profil
+GET http://localhost:8080/rdvpatients/patient/15
+
+### Cette requete permet d'assigner un medecin à un patient
+PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/medecintraitant
+Content-Type: application/json
+
+{
+  "prenom": "Hind",
+  "nom": "HACHEMI"
+}
+
+### Cette requete permet de prendre un rendez vous pour un patient
+POST http://localhost:8080/rdvpatients/consultation
+Content-Type: application/json
+
+{
+  "dateRDV": "15-07-2022",
+  "heureRDV": "14H20",
+  "motif": "Mal de crâne",
+  "type": "SOINS_DIVERS",
+  "ordonnance": "Doliprane 2 fois par jour"
+}
+
+### Cette requete permet à un médecin de confirmer la consultation
+PATCH http://localhost:8080/rdvpatients/consultation/1/confirmer
+
+### Cette requete permet d'ajouter un compte rendu a une consultation
+PATCH http://localhost:8080/rdvpatients/consultation/1/compterendu
+Content-Type: application/json
+
+{
+  "compteRendu" : "Patient fievreux"
+}
+
+### Cette requete permet de voir les consultations d'un medecin
+GET http://localhost:8080/rdvpatients/medecin/2/consultations
+
+### Cette requete permet de demander d'annuler un RDV pour un patient
+POST http://localhost:8080/rdvpatients/consultation/1/annulation
+Content-Type: application/json

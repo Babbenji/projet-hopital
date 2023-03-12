@@ -1,57 +1,38 @@
 package com.example.modele;
 
 public class Utilisateur {
-    private int id_uti;
-    private String prenom_uti;
-    private String nom_uti;
-    private String email_uti;
     private static int IDS = 1;
+    private int id;
+    private String prenom;
+    private String nom;
+    private String email;
 
-    public Utilisateur(int id_uti, String prenom_uti, String nom_uti, String email_uti) {
-        this.id_uti = IDS++;
-        this.prenom_uti = prenom_uti;
-        this.nom_uti = nom_uti;
-        this.email_uti = email_uti;
+    public Utilisateur(String prenom, String nom, String email) {
+        this.id = IDS++;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.email = email;
     }
 
-    public int getId_uti() {
-        return id_uti;
+    public int getId() {
+        return id;
     }
-
-    public void setId_uti(int id_uti) {
-        this.id_uti = id_uti;
+    public String getPrenom() {
+        return prenom;
     }
-
-    public String getPrenom_uti() {
-        return prenom_uti;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
-
-    public void setPrenom_uti(String prenom_uti) {
-        this.prenom_uti = prenom_uti;
+    public String getNom() {
+        return nom;
     }
-
-    public String getNom_uti() {
-        return nom_uti;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
-
-    public void setNom_uti(String nom_uti) {
-        this.nom_uti = nom_uti;
+    public String getEmail() {
+        return email;
     }
-
-    public String getEmail_uti() {
-        return email_uti;
-    }
-
-    public void setEmail_uti(String email_uti) {
-        this.email_uti = email_uti;
-    }
-
-    public Utilisateur() {
-    }
-
-    public Utilisateur(String prenom_uti, String nom_uti, String email_uti) {
-        this.prenom_uti = prenom_uti;
-        this.nom_uti = nom_uti;
-        this.email_uti = email_uti;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
