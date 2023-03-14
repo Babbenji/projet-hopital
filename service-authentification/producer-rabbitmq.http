@@ -1,0 +1,10 @@
+POST http://localhost:8081/api/producer/email
+Content-Type: Application/json
+
+{
+    "destinataire": "rachida.el-ouariachi@etu.univ-orleans.fr",
+    "objet": "rabbitmq test",
+    "contenu": "bonjour, ceci est un test rabbitmq"
+}
+
+###
