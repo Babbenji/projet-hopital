@@ -13,36 +13,31 @@ spring:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
 
-##################   RABBIT MQ   ######################
-  rabbitmq:
-    host: localhost
-    port: 15672
-    username: guest
-    password: guest
-    exchange: user.exchange
-    queue: user.queue
-    routingkey: user.routingkey
-
 ##################   BASE DE DONNEES   ###############
 
 # configuration de la base de données PostgreSQL
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/bdd_notif
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bdd_notif}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
 
-# JPA config Allows Hibernate to generate SQL optimized for a particular DBMS
+  # JPA config Allows Hibernate to generate SQL optimized for a particular DBMS
   jpa:
     hibernate:
       ddl-auto: create-drop
+#      naming:
+#        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-##################   EMAIL   ######################
+
+  ##################   EMAIL   ######################
 
 # configuration de l'envoi de mail avec gmail
   mail:
@@ -70,6 +65,8 @@ spring:
 
   main:
     banner-mode: off
+
+
 #logging.level.org.springframework: DEBUG
 #logging.level.org.hibernate: DEBUG
 #logging.level.org.hibernate.SQL: DEBUG

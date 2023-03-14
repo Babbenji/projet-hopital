@@ -16,10 +16,11 @@ spring:
       port: ${CONSUL_PORT:8500}
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/bdd_auth
-    username: postgres
-    password: postgres
     driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bdd_auth}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -30,3 +31,9 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    open-in-view: false
+
+logging:
+  level:
+    org.hibernate.envers.boot: OFF
+
