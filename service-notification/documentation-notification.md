@@ -30,15 +30,15 @@ _Service gestion de stock :_
 - [x] Mise en place de la couche de persistance : Spring Data JPA
 - [x] Mise en place de la librairie d'envoi d'e-mails : Java Mail Sender
 - [x] Mise en place d'une base de données : PostgresSQL ~~ou MongoDB~~
-- [ ] Mise en place d'un serveur annuaire de services : Consul
-- [ ] Mise en place d'un serveur de surveillance de l'état de santé des services : Spring Boot Actuator
-- [ ] Mise en place d'un serveur d'écoute des événements des autres services : RabbitMQ ~~ou Kafka ou Redis~~
+- [x] Mise en place d'un serveur annuaire de services : Consul
+- [x] Mise en place d'un serveur de surveillance de l'état de santé des services : Spring Boot Actuator
+- [x] Mise en place d'un serveur d'écoute des événements des autres services : RabbitMQ 
 - [ ] Mise en place d'un serveur de configuration : Spring Cloud Config
 - [ ] Mise en place d'un serveur de monitoring : Spring Boot Admin
 
 - [x] Stocker les notifications dans la base de données
 
-- [ ] Gestion des notifications par type (email, sms, ~~notif~~)
+- [ ] Gestion des notifications par type (email, notif, ~~sms~~)
 - [ ] Gestion des notifications par statut (envoyée, en attente, erreur)
 - [ ] Gestion des notifications par contenu (texte, html, json, xml)
 - [ ] Gestion des notifications par destinataire
@@ -52,8 +52,7 @@ _Service gestion de stock :_
 ### Dépendances du service
 
 - Spring Web : permet de créer des applications web
-- Spring Data JPA :
-- ~~H2 Database~~
+- Spring Data JPA 
 - Lombok : permet de générer automatiquement des getters, setters, constructeurs, toString, hashCode, equals
 - Postgres Driver Database
 - ~~MongoDB Driver Database~~

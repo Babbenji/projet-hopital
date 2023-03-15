@@ -1,5 +1,9 @@
 ##################   APPLICATION   ###############
 
+jwt:
+  public:
+    key: classpath:app.pub
+
 server:
   port: 8082
 
@@ -7,14 +11,14 @@ spring:
   application:
     name: service-notif
 
-##################   CONSUL   ######################
+##################   CONSUL   ###################
 
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
 
-##################   RABBIT MQ   ####################
+#################   RABBIT MQ   ##################
 
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -29,7 +33,8 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:bdd_notif}
+#    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:bdd_notif}  #--> prod
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bdd_notif}  #--> dev
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
 

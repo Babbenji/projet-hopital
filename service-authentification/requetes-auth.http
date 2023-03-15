@@ -158,3 +158,21 @@ Content-Type: application/json
   "email": "fred2@hopital-medecin.fr",
   "password": "fred"
 }
+
+
+### Connexion d'un compte admin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "admin@hopital.fr",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("admin_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

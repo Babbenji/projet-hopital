@@ -20,16 +20,19 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Utilisateur inscription(String email, String mdp) throws UtilisateurDejaExistantException {
-        if(utilisateurRepository.existsByEmail(email))
+
+        if(utilisateurRepository.existsByEmail(email)) {
             throw new UtilisateurDejaExistantException();
-
-
+        }
         // Détermination du rôle de l'utilisateur en fonction du domaine de l'email
         String[] res = email.split("@");
 
         ERole role;
 
-        if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin"))
+        if  (res[1].equals("hopital.fr") && res[0].equals("admin")) {
+            role = ERole.ADMIN;
+        }
+        else if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin"))
         {
             role = ERole.MEDECIN;
         }
@@ -44,42 +47,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         else {
             role = ERole.PATIENT;
         }
-
-
-//        Role role;
-//        if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin")) {
-//            role = new Role(ERole.MEDECIN,"Compte médecin");
-//        }
-//        else if (res[1].equals("hopital-secretaire.fr")) {
-//            role = new Role(ERole.SECRETAIRE,"Compte secrétaire médicale");
-//        }
-//        else if (res[1].equals("hopital-comptable.fr")) {
-//            role = new Role(ERole.COMPTABLE,"Compte comptable pour le service facturation");
-//        }
-//        else {
-//            role = new Role(ERole.PATIENT,"Compte utilisateur simple");
-//        }
-
-
-//        // Détermination du rôle de l'utilisateur en fonction du domaine de l'email
-//        String[] res = email.split("@");
-//        Role role = new Role();
-//
-//        if (res[1].equals("hopital-medecin.fr") && !res[0].equals("admin"))
-//        {
-//            role.setERole(ERole.MEDECIN);
-//        }
-//        else if(res[1].equals("hopital-secretaire.fr"))
-//        {
-//            role.setERole(ERole.SECRETAIRE);
-//        }
-//        else if(res[1].equals("hopital-comptable.fr"))
-//        {
-//            role.setERole(ERole.COMPTABLE);
-//        }
-//        else {
-//            role.setERole(ERole.PATIENT);
-//        }
 
         Utilisateur user = new Utilisateur(email,mdp,role);
         this.utilisateurRepository.save(user);
