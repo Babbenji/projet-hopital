@@ -2,9 +2,8 @@ package fr.univ.orleans.miage.serviceauthentification.producer;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +18,9 @@ public class EmailDto {
     private String objet;
     @NotBlank
     private String contenu;
+
+    @NotBlank
+    private String type = "simple";
 
 
 

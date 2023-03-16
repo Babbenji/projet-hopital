@@ -7,4 +7,50 @@ Content-Type: Application/json
     "contenu": "bonjour, ceci est un test rabbitmq"
 }
 
-###
+### Creation d'un compte user
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "rachida.el-ouariachi@etu.univ-orleans.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("rachi_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### confirmation du compte user
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token=f038df57-e108-44cf-982d-9bb61c7e69a7
+
+
+### Connexion d'un compte medecin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "rachida.el-ouariachi@etu.univ-orleans.fr",
+  "password": "mdp"
+}
+
+> {%
+    client.global.set("rachi_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Recuperation du compte medecin avec un token valide
+GET http://localhost:8081/api/v1/auth/utilisateurs/rachida.el-ouariachi@etu.univ-orleans.fr",
+Authorization: {{rachi_token}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+

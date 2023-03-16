@@ -24,7 +24,6 @@ public class TokenConfirmation {
     private LocalDateTime dateCreation;
     @NotNull
     private LocalDateTime dateExpiration;
-    private LocalDateTime dateConfirmation;
 
     @ManyToOne
     @JoinColumn(

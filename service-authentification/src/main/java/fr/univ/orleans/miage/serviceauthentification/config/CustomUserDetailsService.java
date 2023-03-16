@@ -1,8 +1,10 @@
 package fr.univ.orleans.miage.serviceauthentification.config;
 
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.CompteDejaActiveException;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.UtilisateurInexistantException;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -45,13 +47,12 @@ public class CustomUserDetailsService implements UserDetailsService {
             utilisateur = utilisateurService.getUtilisateurByEmail(email);
 
         } catch (UtilisateurInexistantException e) {
-            throw new UsernameNotFoundException("User "+ email +" not found");
+            throw new UsernameNotFoundException("Le compte "+ email +" n'existe pas");
         }
 
         UserDetails userdetails = User.builder()
                 .username(utilisateur.getEmail())
                 .password(passwordEncoder.encode(utilisateur.getPassword()))
-//                .roles(utilisateur.getRole().name())
                 .roles(utilisateur.getRole())
                 .build();
 

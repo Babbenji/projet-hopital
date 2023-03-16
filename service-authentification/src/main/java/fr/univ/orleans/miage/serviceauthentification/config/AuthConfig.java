@@ -71,8 +71,9 @@ public class AuthConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/producer/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
-                        // les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
+                        //les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

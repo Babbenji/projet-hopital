@@ -21,6 +21,9 @@ public class EmailDto {
     @NotBlank
     private String contenu;
 
+    @NotBlank
+    private String type = "simple";
+
 
 
 }

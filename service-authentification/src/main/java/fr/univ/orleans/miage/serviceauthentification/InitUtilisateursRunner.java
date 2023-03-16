@@ -1,6 +1,5 @@
 package fr.univ.orleans.miage.serviceauthentification;
 
-import fr.univ.orleans.miage.serviceauthentification.modele.ERole;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.UtilisateurDejaExistantException;

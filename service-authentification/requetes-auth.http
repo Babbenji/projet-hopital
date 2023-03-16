@@ -14,6 +14,10 @@ Content-Type: application/json
     });
 %}
 
+### confirmation du compte user
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token=22509db2-eddb-43fc-a0cd-6ded214fedc6
+
+
 ### Connexion d'un compte medecin
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json

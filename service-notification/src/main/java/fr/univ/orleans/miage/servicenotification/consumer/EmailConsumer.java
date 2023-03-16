@@ -3,6 +3,7 @@ package fr.univ.orleans.miage.servicenotification.consumer;
 import fr.univ.orleans.miage.servicenotification.dto.EmailDto;
 import fr.univ.orleans.miage.servicenotification.modele.Email;
 import fr.univ.orleans.miage.servicenotification.service.EmailService;
+import jakarta.mail.MessagingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,12 +21,19 @@ public class EmailConsumer {
     EmailService emailService;
 
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
-    public void listen(@Payload EmailDto emailDto) {
+    public void listen(@Payload EmailDto emailDto) throws MessagingException {
 
         Email email = new Email();
+
         BeanUtils.copyProperties(emailDto, email);
-        emailService.envoyerEmail(email);
+
+        if (emailDto.getType().equals("html")) {
+            emailService.envoyerEmailHtml(email);
+        } else {
+            emailService.envoyerEmail(email);
+        }
 
         logger.info("Email envoyé : " + email);
     }
+
 }

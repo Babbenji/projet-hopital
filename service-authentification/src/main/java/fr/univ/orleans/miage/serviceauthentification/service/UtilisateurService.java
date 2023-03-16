@@ -8,6 +8,10 @@ import java.util.Collection;
 
 public interface UtilisateurService {
 
+    String inscriptionConfirmation(String email, String mdp) throws UtilisateurDejaExistantException;
+
+    void confirmationCompte(String tokenConfirmation) throws TokenExpirationException, CompteDejaActiveException;
+
     /**
      * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email
      * @param email
@@ -71,4 +75,9 @@ public interface UtilisateurService {
      * @param nouveauPassword le nouveau mot de passe encodé
      */
     void modifierMotDePasse(String email, String nouveauPassword) throws UtilisateurInexistantException;
+
+
+    boolean verifierActivationCompte(String email) throws CompteDejaActiveException;
+
+    int activerCompteUser(String email) throws CompteDejaActiveException;
 }

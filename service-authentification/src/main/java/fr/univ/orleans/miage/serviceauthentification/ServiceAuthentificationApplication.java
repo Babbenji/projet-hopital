@@ -15,10 +15,13 @@ public class ServiceAuthentificationApplication {
         SpringApplication.run(ServiceAuthentificationApplication.class, args);
     }
 
-    @Bean
-    public InitUtilisateursRunner initUserRunner() {
-        return new InitUtilisateursRunner();
-    }
+    /**
+     * Initialisation des utilisateurs
+     */
+//    @Bean
+//    public InitUtilisateursRunner initUsersRunner() {
+//        return new InitUtilisateursRunner();
+//    }
 
 
 

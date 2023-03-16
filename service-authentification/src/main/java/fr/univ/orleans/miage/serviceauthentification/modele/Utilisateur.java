@@ -32,8 +32,8 @@ public class Utilisateur implements UserDetails {
     @Column(nullable = false)
     private ERole role;
 
-    private boolean compteVerouille;
     private boolean compteActive;
+
 
     public Utilisateur(String nom, String prenom, String email, String motDePasse, ERole role) {
         this.nom = nom;
@@ -43,11 +43,14 @@ public class Utilisateur implements UserDetails {
         this.role = role;
     }
 
-    public Utilisateur(String email, String motDePasse, ERole role) {
+    public Utilisateur(String email, String motDePasse, ERole role, boolean compteActive) {
         this.email = email;
         this.motDePasse = motDePasse;
         this.role = role;
+        this.compteActive = compteActive;
     }
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -64,14 +67,10 @@ public class Utilisateur implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+    public boolean isAccountNonExpired() {return true;}
 
     @Override
-    public boolean isAccountNonLocked() {
-        return !compteVerouille;
-    }
+    public boolean isAccountNonLocked() {return true;}
 
     @Override
     public boolean isCredentialsNonExpired() {
@@ -79,9 +78,7 @@ public class Utilisateur implements UserDetails {
     }
 
     @Override
-    public boolean isEnabled() {
-        return compteActive;
-    }
+    public boolean isEnabled() { return compteActive;}
 
     public String getEmail() {
         return email;

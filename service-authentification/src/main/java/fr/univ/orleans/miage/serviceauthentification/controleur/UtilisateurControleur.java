@@ -4,6 +4,8 @@ import fr.univ.orleans.miage.serviceauthentification.dto.UserDTO;
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
+import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
+import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -33,13 +36,25 @@ import java.util.function.Function;
 public class UtilisateurControleur {
 
     /**
-     *  Token prefix pour le header de la réponse HTTP (Bearer)
+     *  Token prefix pour le header de la réponse HTTP (Bearer) dans le cas de l'authentification
      */
     private static final Object TOKEN_PREFIX = "Bearer";
 
+    /**
+     * Fournit les services pour la gestion des comptes utilisateurs du microservice (inscription, connexion, etc.)
+     */
     @Autowired
     UtilisateurService utilisateurService;
 
+    /**
+     * Fournit les services pour la gestion des tokens de confirmation des comptes utilisateurs lors de l'inscription
+     */
+    @Autowired
+    TokenConfirmationService tokenConfirmationService;
+
+    /**
+     * Permet de crypter les mots de passe avant de les stocker dans la base de données
+     */
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -53,7 +68,7 @@ public class UtilisateurControleur {
      * Permet à un utilisateur de créer un compte
      * @param userDTO
      */
-    @PostMapping(value = "/inscription")
+    @PostMapping(value = "/inscription-v0")
     public ResponseEntity<String> inscription(@Valid @RequestBody UserDTO userDTO) {
         try {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
@@ -64,15 +79,46 @@ public class UtilisateurControleur {
                     .buildAndExpand(userDTO.getEmail()).toUri();
             return ResponseEntity
                     .created(location)
-                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+genereToken.apply(u)).build();
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+" "+genereToken.apply(u))
+                    .body("Utilisateur créé avec succès");
+//                    .build();
         } catch (UtilisateurDejaExistantException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
         }
     }
 
+    @PostMapping(value = "/inscription")
+    public ResponseEntity<String> inscriptionConfirmation(@Valid @RequestBody UserDTO userDTO) {
+        try {
+            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            String u = utilisateurService.inscriptionConfirmation(userDTO.getEmail(), encodedPassword);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{email}")
+                    .buildAndExpand(userDTO.getEmail()).toUri();
+            return ResponseEntity
+                    .created(location)
+                    .body("Utilisateur créé avec succès " + u);
+        } catch (UtilisateurDejaExistantException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
+        }
+    }
+
+    @GetMapping("/confirmation-compte")
+    public ResponseEntity<String> confirmationCompte(@RequestParam("token") String token) {
+        try {
+            this.utilisateurService.confirmationCompte(token);
+            return ResponseEntity.ok().body("Compte confirmé avec succès");
+        } catch (CompteDejaActiveException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Le compte a déjà été activé");
+        } catch (TokenExpirationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token de confirmation invalide ou a expiré");
+        }
+    }
+
     /**
      * Permet à un utilisateur de se connecter
-     * @param userDTO
+     * @param userDTO informations de connexion
      */
     @PostMapping("/connexion")
     public ResponseEntity login(@Valid @RequestBody UserDTO userDTO) {
@@ -81,6 +127,9 @@ public class UtilisateurControleur {
             u = utilisateurService.getUtilisateurByEmail(userDTO.getEmail());
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (!u.isCompteActive()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Le compte n'est pas encore activé.");
         }
         if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
             String token = genereToken.apply(u);
@@ -140,7 +189,6 @@ public class UtilisateurControleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
     @GetMapping ("/utilisateurs/type")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN') or hasAuthority('SCOPE_SECRETAIRE')")
