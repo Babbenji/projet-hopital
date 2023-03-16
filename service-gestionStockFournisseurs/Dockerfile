@@ -1,3 +1,3 @@
 FROM openjdk:17
-ADD target/projet-hopital.jar app.jar
+ADD target/service-gestionStockFournisseurs.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

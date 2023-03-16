@@ -3,7 +3,7 @@ package fr.univ.servicegestionstockfournisseurs.modele;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "produitMedical")
+@Document(collection = "ProduitMedical")
 public class ProduitMedical {
 
     private int idProduitMedical;
@@ -18,13 +18,12 @@ public class ProduitMedical {
     private int stockProduitMedical;
 
 
-
-    public ProduitMedical( Double prixProduitMedical, String nomProduitMedical, String descriptionProduitMedical, int stockProduitMedical) {
+    public ProduitMedical(String nomProduitMedical,Double prixProduitMedical, String descriptionProduitMedical) {
         this.idProduitMedical = IDS++;
         this.prixProduitMedical = prixProduitMedical;
         this.nomProduitMedical = nomProduitMedical;
         this.descriptionProduitMedical = descriptionProduitMedical;
-        this.stockProduitMedical = stockProduitMedical;
+        this.stockProduitMedical = 0;
 
     }
 

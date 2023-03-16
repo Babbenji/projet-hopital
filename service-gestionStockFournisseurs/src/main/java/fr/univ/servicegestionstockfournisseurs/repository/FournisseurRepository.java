@@ -11,7 +11,7 @@ public interface FournisseurRepository extends MongoRepository<Fournisseur, Inte
 
     boolean existsByIdFournisseur(int idFournisseur);
     boolean existsByNomFournisseur(String nomFournisseur);
-
+    boolean existsByCatalogueFournisseur(int idProduit);
     Fournisseur findByIdFournisseur(int idFournisseur);
     void deleteByIdFournisseur(int idFournisseur);
 }
