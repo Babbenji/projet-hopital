@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      database: gestionStock
+      host: service-gestionstockfournisseur_mongo_db_1
+      port: 27017
+
