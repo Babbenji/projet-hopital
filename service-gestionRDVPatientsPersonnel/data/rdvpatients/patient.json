@@ -1,0 +1,15 @@
+[{
+  "_id": {
+    "$oid": "63f3e862a6eded98cf113937"
+  },
+  "idUti": 1,
+  "prenomUti": "Martin",
+  "nomUti": "Gari",
+  "emailUti": "martin.gari@hotmail.fr",
+  "numSecu": "65413218463515",
+  "numTelPat": "0507896547",
+  "dateNaisPat": "56",
+  "genre_pat": "Femme",
+  "medecinTrPat": null,
+  "antecedentsPat": "Allergie"
+}]

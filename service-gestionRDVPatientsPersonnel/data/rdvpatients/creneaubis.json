@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "63f3e8dfa6eded98cf113938"
+  },
+  "dateCren": {
+    "$date": {
+      "$numberLong": "1578700239000"
+    }
+  },
+  "heureCren": "10H-12H",
+  "dispoCren": true
+}]
