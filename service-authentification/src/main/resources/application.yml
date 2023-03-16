@@ -1,0 +1,27 @@
+jwt:
+  private:
+    key: classpath:app.key
+  public:
+    key: classpath:app.pub
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: service-auth
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres_auth
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+#      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
