@@ -1,13 +1,16 @@
-package fr.univ.orleans.miage.serviceauthentification.facade;
+package fr.univ.orleans.miage.serviceauthentification.service;
 
 
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.*;
-import fr.univ.orleans.miage.serviceauthentification.modele.Role;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 
 import java.util.Collection;
 
-public interface FacadeUtilisateur {
+public interface UtilisateurService {
+
+    String inscriptionConfirmation(String email, String mdp) throws UtilisateurDejaExistantException;
+
+    void confirmationCompte(String tokenConfirmation) throws TokenExpirationException, CompteDejaActiveException;
 
     /**
      * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email
@@ -72,4 +75,9 @@ public interface FacadeUtilisateur {
      * @param nouveauPassword le nouveau mot de passe encodé
      */
     void modifierMotDePasse(String email, String nouveauPassword) throws UtilisateurInexistantException;
+
+
+    boolean verifierActivationCompte(String email) throws CompteDejaActiveException;
+
+    int activerCompteUser(String email) throws CompteDejaActiveException;
 }

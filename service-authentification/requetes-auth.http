@@ -14,6 +14,10 @@ Content-Type: application/json
     });
 %}
 
+### confirmation du compte user
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token=22509db2-eddb-43fc-a0cd-6ded214fedc6
+
+
 ### Connexion d'un compte medecin
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
@@ -30,19 +34,6 @@ Content-Type: application/json
     });
 %}
 
-### Recuperation de la liste des utilisateurs en tant que medecin
-GET http://localhost:8081/api/v1/auth/utilisateurs
-Authorization: {{fred_token}}
-
-### Recuperation de la liste des utilisateurs par role => les patients
-GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=PATIENT
-Authorization: {{fred_token}}
-
-### Recuperation de la liste des utilisateurs par role => les medecins
-GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=MEDECIN
-Authorization: {{fred_token}}
-
-
 
 ### Recuperation du compte medecin avec un token valide
 GET http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
@@ -55,16 +46,14 @@ Authorization: {{fred_token}}
 %}
 
 ### Recuperation du compte medecin avec un token valide
-GET http://localhost:8081/api/v1/auth/inscription/fred@hopital-medecin.fr
+GET http://localhost:8081/api/v1/auth/utilisateurs
 Authorization: Bearer invalide
 
-#> {%
-#    client.test("Request executed successfully", function() {
-#        client.assert(response.status === 200, "Response status is not 200");
-#    });
-#%}
-
-
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
 
 ### Création d'un compte patient
 POST http://localhost:8081/api/v1/auth/inscription
@@ -81,6 +70,28 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
+
+### Récupération d'un compte d'un autre => non autorisé
+GET http://localhost:8081/api/v1/auth/utilisateurs/yohan@univ-orleans.fr
+Authorization: {{fred_token}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 403, "Response status is not 403");
+    });
+%}
+
+### Recuperation de la liste des utilisateurs en tant que medecin
+GET http://localhost:8081/api/v1/auth/utilisateurs
+Authorization: {{fred_token}}
+
+### Recuperation de la liste des utilisateurs par role => les patients
+GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=PATIENT
+Authorization: {{fred_token}}
+
+### Recuperation de la liste des utilisateurs par role => les medecins
+GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=MEDECIN
+Authorization: {{fred_token}}
 
 ### Connexion d'un compte patient valide
 POST http://localhost:8081/api/v1/auth/connexion
@@ -105,16 +116,6 @@ Authorization: {{yoh_token}}
 > {%
     client.test("Request executed successfully", function() {
         client.assert(response.status === 200, "Response status is not 200");
-    });
-%}
-
-### Récupération d'un compte d'un autre => non autorisé
-GET http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
-Authorization: {{yoh_token}}
-
-> {%
-    client.test("Request executed successfully", function() {
-        client.assert(response.status === 403, "Response status is not 403");
     });
 %}
 
@@ -152,4 +153,30 @@ Authorization: {{fred_token}}
 ### Suppression d'un compte medecin par son propriétaire
 DELETE http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
 Authorization: {{fred_token}}
+
+### Creation d'un compte medecin
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred2@hopital-medecin.fr",
+  "password": "fred"
+}
+
+
+### Connexion d'un compte admin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "admin@hopital.fr",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("admin_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
 

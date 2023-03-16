@@ -9,34 +9,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-
+@Data
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "utilisateur")
-public class Utilisateur {//implements UserDetails {
+public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String nom;
     private String prenom;
-
-    @NonNull
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
-    @NonNull
+    @Column(nullable = false)
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
-    @NonNull
-    private Role role;
+    @Column(nullable = false)
+    private ERole role;
 
-    public Utilisateur(String email, String mdp,Role role) {
-        this.email = email;
-        this.motDePasse = mdp;
-        this.role = role;
-    }
+    private boolean compteActive;
 
-    public Utilisateur(String nom, String prenom, @NonNull String email, @NonNull String motDePasse, @NonNull Role role) {
+
+    public Utilisateur(String nom, String prenom, String email, String motDePasse, ERole role) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -44,83 +43,50 @@ public class Utilisateur {//implements UserDetails {
         this.role = role;
     }
 
-    public Utilisateur() {}
+    public Utilisateur(String email, String motDePasse, ERole role, boolean compteActive) {
+        this.email = email;
+        this.motDePasse = motDePasse;
+        this.role = role;
+        this.compteActive = compteActive;
+    }
 
-   // @Override
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    //@Override//
+    @Override
     public String getPassword() {
         return motDePasse;
     }
 
-//    @Override
-//    public String getUsername() {
-//        return email;
-//    }
-
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
-//
-    public Long getId() {
-        return id;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonExpired() {return true;}
+
+    @Override
+    public boolean isAccountNonLocked() {return true;}
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
+    @Override
+    public boolean isEnabled() { return compteActive;}
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getRole() {
+        return role.name();
     }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
 
     public void setMotDePasse(String motDePasse) {
         this.motDePasse = motDePasse;

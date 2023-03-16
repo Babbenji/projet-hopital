@@ -1,9 +1,11 @@
 package fr.univ.orleans.miage.serviceauthentification.controleur;
 
 import fr.univ.orleans.miage.serviceauthentification.dto.UserDTO;
-import fr.univ.orleans.miage.serviceauthentification.facade.FacadeUtilisateur;
-import fr.univ.orleans.miage.serviceauthentification.facade.exceptions.*;
+import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
+import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
+import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,10 +21,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.function.Function;
 
-/**cd
+/**
  * Controleur REST pour l'authentification et la gestion des comptes utilisateurs du microservice.
  * @version : 1.0
  */
@@ -33,13 +36,25 @@ import java.util.function.Function;
 public class UtilisateurControleur {
 
     /**
-     *  Token prefix pour le header de la réponse HTTP (Bearer)
+     *  Token prefix pour le header de la réponse HTTP (Bearer) dans le cas de l'authentification
      */
     private static final Object TOKEN_PREFIX = "Bearer";
 
+    /**
+     * Fournit les services pour la gestion des comptes utilisateurs du microservice (inscription, connexion, etc.)
+     */
     @Autowired
-    FacadeUtilisateur facadeUser;
+    UtilisateurService utilisateurService;
 
+    /**
+     * Fournit les services pour la gestion des tokens de confirmation des comptes utilisateurs lors de l'inscription
+     */
+    @Autowired
+    TokenConfirmationService tokenConfirmationService;
+
+    /**
+     * Permet de crypter les mots de passe avant de les stocker dans la base de données
+     */
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -53,36 +68,70 @@ public class UtilisateurControleur {
      * Permet à un utilisateur de créer un compte
      * @param userDTO
      */
-    @PostMapping(value = "/inscription")
+    @PostMapping(value = "/inscription-v0")
     public ResponseEntity<String> inscription(@Valid @RequestBody UserDTO userDTO) {
         try {
-            String encodedPassword = passwordEncoder.encode(userDTO.password());
-            Utilisateur u = facadeUser.inscription(userDTO.email(), encodedPassword);
+            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            Utilisateur u = utilisateurService.inscription(userDTO.getEmail(), encodedPassword);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{email}")
-                    .buildAndExpand(userDTO.email()).toUri();
+                    .buildAndExpand(userDTO.getEmail()).toUri();
             return ResponseEntity
                     .created(location)
-                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+genereToken.apply(u)).build();
+                    .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+" "+genereToken.apply(u))
+                    .body("Utilisateur créé avec succès");
+//                    .build();
         } catch (UtilisateurDejaExistantException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.email()+" déjà pris");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
+        }
+    }
+
+    @PostMapping(value = "/inscription")
+    public ResponseEntity<String> inscriptionConfirmation(@Valid @RequestBody UserDTO userDTO) {
+        try {
+            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            String u = utilisateurService.inscriptionConfirmation(userDTO.getEmail(), encodedPassword);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{email}")
+                    .buildAndExpand(userDTO.getEmail()).toUri();
+            return ResponseEntity
+                    .created(location)
+                    .body("Utilisateur créé avec succès " + u);
+        } catch (UtilisateurDejaExistantException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
+        }
+    }
+
+    @GetMapping("/confirmation-compte")
+    public ResponseEntity<String> confirmationCompte(@RequestParam("token") String token) {
+        try {
+            this.utilisateurService.confirmationCompte(token);
+            return ResponseEntity.ok().body("Compte confirmé avec succès");
+        } catch (CompteDejaActiveException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Le compte a déjà été activé");
+        } catch (TokenExpirationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token de confirmation invalide ou a expiré");
         }
     }
 
     /**
      * Permet à un utilisateur de se connecter
-     * @param userDTO
+     * @param userDTO informations de connexion
      */
     @PostMapping("/connexion")
     public ResponseEntity login(@Valid @RequestBody UserDTO userDTO) {
         Utilisateur u = null;
         try {
-            u = facadeUser.getUtilisateurByEmail(userDTO.email());
+            u = utilisateurService.getUtilisateurByEmail(userDTO.getEmail());
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        if (passwordEncoder.matches(userDTO.password(), u.getPassword())) {
+        if (!u.isCompteActive()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Le compte n'est pas encore activé.");
+        }
+        if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
             String token = genereToken.apply(u);
             return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION,"Bearer "+token).build();
         }
@@ -91,24 +140,25 @@ public class UtilisateurControleur {
 
     /**
      * Permet à un utilisateur de récupérer ses informations
-     * @param email
      */
     @GetMapping( "/utilisateurs/{email}")
     @PreAuthorize("#email == authentication.name")
     public ResponseEntity<Utilisateur> getCompteUtilisateur(Authentication authentication, @PathVariable String email) {
-        Utilisateur u = null;
-        String sv =  authentication.getName();
+        Utilisateur utilisateur = null;
+        String emailUserConnecte =  authentication.getName();
+        if (!email.equals(emailUserConnecte)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         try {
-            u = facadeUser.getUtilisateurByEmail(email);
+            utilisateur = utilisateurService.getUtilisateurByEmail(email);
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(u);
+        return ResponseEntity.ok(utilisateur);
     }
 
     /**
      * Permet à un utilisateur de se désinscrire
-     * @param email
      */
     @DeleteMapping(value = "/utilisateurs/{email}")
     @PreAuthorize("#email == authentication.name")
@@ -120,7 +170,7 @@ public class UtilisateurControleur {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas supprimer un compte qui n'est pas le votre !");
         }
         try {
-            this.facadeUser.desincription(email);
+            this.utilisateurService.desincription(email);
             return ResponseEntity.ok("Le compte utilisateur a été supprimé avec succès.");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Mauvaises informations transmises !");
@@ -134,18 +184,17 @@ public class UtilisateurControleur {
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN') or hasAuthority('SCOPE_PATIENT')")
     public ResponseEntity<Collection<Utilisateur>> getUtilisateurs() {
         try {
-            return ResponseEntity.ok(facadeUser.getAllUtilisateurs());
+            return ResponseEntity.ok(utilisateurService.getAllUtilisateurs());
         } catch (DonneesIntrouvablesException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
-
     @GetMapping ("/utilisateurs/type")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN') or hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Collection<Utilisateur>> getUtilisateursByRole(@RequestParam String role) {
         try {
-            return ResponseEntity.ok(facadeUser.getUtilisateursByRole(role));
+            return ResponseEntity.ok(utilisateurService.getUtilisateursByRole(role));
         } catch (InformationsFourniesIncorrectesException | RoleInvalideException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         } catch (DonneesIntrouvablesException e) {
@@ -158,9 +207,9 @@ public class UtilisateurControleur {
     public ResponseEntity<String> modifierPassword(Authentication authentication, @RequestBody UserDTO userDTO) {
 
         String email = authentication.getName();
-        String encodedPassword = passwordEncoder.encode(userDTO.password());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         try {
-            this.facadeUser.modifierMotDePasse(email,encodedPassword);
+            this.utilisateurService.modifierMotDePasse(email,encodedPassword);
             return ResponseEntity.ok("Le mot de passe a été modifié avec succès.");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

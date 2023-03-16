@@ -1,6 +1,6 @@
 package fr.univ.orleans.miage.serviceauthentification.config;
 
-import fr.univ.orleans.miage.serviceauthentification.facade.FacadeUtilisateur;
+import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -11,6 +11,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,12 +29,15 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.util.Map;
 import java.util.function.Function;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * Cette classe configure l'authentification avec Spring Security et OAuth2 en utilisant JWT et RSA pour la signature des tokens.
@@ -62,31 +66,34 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/inscription").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v1/auth/connexion").permitAll()
-                        // les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
+                        .requestMatchers("/api/producer/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
+                        //les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
                         .anyRequest().authenticated()
                 )
-                .csrf().disable()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .exceptionHandling((exceptions) -> exceptions
                         .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
                         .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+
         return http.build();
     }
 
     /**
      * Implémentation du service de gestion des utilisateurs.
-     * @param facadeUser le service de gestion des utilisateurs.
+     * @param utilisateurService le service de gestion des utilisateurs.
      * @param passwordEncoder l'encodeur de mot de passe.
      * @return le service de gestion des utilisateurs.
      */
     @Bean
-    UserDetailsService users(FacadeUtilisateur facadeUser, PasswordEncoder passwordEncoder) {
-        return new CustomUserDetailsService(passwordEncoder, facadeUser);
+    UserDetailsService users(UtilisateurService utilisateurService, PasswordEncoder passwordEncoder) {
+        return new CustomUserDetailsService(passwordEncoder, utilisateurService);
     }
 
     /**
@@ -154,7 +161,8 @@ public class AuthConfig {
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
                     .subject(user.getEmail())
-                    .claim("scope", user.getRole().name())
+//                    .claim("scope", user.getRole().name())
+                    .claim("scope", user.getRole())
                     .build();
 
             // Encode le token JWT et renvoie sa valeur.
