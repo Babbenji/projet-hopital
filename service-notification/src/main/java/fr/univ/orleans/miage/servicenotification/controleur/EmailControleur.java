@@ -45,7 +45,7 @@ public class EmailControleur {
      * @return Collection d'emails envoyés
      */
     @GetMapping("/emails")
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN') or hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<Email>> getAllEmails() {
         List<Email> emails = this.emailService.getAllEmails();
         if (emails.isEmpty()) {

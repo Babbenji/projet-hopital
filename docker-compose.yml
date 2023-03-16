@@ -8,6 +8,32 @@ services:
     container_name: consul
     ports:
       - "8500:8500"
+    restart: always
+    networks:
+      - consul
+
+  # Service de messagerie
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    networks:
+      - consul
+
+  # Base de données Postgres (service authentification)
+  db_postgres_auth:
+    image: postgres:alpine
+    container_name: bdd_auth
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bdd_auth
+    ports:
+      - "5433:5432"
+    restart: always
     networks:
       - consul
 
@@ -25,13 +51,72 @@ services:
     networks:
       - consul
 
+
+  # Base de données Mongo (service gestion RDV patients)
+  db_mongo_rdv_patients:
+    image: mongo:latest
+    container_name: bdd_rdv_patients
+    ports:
+      - 27018:27017
+    restart: always
+    networks:
+      - consul
+
+  # Service gestion des RDV médicaux
+  service-rdv-patients:
+    image: projet-hopital/service-gestion-rdv-patients-personnel:latest
+    container_name: service-rdv-patients
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DDB_HOST=db_mongo_rdv_patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
+        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+    ports:
+      - "8083:8083"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_mongo_rdv_patients
+#      - rabbitmq
+
+  # Base de données Mongo (service gestion de stocks)
+  db_mongo_stockfournisseur:
+    image: mongo:latest
+    container_name: bdd_stockfournisseur
+    ports:
+      - 27017:27017
+    networks:
+        - consul
+
+# Service gestion de stocks
+  service-stockfournisseur:
+    image: projet-hopital/service-gestion-stock-fournisseurs:latest
+    container_name: service-stockfournisseur
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DDB_HOST=db_mongo_stockfournisseur -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
+        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+    ports:
+      - "8084:8084"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_mongo_stockfournisseur
+#      - rabbitmq
+
+
   # Service de notification
   service-notif:
     image: projet-hopital/service-notification:latest
     container_name: service-notif
     environment:
       JAVA_TOOL_OPTIONS:
-        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500 
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db_postgres_notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
     ports:
@@ -45,19 +130,6 @@ services:
       - rabbitmq
 #      - service-auth
 
-  # Base de données Postgres (service authentification)
-  db_postgres_auth:
-    image: postgres:alpine
-    container_name: bdd_auth
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bdd_auth
-    ports:
-      - "5433:5432"
-    restart: always
-    networks:
-      - consul
 
   # Service de notification
   service-auth:
@@ -65,30 +137,18 @@ services:
     container_name: service-auth
     environment:
       JAVA_TOOL_OPTIONS:
-        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500 
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db_postgres_auth -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_auth
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=5672
     ports:
       - "8081:8081"
-#    restart: always
+    restart: always
     networks:
       - consul
     depends_on:
       - discovery
       - db_postgres_auth
       - rabbitmq
-
-  # Service de messagerie
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    restart: always
-    networks:
-      - consul
-
 
 networks:
   consul:

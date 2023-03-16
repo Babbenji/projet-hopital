@@ -1,0 +1,29 @@
+jwt:
+  public:
+    key: classpath:app.pub
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: service-gestion-rdv-patients-personnel
+  data:
+    mongodb:
+      database: ${DB_NAME:rdvpatients}
+      host: ${DB_HOST:db_mongo_rdv_patients}
+      port: ${DB_PORT:27017}
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+
+#TODO configurer le service de messagerie
+#  rabbitmq:
+#    host: ${RABBITMQ_HOST:localhost}
+#    port: ${RABBITMQ_PORT:15672}
+#    username: ${RABBITMQ_USERNAME:guest}
+#    password: ${RABBITMQ_PASSWORD:guest}
+#    exchange: user.exchange
+#    queue: user.queue
+#    routingkey: user.routingkey
