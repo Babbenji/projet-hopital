@@ -18,6 +18,7 @@ spring:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
 
+
 #TODO configurer le service de messagerie
 #  rabbitmq:
 #    host: ${RABBITMQ_HOST:localhost}

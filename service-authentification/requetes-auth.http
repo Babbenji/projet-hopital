@@ -1,3 +1,22 @@
+#test gateway :
+
+POST http://localhost:8080/api/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-medecin.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("fred_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+
+
 ### Creation d'un compte medecin
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json

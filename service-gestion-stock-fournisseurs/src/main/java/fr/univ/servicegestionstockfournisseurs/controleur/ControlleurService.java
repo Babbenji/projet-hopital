@@ -24,7 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/gestionnaire", produces = "application/json")
+@RequestMapping(value = "/api/v1/gestionnaire", produces = "application/json")
 public class ControlleurService {
 
     @Autowired

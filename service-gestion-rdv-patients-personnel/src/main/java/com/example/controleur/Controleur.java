@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(value = "/api/v1/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
 public class Controleur {
 
     @Autowired

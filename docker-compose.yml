@@ -23,7 +23,28 @@ services:
     networks:
       - consul
 
-  # Base de données Postgres (service authentification)
+  # Service de configuration
+
+
+  # Service api gateway
+  api-gateway:
+    image: projet-hopital/api-gateway:latest
+    container_name: api-gateway
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+    ports:
+      - "8080:8080"
+    restart: always
+    networks:
+      - consul
+
+
+####################################################################################
+#                           SERVICE D'AUTHENTIFICATION
+####################################################################################
+
+  # Base de données Postgres
   db_postgres_auth:
     image: postgres:alpine
     container_name: bdd_auth
@@ -37,101 +58,7 @@ services:
     networks:
       - consul
 
-  # Base de données Postgres (service notification)
-  db_postgres_notif:
-    image: postgres:alpine
-    container_name: bdd_notif
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: bdd_notif
-    ports:
-      - "5432:5432"
-    restart: always
-    networks:
-      - consul
-
-
-  # Base de données Mongo (service gestion RDV patients)
-  db_mongo_rdv_patients:
-    image: mongo:latest
-    container_name: bdd_rdv_patients
-    ports:
-      - 27018:27017
-    restart: always
-    networks:
-      - consul
-
-  # Service gestion des RDV médicaux
-  service-rdv-patients:
-    image: projet-hopital/service-gestion-rdv-patients-personnel:latest
-    container_name: service-rdv-patients
-    environment:
-      JAVA_TOOL_OPTIONS:
-        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_mongo_rdv_patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
-        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
-    ports:
-      - "8083:8083"
-    restart: always
-    networks:
-      - consul
-    depends_on:
-      - discovery
-      - db_mongo_rdv_patients
-#      - rabbitmq
-
-  # Base de données Mongo (service gestion de stocks)
-  db_mongo_stockfournisseur:
-    image: mongo:latest
-    container_name: bdd_stockfournisseur
-    ports:
-      - 27017:27017
-    networks:
-        - consul
-
-# Service gestion de stocks
-  service-stockfournisseur:
-    image: projet-hopital/service-gestion-stock-fournisseurs:latest
-    container_name: service-stockfournisseur
-    environment:
-      JAVA_TOOL_OPTIONS:
-        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_mongo_stockfournisseur -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
-        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
-    ports:
-      - "8084:8084"
-    restart: always
-    networks:
-      - consul
-    depends_on:
-      - discovery
-      - db_mongo_stockfournisseur
-#      - rabbitmq
-
-
-  # Service de notification
-  service-notif:
-    image: projet-hopital/service-notification:latest
-    container_name: service-notif
-    environment:
-      JAVA_TOOL_OPTIONS:
-        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_postgres_notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
-        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
-    ports:
-      - "8082:8082"
-    restart: always
-    networks:
-      - consul
-    depends_on:
-      - discovery
-      - db_postgres_notif
-      - rabbitmq
-#      - service-auth
-
-
-  # Service de notification
+  # Application Spring Boot
   service-auth:
     image: projet-hopital/service-authentification:latest
     container_name: service-auth
@@ -150,7 +77,124 @@ services:
       - db_postgres_auth
       - rabbitmq
 
+
+
+####################################################################################
+#                            SERVICE DE NOTIFICATION
+####################################################################################
+
+  # Base de données Postgres
+  db_postgres_notif:
+    image: postgres:alpine
+    container_name: bdd_notif
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bdd_notif
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - consul
+
+  # Application Spring Boot
+  service-notif:
+    image: projet-hopital/service-notification:latest
+    container_name: service-notif
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DDB_HOST=db_postgres_notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
+        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+    ports:
+      - "8082:8082"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_postgres_notif
+      - rabbitmq
+    #      - service-auth
+
+
+####################################################################################
+#                  SERVICE DE GESTION DES PATIENTS ET PERSONNEL
+####################################################################################
+
+  # Base de données Mongo
+  db_mongo_rdv_patients:
+    image: mongo:latest
+    container_name: bdd_rdv_patients
+    ports:
+      - "27018:27017"
+    restart: always
+    networks:
+      - consul
+
+  # Application Spring Boot
+  service-rdv-patients:
+    image: projet-hopital/service-gestion-rdv-patients-personnel:latest
+    container_name: service-rdv-patients
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DDB_HOST=db_mongo_rdv_patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
+        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+    ports:
+      - "8083:8083"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_mongo_rdv_patients
+#      - rabbitmq
+
+####################################################################################
+#                  SERVICE DE GESTION DES STOCKS ET FOURNISSEURS
+####################################################################################
+
+  # Base de données Mongo
+  db_mongo_stockfournisseur:
+    image: mongo:latest
+    container_name: bdd_stockfournisseur
+    ports:
+      - 27017:27017
+    networks:
+      - consul
+
+  # Application Spring Boot
+  service-stockfournisseur:
+    image: projet-hopital/service-gestion-stock-fournisseurs:latest
+    container_name: service-stockfournisseur
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DDB_HOST=db_mongo_stockfournisseur -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
+        -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+    ports:
+      - "8084:8084"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_mongo_stockfournisseur
+  #     - rabbitmq
+
+
+####################################################################################
+#                            SERVICE DE FACTURATION
+####################################################################################
+
+
+
+
+
 networks:
   consul:
     driver: bridge
+
+
 

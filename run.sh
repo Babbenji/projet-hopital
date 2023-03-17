@@ -11,6 +11,9 @@ for dir in */ ; do
     fi
 done
 
+#
+#cd service-gestion-rdv-patients-personnel
+#mvn spring-boot:build-image -DskipTests
 # commande pour construire et executer les containers docker
 
 docker compose build
