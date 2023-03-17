@@ -1,14 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace micro_service.Models
 {
     public class Facture
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
+
+        [BsonElement("date")]
         public DateTime? DateFature { get; set; }
+
+        [BsonElement("patient")]
+        public string? NomPatient { get; set; }
+
+        [BsonElement("produits")]
         public ICollection<Produit>? Produits { get; set; }
     }
 }
