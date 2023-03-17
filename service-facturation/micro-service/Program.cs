@@ -1,8 +1,14 @@
+using Consul;
+using micro_service.ConsulConfig;
 using micro_service.EventBus;
 using micro_service.Repository;
 using micro_service.Security;
+using micro_service.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,13 +19,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddSingleton<IMongoClient>(p => new MongoClient(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddDbContext<FinanceDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("RabbitMQ"));
+
+//builder.Services.AddSingleton<IRabbitMQConsumer,RabbitMQConsumer>();
+
+//builder.Services.AddSingleton<IRabbitMQPublisher,RabbitMQPublisher>();
+
+builder.Services.AddSingleton<IFactureRepository, FactureRepository>();
+
+builder.Services.AddSingleton<IFactureService, FactureService>();
+
+
+//string f = builder.Configuration.GetSection("Consul:Uri").Value;
+
+//builder.Services.AddSingleton<IConsulClient, ConsulClient>( p => new ConsulClient(config => config.Address = new Uri(f)));
+
+//builder.Services.AddHostedService<ConsulRegisterService>();
+
+//builder.Services.BuildServiceProvider().GetService<IRabbitMQConsumer>().SubcribeQueue("boite_recept");
 
 
 
-builder.Services.AddSingleton<RabbitMQService>();
-builder.Services.AddHostedService<EventBusBackgroundService>();
+
+builder.Services.AddHealthChecks();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
@@ -30,11 +54,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         RoleClaimType = "scope",
+        NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
         IssuerSigningKey = RSAConfiguration.RSASignature()
     };
 });
 
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -43,8 +71,41 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.Use(async (context, next) =>
+{
+    if(context.User.Identity != null)
+    {
+        if (context.User.Identity.IsAuthenticated)
+        {
+            Claim? claim = context.User.FindFirst("exp");
+            string expires =  claim != null ? claim.Value : "";
+            if (!string.IsNullOrEmpty(expires) && long.TryParse(expires, out long expiresEpoch))
+            {
+                DateTime expiresUtc = DateTimeOffset.FromUnixTimeSeconds(expiresEpoch).UtcDateTime;
+                if (expiresUtc <= DateTime.UtcNow)
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync("Token expired");
+                    return;
+                }
+            }
+        }
+    }
+
+    await next.Invoke();
+});
+
+app.UseRouting();
+
 app.UseAuthorization();
 
+app.UseEndpoints(endpoints => { endpoints.MapHealthChecks("/health"); });
+
+
+
 app.MapControllers();
+
+
 
 app.Run();
