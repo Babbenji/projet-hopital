@@ -12,7 +12,7 @@ public class Utilisateur {
     private String nomUtilisateur;
     private String prenomUtilisateur;
     private String emailUtilisateur;
-    private Map<ProduitMedical,Integer> panierUtilisateur;
+    private Map<Integer,Integer> panierUtilisateur; //idProduit et Quantité
 
     public Utilisateur(String nomUtilisateur, String prenomUtilisateur, String emailUtilisateur) {
         this.nomUtilisateur = nomUtilisateur;
@@ -54,7 +54,7 @@ public class Utilisateur {
         this.emailUtilisateur = emailUtilisateur;
     }
 
-    public Map<ProduitMedical,Integer> getPanierUtilisateur() {
+    public Map<Integer,Integer> getPanierUtilisateur() {
         return panierUtilisateur;
     }
 

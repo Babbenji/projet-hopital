@@ -52,5 +52,5 @@ public interface FacadeServiceGestionStock {
 
     ProduitMedical getProduitMedicaleByNom(String nomProduit);
 
-    Map<ProduitMedical, Integer> getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
+    Map<Integer, Integer> getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
 }
