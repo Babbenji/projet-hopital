@@ -38,6 +38,8 @@ services:
     restart: always
     networks:
       - consul
+    depends_on:
+      - discovery
 
 
 ####################################################################################
