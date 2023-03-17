@@ -1,15 +1,8 @@
 ﻿using micro_service.EventBus;
 using micro_service.Models;
-using micro_service.Repository;
-using micro_service.Security;
-using Microsoft.AspNetCore.Authorization;
+using micro_service.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.Extensions.Options;
 
 namespace micro_service.Controllers
 {
@@ -18,30 +11,51 @@ namespace micro_service.Controllers
     public class FactureController : ControllerBase
     {
         private readonly ILogger<FactureController> logger;
-        private readonly FinanceDbContext context;
+        private readonly IFactureService factureService;
+        private readonly RabbitMQConfig rabbitMQConfig; 
+        //private readonly IRabbitMQPublisher rabbitMQPublisher;
         
-        public FactureController(FinanceDbContext context, ILogger<FactureController> logger) 
+        public FactureController(ILogger<FactureController> logger, IFactureService factureService, IOptions<RabbitMQConfig> config /*, IRabbitMQPublisher rabbitMQPublisher*/) 
         {
-            this.context = context;
+           // this.context = context;
             this.logger = logger;
+            this.factureService = factureService;
+            this.rabbitMQConfig = config.Value;
+            //this.rabbitMQPublisher = rabbitMQPublisher;
         }
 
-
-        [HttpGet("products/{id:int}")]
-        public IActionResult GetOneProduct(int id)
+        [HttpPost]
+        public IActionResult CreationFacture([FromBody] Facture facture) 
         {
-            Produit? produit = this.context.Produit.SingleOrDefault(p => p.Id == id);
-            return Ok(produit);
+            Facture entity = this.factureService.Create(facture);
+
+            return Ok(entity);
         }
 
-        [HttpPost("products")]
-        public IActionResult NewFacture(Produit produit)
+
+        [HttpGet]
+        public IActionResult GetFacture()
         {
-            EntityEntry<Produit> entityEntry =  this.context.Produit.Add(produit);
-            this.context.SaveChanges();
-            return CreatedAtAction(nameof(GetOneProduct),new {id = entityEntry.Entity.Id}, produit);
+            List<Facture> entities = this.factureService.GetAll();
+
+            return Ok(entities);
         }
 
-       
+        [HttpGet("{id}")]
+        public IActionResult GetFacture(string id)
+        {
+            Facture entity = this.factureService.GetById(id);
+
+            return Ok(entity);
+        }
+
+
+        [HttpGet("rabbitmq/config")]
+        public IActionResult GetConfig()
+        {
+            return Ok(this.rabbitMQConfig);
+        }
+
+
     }
 }
