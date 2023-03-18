@@ -6,8 +6,8 @@ services:
     ports:
       - 27017:27017
   springboot-mongodb:
-    image: springboot-mongodb:1.0
-    container_name: "springboot-mongodb"
+    image: springboot-mongodb-rdvpatients:1.0
+    container_name: "springboot-mongodb-rdvpatients"
     ports:
       - 8080:8080
     links:

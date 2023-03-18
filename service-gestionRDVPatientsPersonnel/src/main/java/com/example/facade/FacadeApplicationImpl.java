@@ -68,9 +68,10 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
 
     @Override
-    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException {
+    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
         List<TypeCons> typePossible = Arrays.asList(TypeCons.values());
-        if(typePossible.contains(type)){
+        if(typePossible.contains(TypeCons.valueOf(type))){
+            System.out.println("OK");
             Creneau creneau;
             if (!(creneauRepository.existsByDateAndHeure(dateRDV, heureRDV))){//Creneau inexistant
                 creneau = new Creneau(dateRDV, heureRDV);
@@ -86,6 +87,9 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 }
             }
             Medecin medecin = getMedecinTraitant(patient.getNumSecu());
+            if(medecin==null){
+                throw new PasDeMedecinTraitantAssigneException();
+            }
             Consultation consultation = new Consultation(creneau, motif, TypeCons.valueOf(type), ordonnance, medecin.getId(), patient.getId());
             medecin.ajouterConsultation(consultation);
             consultationRepository.save(consultation);

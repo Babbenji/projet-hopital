@@ -16,7 +16,7 @@ public interface FacadeApplication {
     List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException;
     void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException;
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
-    Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException;
+    Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
     //Afficher un patient
     //Modifier un patient
@@ -28,6 +28,7 @@ public interface FacadeApplication {
     //Liste de Médicaments utilisés dans un RDV
     //Diminuer la quantité d'un produit médicale dans une consultation
     //Liste des patients d'un medecin
+    //Voir toutes les consultations par type
 
     //REQUETES
     Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, MedecinInexistantException;

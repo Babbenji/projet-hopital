@@ -69,5 +69,5 @@ Content-Type: application/json
 GET http://localhost:8080/rdvpatients/medecin/2/consultations
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
-POST http://localhost:8080/rdvpatients/consultation/1/annulation
+DELETE http://localhost:8080/rdvpatients/consultation/1/annulation
 Content-Type: application/json
