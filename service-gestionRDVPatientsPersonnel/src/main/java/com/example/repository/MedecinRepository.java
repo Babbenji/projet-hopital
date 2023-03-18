@@ -10,11 +10,11 @@ import java.util.List;
 
 @Repository
 public interface MedecinRepository extends MongoRepository<Medecin, Integer>, CrudRepository<Medecin,Integer> {
-    Medecin findByPrenomAndNom(String prenom, String nom);
-    Medecin findById(int id);
+    Medecin findMedecinByPrenomAndNom(String prenom, String nom);
+    Medecin findMedecinById(int id);
     List<Consultation> getById(int id);
     void removeById(int id);
 
 
-
+    boolean existsByEmail(String email);
 }

@@ -12,6 +12,3 @@ services:
       - 8080:8080
     links:
     - service-gestionrdvpatientspersonnel_mongo_db_1
-
-
-
