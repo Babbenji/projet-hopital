@@ -45,6 +45,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>projet-hopital</finalName>
+		<finalName>service-gestionRDVPatientsPersonnel</finalName>
 	</build>
 </project>
