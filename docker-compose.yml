@@ -78,6 +78,7 @@ services:
       - discovery
       - db_postgres_auth
       - rabbitmq
+      - api-gateway
 
 
 
@@ -117,6 +118,7 @@ services:
       - discovery
       - db_postgres_notif
       - rabbitmq
+      - api-gateway
     #      - service-auth
 
 
@@ -151,6 +153,7 @@ services:
     depends_on:
       - discovery
       - db_mongo_rdv_patients
+      - api-gateway
 #      - rabbitmq
 
 ####################################################################################
@@ -183,6 +186,7 @@ services:
     depends_on:
       - discovery
       - db_mongo_stockfournisseur
+      - api-gateway
   #     - rabbitmq
 
 
