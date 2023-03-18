@@ -30,7 +30,7 @@ Content-Type: application/json
   "antecedents": "Fragile"
 }
 
-### Cette requete permet d'ajouter les antécédents d'un patient à son profil
+### Cette requete permet de voir les antécédents d'un patient à son profil
 GET http://localhost:8080/rdvpatients/patient/15
 
 ### Cette requete permet d'assigner un medecin à un patient
