@@ -192,6 +192,39 @@ services:
 
 
 
+    # Base de données Mongo (service gestion de stocks)
+  db_mongo_facturation:
+    image: mongo:latest
+    container_name: bdd_facturation
+    ports:
+      - "27019:27017"
+    networks:
+        - consul
+
+
+  service-facturation:
+    container_name: service-facturation
+    image: service-facturation:1.0
+    ports:
+      - "8085:80"
+    environment:
+      - Consul__Host=discovery
+      - Consul__Port=8500
+      - ServeurDetails__Host=service-facturation
+      - ServeurDetails__Port=80
+      - RabbitMQ__Protocol=amqp
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - RabbitMQ__Port=5672
+    restart: on-failure
+    networks:
+      - consul
+    depends_on:
+      - discovery
+      - db_mongo_facturation
+      - rabbitmq
+
 
 
 networks:

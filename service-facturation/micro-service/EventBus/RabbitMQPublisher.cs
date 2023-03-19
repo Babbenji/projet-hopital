@@ -7,8 +7,7 @@ namespace micro_service.EventBus
 {
     public class RabbitMQPublisher : RabbitMQProvider, IRabbitMQPublisher
     {
-        //amqp://guest:guest@localhost:5672 config.Value.Protocol + "://" + config.Value.Username + ":" + config.Value.Password + "@" + config.Value.Host + ":" + config.Value.Port + ""
-        public RabbitMQPublisher(IOptions<RabbitMQConfig> config) : base(config.Value.Protocol + "://" + config.Value.Username + ":" + config.Value.Password + "@" + config.Value.Host + ":" + config.Value.Port + "") { }
+        public RabbitMQPublisher(IOptions<RabbitMQConfig> config) : base(config.Value) { }
 
         public void Publish<T>(T message)
         {

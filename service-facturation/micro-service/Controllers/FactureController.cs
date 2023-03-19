@@ -1,61 +1,59 @@
-﻿using micro_service.EventBus;
+﻿using micro_service.ConsulConfig;
+using micro_service.EventBus;
 using micro_service.Models;
 using micro_service.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 
 namespace micro_service.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/facture")]
     [ApiController]
     public class FactureController : ControllerBase
     {
         private readonly ILogger<FactureController> logger;
         private readonly IFactureService factureService;
-        private readonly RabbitMQConfig rabbitMQConfig; 
         //private readonly IRabbitMQPublisher rabbitMQPublisher;
         
-        public FactureController(ILogger<FactureController> logger, IFactureService factureService, IOptions<RabbitMQConfig> config /*, IRabbitMQPublisher rabbitMQPublisher*/) 
+        public FactureController(ILogger<FactureController> logger, IFactureService factureService) 
         {
-           // this.context = context;
             this.logger = logger;
             this.factureService = factureService;
-            this.rabbitMQConfig = config.Value;
             //this.rabbitMQPublisher = rabbitMQPublisher;
         }
 
-        [HttpPost]
+        [HttpPost("v1/new-bill")]
         public IActionResult CreationFacture([FromBody] Facture facture) 
         {
             Facture entity = this.factureService.Create(facture);
-
-            return Ok(entity);
+            return CreatedAtAction(nameof(GetFacture), new { id = entity.Id }, entity);
         }
 
 
-        [HttpGet]
-        public IActionResult GetFacture()
+        [HttpGet("v1/bill")]
+        public IActionResult GetFactures()
         {
             List<Facture> entities = this.factureService.GetAll();
 
             return Ok(entities);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetFacture(string id)
+        [HttpGet("v1/bill/{id}")]
+        public IActionResult GetFactureWithVersion(string id)
         {
             Facture entity = this.factureService.GetById(id);
 
             return Ok(entity);
         }
 
-
-        [HttpGet("rabbitmq/config")]
-        public IActionResult GetConfig()
+        [HttpGet("bill/{id}")]
+        public IActionResult GetFacture(string id)
         {
-            return Ok(this.rabbitMQConfig);
-        }
+            Facture entity = this.factureService.GetById(id);
 
+            return Ok(entity);
+        }
 
     }
 }

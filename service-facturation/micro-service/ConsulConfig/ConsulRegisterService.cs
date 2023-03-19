@@ -1,6 +1,8 @@
 ﻿using Consul;
+using micro_service.EventBus;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.Extensions.Options;
 using static System.Net.WebRequestMethods;
 
 namespace micro_service.ConsulConfig
@@ -9,21 +11,23 @@ namespace micro_service.ConsulConfig
     {
         private readonly ILogger<ConsulRegisterService> logger;
         private readonly IConsulClient consulClient;
-        public ConsulRegisterService(IConsulClient consulClient, ILogger<ConsulRegisterService> logger)
+        private readonly ServerHostConfiguration serverHostConfiguration;
+        public ConsulRegisterService(IConsulClient consulClient, ILogger<ConsulRegisterService> logger, IOptions<ServerHostConfiguration> serverHostConfiguration)
         {
             this.logger = logger;
             this.consulClient = consulClient;
+            this.serverHostConfiguration = serverHostConfiguration.Value;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
 
            
-            Uri uri = new Uri("http://localhost:41487");
+            Uri uri = new Uri("http://"+ this.serverHostConfiguration.Host + ":"+ this.serverHostConfiguration.Port+"");
             AgentServiceRegistration agentServiceRegistration = new AgentServiceRegistration()
             {
                 Address = uri.Host,
-                Name = "service facturation",
+                Name = "service-facturation",
                 Port = uri.Port,
                 ID = "service-facturation"
             };

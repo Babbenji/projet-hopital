@@ -49,10 +49,10 @@ public class ApiGatewayApplication {
 				)
 				// Route vers le service de facturation
 				.route(r -> r.path("/api/facture/**")
-						.filters(f -> f.rewritePath("/api/facture/(?<remains>.*)", "/api/v1/facturation/${remains}")
+						.filters(f -> f.rewritePath("/api/facture/(?<remains>.*)", "/api/facture/v1/${remains}")
 								.preserveHostHeader()
 						)
-						.uri("http://localhost:8080")
+						.uri("http://service-facturation:80")
 				)
 				.build();
 	}
