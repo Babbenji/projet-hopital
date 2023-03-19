@@ -38,6 +38,9 @@ POST http://localhost:8080/gestionnaire/fournisseurs/6/catalogue?idProduit=6
 POST http://localhost:8080/gestionnaire/utilisateurs/6/panier?idProduit=1&quantite=3
 
 
+### passer commande###
+POST http://localhost:8080/gestionnaire/utilisateurs/6/passerCommande
+
 ### Supprimer un produit dans un panier###
 
 DELETE http://localhost:8080/gestionnaire/utilisateurs/2/panier/1

@@ -51,12 +51,12 @@ public class ControlleurService {
 //        return ResponseEntity.ok(authentication.getName());
 //    }
 
-    @PostMapping(value = "/passerCommande/{idPanier}")
-    public ResponseEntity<String> passerCommande(@PathVariable int idPanier) throws PanierInexistantException, ProduitNonDisponibleException
+    @PostMapping(value = "/utilisateur/{idUtilisateur}/passerCommande")
+    public ResponseEntity<String> passerCommande(@PathVariable int idUtilisateur) throws PanierInexistantException, ProduitNonDisponibleException
     {
         try {
             //String identifiant = authentication.getName();
-            facadeServiceGestionStock.passerCommande(idPanier);
+            facadeServiceGestionStock.passerCommande(idUtilisateur);
             return ResponseEntity.ok("Commande passée");
         } catch (PanierInexistantException e) {
             return ResponseEntity.notFound().build();
