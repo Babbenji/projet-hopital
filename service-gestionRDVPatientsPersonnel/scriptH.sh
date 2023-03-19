@@ -1,7 +1,7 @@
-sudo docker stop springboot-mongodb
+sudo docker stop springboot-mongodb-rdvpatients
 sudo docker stop service-gestionrdvpatientspersonnel_mongo_db_1
 sudo docker rm service-gestionrdvpatientspersonnel_mongo_db_1
-sudo docker rm springboot-mongodb
+sudo docker rm springboot-mongodb-rdvpatients
 
 mvn clean install
 

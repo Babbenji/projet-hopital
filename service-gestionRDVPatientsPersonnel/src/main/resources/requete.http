@@ -30,7 +30,7 @@ Content-Type: application/json
   "antecedents": "Fragile"
 }
 
-### Cette requete permet de voir les antécédents d'un patient à son profil
+### Cette requete permet de voir les données d'un patient
 GET http://localhost:8083/rdvpatients/patient/15
 
 ### Cette requete permet d'assigner un medecin à un patient
@@ -48,7 +48,7 @@ Content-Type: application/json
 
 {
   "dateRDV": "15-07-2022",
-  "heureRDV": "14H20",
+  "heureRDV": "18H20",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"
