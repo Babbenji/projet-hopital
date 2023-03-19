@@ -1,6 +1,6 @@
 Feature: Tests Integration
   Background:
-    * url 'http://localhost:8080/rdvpatients'
+    * url 'http://localhost:8083/rdvpatients'
     * header Accept = 'application/json'
 
   Scenario: Test de creation de medecin
@@ -22,18 +22,41 @@ Feature: Tests Integration
 
   Scenario: Test de creation de patient
     Given path '/patient'
-    And request {"prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "15","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
+    And request {"prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "154","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
     When method post
     Then status 201
-    And match response == { "id": "#number", "prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "15","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme","idMedecinTraitant":0,"antecedents":null}
+    And match response == { "id": "#number", "prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "154","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme","idMedecinTraitant":0,"antecedents":null}
     And print response
 
   Scenario: Test de creation de patient déjà existant
     Given path '/patient'
-    And request  {"prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "15","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
+    And request  {"prenom": "Joel", "nom": "Dino", "email": "joel.dino@etu.univ-orleans.fr","numSecu": "154","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
     When method post
     Then status 409
     And match response == 'Ce numéro de sécurité sociale est déjà attribué à un autre patient.'
     And print response
 
 
+  Scenario: Test d'ajout des antécédents d'un patient à son profil
+    Given path 'personnel/modif/patient/154/antecedents'
+    And request {"antecedents": "Allergique"}
+    When method patch
+    Then status 200
+    And match response == 'Les antécédents pour le patient n°154 : \nAllergique'
+    And print response
+
+  Scenario: Test pour voir les données d'un patient
+    Given path '/patient/154'
+    When method get
+    Then status 200
+    And match response == {"id":5,"prenom":"Joel","nom":"Dino","email":"joel.dino@etu.univ-orleans.fr","numSecu":"154","numTel":"0123456789","dateNaissance":"14-02-2000","genre":"Homme","idMedecinTraitant":2,"antecedents":"Allergique"}
+    And print response
+
+
+  Scenario: Test d'assigner un medecin à un patient
+    Given path 'personnel/modif/patient/154/medecintraitant'
+    And request {"prenom": "Mirabelle", "nom": "Soubai"}
+    When method patch
+    Then status 200
+    And match response == 'Le médecin assigné au patient n°154\n est Mirabelle Soubai'
+    And print response
