@@ -1,17 +1,18 @@
-version: "3.4"
+version: "3"
 services:
-  service-gestionstockfournisseur_mongo_db_1:
+  service-gestionstockfournisseurs_mongo_db_1:
     image: mongo:latest
-    container_name: "service-gestionstockfournisseur_mongo_db_1"
+    container_name: "service-gestionstockfournisseurs_mongo_db_1"
     ports:
-      - 27017:27017
+      - 27018:27017
 
-  springboot-mongodb-stockfournisseur:
-    image: springboot-mongodb:1.0
-    container_name: "springboot-mongodb-stockfournisseur"
+  springboot-mongodb-stockfournisseurs:
+    image: springboot-mongodb-stockfournisseurs:1.0
+    container_name: "springboot-mongodb-stockfournisseurs"
     ports:
-      - 8080:8080
+      - 8084:8084
     links:
-      - service-gestionstockfournisseur_mongo_db_1
+      - service-gestionstockfournisseurs_mongo_db_1
+
 
 

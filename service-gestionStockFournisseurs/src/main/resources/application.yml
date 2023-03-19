@@ -1,7 +1,9 @@
+server:
+  port: 8084
 spring:
   data:
     mongodb:
       database: gestionStock
-      host: service-gestionstockfournisseur_mongo_db_1
+      host: service-gestionstockfournisseurs_mongo_db_1
       port: 27017
 
