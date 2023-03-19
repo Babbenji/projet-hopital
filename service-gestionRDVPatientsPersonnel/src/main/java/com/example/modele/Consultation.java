@@ -18,7 +18,6 @@ public class Consultation {
     private int idPatient;
     private String dateCreation;
     private String dateModification;
-    private String dateAnnulation;
     public Consultation(Creneau creneau, String motif, TypeCons type, String ordonnance, int idMedecin, int idPatient) {
         this.id=IDS++;
         this.creneau = creneau;
@@ -31,7 +30,6 @@ public class Consultation {
         this.idPatient = idPatient;
         this.dateCreation = LocalDate.now().toString();
         this.dateModification = LocalDate.now().toString();
-        this.dateAnnulation = null;
     }
     public int getId() {
         return id;
@@ -95,11 +93,5 @@ public class Consultation {
     }
     public void setDateModification(String dateModification) {
         this.dateModification = dateModification;
-    }
-    public String getDateAnnulation() {
-        return dateAnnulation;
-    }
-    public void setDateAnnulation(String dateAnnulation) {
-        this.dateAnnulation = dateAnnulation;
     }
 }

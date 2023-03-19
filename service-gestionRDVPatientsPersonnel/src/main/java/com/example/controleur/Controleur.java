@@ -128,7 +128,7 @@ public class Controleur {
         } catch (MedecinInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
         } catch (ConsultationInexistanteException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de consultation trouvée pour ce médecin !");
         }
         return ResponseEntity.ok().body(consultations);
     }
