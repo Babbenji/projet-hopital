@@ -108,7 +108,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                                 panier.put(idProduit, panier.get(idProduit) + quantite);
                                 utilisateurRepository.save(utilisateur);
                         } else {
-                                panier.put(idProduit, 1);
+                                panier.put(idProduit, quantite);
                                 utilisateurRepository.save(utilisateur);
                         }
                 }
