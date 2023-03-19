@@ -7,7 +7,7 @@ import javax.annotation.processing.Generated;
 import java.util.Date;
 import java.util.Map;
 
-@Document(collection = "Commande")
+@Document(collection = "commande")
 public class Commande {
 
     @Id

@@ -4,7 +4,7 @@ package fr.univ.servicegestionstockfournisseurs.modele;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "ProduitMedical")
+@Document(collection = "produitMedical")
 public class ProduitMedical {
 
     @Id
