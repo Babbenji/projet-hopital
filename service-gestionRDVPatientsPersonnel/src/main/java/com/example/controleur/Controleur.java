@@ -83,7 +83,8 @@ public class Controleur {
     public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
         Patient patient;
         try {
-            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com"); // principal.getName()
+            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
+            //patient = facadeApplication.getPatientByEmail(principal.getName());
         } catch (PatientInexistantException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
         }
@@ -95,6 +96,8 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Ce type de consultation n'existe pas !");
         } catch (CreneauIndisponibleException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce creneau est déjà pris par un autre patient !");
+        } catch (PasDeMedecinTraitantAssigneException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veuillez définir votre médecin traitant avant de prendre RDV !");
         }
     }
     @PatchMapping("/consultation/{idConsultation}/confirmer")
