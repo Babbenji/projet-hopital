@@ -10,7 +10,7 @@ import java.util.Map;
 @Document(collection = "Commande")
 public class Commande {
 
-//    @Id
+    @Id
 //    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idCommande;
     private static int IDS = 1;

@@ -1,5 +1,6 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 @Document(collection = "Utilisateur")
 public class Utilisateur {
 
+    @Id
     private int idUtilisateur;
     private static int IDS = 1;
     private String nomUtilisateur;
