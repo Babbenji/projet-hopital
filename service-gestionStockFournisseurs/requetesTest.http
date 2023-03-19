@@ -1,5 +1,5 @@
 ### Ajout utilisateur###
-POST http://localhost:8080/gestionnaire/utilisateurs
+POST http://localhost:8084/gestionnaire/utilisateurs
 Content-Type: application/json
 
 {
