@@ -140,7 +140,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 medecin.retirerConsultation(idConsultation);
                 medecinRepository.save(medecin);
                 creneau.setDisponibilite(true);
-                System.out.println(creneau);
                 creneauRepository.save(creneau);
                 consultationRepository.removeConsultationById(idConsultation);
                 //Envoyer notif à Medecin(email)
@@ -156,7 +155,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
         if(medecinRepository.existsById(idMedecin)){
             Medecin medecin = medecinRepository.findMedecinById(idMedecin);
             List<Consultation> reponse = new ArrayList<>();
-            if (medecin.getListeConsultations().size()==0){
+            if (medecin.getListeConsultations().size()!=0){
                 for (int idConsult: medecin.getListeConsultations()) {
                     if (consultationRepository.existsById(idConsult)){
                         reponse.add(consultationRepository.findConsultationById(idConsult));

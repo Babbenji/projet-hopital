@@ -72,7 +72,7 @@ public class Controleur {
     public ResponseEntity<String> assignerMedecinTraitant(@PathVariable("numSecu") String numSecu, @RequestBody Medecin medecin) {
         try {
             facadeApplication.assignerMedecinTraitant(numSecu,medecin.getPrenom(),medecin.getNom());
-            return ResponseEntity.ok().body("Le médecin assigné au patient n°"+numSecu+"\n est "+medecin.getPrenom()+" "+medecin.getNom());
+            return ResponseEntity.ok().body("Le médecin assigné au patient n°"+numSecu+" est "+medecin.getPrenom()+" "+medecin.getNom());
         } catch (PatientInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
         } catch (MedecinInexistantException e) {
