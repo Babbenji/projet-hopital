@@ -1,6 +1,5 @@
-
 ### Creation d'un compte medecin ancienne version
-POST http://localhost:8081/api/v1/auth/inscription-v0
+POST http://localhost:8080/api/auth/inscription/sans-confirmation
 Content-Type: application/json
 
 {
@@ -17,7 +16,7 @@ Content-Type: application/json
 
 
 ### Creation d'un compte medecin nouvelle version (avec confirmation)
-POST http://localhost:8081/api/v1/auth/inscription
+POST http://localhost:8080/api/auth/inscription
 Content-Type: application/json
 
 {
@@ -33,11 +32,11 @@ Content-Type: application/json
 %}
 
 ### confirmation du compte utilisateur
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm}}
+GET http://localhost:8080/api/auth/confirmation-compte?token={{token_confirm}}
 
 
 ### Connexion d'un compte medecin
-POST http://localhost:8081/api/v1/auth/connexion
+POST http://localhost:8080/api/auth/connexion
 Content-Type: application/json
 
 {
@@ -54,7 +53,7 @@ Content-Type: application/json
 
 
 ### Recuperation du compte medecin avec un token valide
-GET http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
+GET http://localhost:8080/api/auth/utilisateurs/fred@hopital-medecin.fr
 Authorization: {{fred_token}}
 
 > {%
@@ -64,7 +63,7 @@ Authorization: {{fred_token}}
 %}
 
 ### Recuperation du compte medecin avec un token valide
-GET http://localhost:8081/api/v1/auth/utilisateurs
+GET http://localhost:8080/api/auth/utilisateurs
 Authorization: Bearer invalide
 
 > {%
@@ -74,7 +73,7 @@ Authorization: Bearer invalide
 %}
 
 ### Création d'un compte patient
-POST http://localhost:8081/api/v1/auth/inscription
+POST http://localhost:8080/api/auth/inscription
 Content-Type: application/json
 
 {
@@ -90,10 +89,10 @@ Content-Type: application/json
 %}
 
 ### confirmation du compte utilisateur
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_yohan}}
+GET http://localhost:8080/api/auth/confirmation-compte?token={{token_confirm_yohan}}
 
 ### Récupération d'un compte d'un autre => non autorisé
-GET http://localhost:8081/api/v1/auth/utilisateurs/yohan@univ-orleans.fr
+GET http://localhost:8080/api/auth/utilisateurs/yohan@univ-orleans.fr
 Authorization: {{fred_token}}
 
 > {%
@@ -103,19 +102,19 @@ Authorization: {{fred_token}}
 %}
 
 ### Recuperation de la liste des utilisateurs en tant que medecin
-GET http://localhost:8081/api/v1/auth/utilisateurs
+GET http://localhost:8080/api/auth/utilisateurs
 Authorization: {{fred_token}}
 
 ### Recuperation de la liste des utilisateurs par role => les patients
-GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=PATIENT
+GET http://localhost:8080/api/auth/utilisateurs/type?role=PATIENT
 Authorization: {{fred_token}}
 
 ### Recuperation de la liste des utilisateurs par role => les medecins
-GET http://localhost:8081/api/v1/auth/utilisateurs/type?role=MEDECIN
+GET http://localhost:8080/api/auth/utilisateurs/type?role=MEDECIN
 Authorization: {{fred_token}}
 
 ### Connexion d'un compte patient valide
-POST http://localhost:8081/api/v1/auth/connexion
+POST http://localhost:8080/api/auth/connexion
 Content-Type: application/json
 
 {
@@ -131,7 +130,7 @@ Content-Type: application/json
 %}
 
 ### Recuperation du compte patient par son propriétaire avec un token valide
-GET http://localhost:8081/api/v1/auth/utilisateurs/yohan@univ-orleans.fr
+GET http://localhost:8080/api/auth/utilisateurs/yohan@univ-orleans.fr
 Authorization: {{yoh_token}}
 
 > {%
@@ -142,7 +141,7 @@ Authorization: {{yoh_token}}
 
 
 ### Modification du mot de passe d'un compte valide
-PATCH http://localhost:8081/api/v1/auth/utilisateurs/mot-de-passe
+PATCH http://localhost:8080/api/auth/utilisateurs/mot-de-passe
 Authorization: {{fred_token}}
 Content-Type: application/json
 
@@ -152,7 +151,7 @@ Content-Type: application/json
 }
 
 ### Connexion d'un compte avec le nouveau mot de passe
-POST http://localhost:8081/api/v1/auth/connexion
+POST http://localhost:8080/api/auth/connexion
 Content-Type: application/json
 
 {
@@ -168,15 +167,15 @@ Content-Type: application/json
 %}
 
 ### Suppression d'un compte medecin par son propriétaire
-GET http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
+GET http://localhost:8080/api/auth/utilisateurs/fred@hopital-medecin.fr
 Authorization: {{fred_token}}
 
 ### Suppression d'un compte medecin par son propriétaire
-DELETE http://localhost:8081/api/v1/auth/utilisateurs/fred@hopital-medecin.fr
+DELETE http://localhost:8080/api/auth/utilisateurs/fred@hopital-medecin.fr
 Authorization: {{fred_token}}
 
 ### Creation d'un compte medecin
-POST http://localhost:8081/api/v1/auth/inscription
+POST http://localhost:8080/api/auth/inscription
 Content-Type: application/json
 
 {
@@ -191,11 +190,11 @@ Content-Type: application/json
 %}
 
 ### confirmation du compte utilisateur
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm}}
+GET http://localhost:8080/api/auth/confirmation-compte?token={{token_confirm}}
 
 
 ### Connexion d'un compte admin
-POST http://localhost:8081/api/v1/auth/connexion
+POST http://localhost:8080/api/auth/connexion
 Content-Type: application/json
 
 {

@@ -70,9 +70,9 @@ public class AuthConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/api/producer/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
                         //les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
                         .anyRequest().authenticated()
                 )

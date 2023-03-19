@@ -2,6 +2,8 @@ package fr.univ.orleans.miage.serviceauthentification;
 
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.CompteDejaActiveException;
+import fr.univ.orleans.miage.serviceauthentification.service.exceptions.TokenExpirationException;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.UtilisateurDejaExistantException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -23,16 +25,20 @@ public class InitUtilisateursRunner implements CommandLineRunner {
 
         try {
             // Créer un compte admin
-             Utilisateur admin = utilisateurService.inscription("admin@hopital.fr", passwordEncoder.encode("admin"));
+            String admin = utilisateurService.inscriptionConfirmation("admin@hopital.fr", passwordEncoder.encode("admin"));
+            utilisateurService.confirmationCompte(admin);
 
             // Créer un compte médecin
-            Utilisateur medecin = utilisateurService.inscription("medecin@hopital-medecin.fr", passwordEncoder.encode("mdp"));
+            String medecin = utilisateurService.inscriptionConfirmation("medecin@hopital-medecin.fr", passwordEncoder.encode("mdp"));
+            utilisateurService.confirmationCompte(medecin);
 
             // Créer un compte comptable
-            Utilisateur comptable = utilisateurService.inscription("comptable@hopital-comptable.fr", passwordEncoder.encode("mdp"));
+            String comptable = utilisateurService.inscriptionConfirmation("comptable@hopital-comptable.fr", passwordEncoder.encode("mdp"));
+            utilisateurService.confirmationCompte(comptable);
 
             // Créer un compte secrétaire
-            Utilisateur secretaire = utilisateurService.inscription("secretaire@hopital-secretaire.fr", passwordEncoder.encode("mdp"));
+            String secretaire = utilisateurService.inscriptionConfirmation("secretaire@hopital-secretaire.fr", passwordEncoder.encode("mdp"));
+            utilisateurService.confirmationCompte(secretaire);
 
             // Créer des comptes patients
             for (int i = 1; i <= 3; i++) {
@@ -41,10 +47,9 @@ public class InitUtilisateursRunner implements CommandLineRunner {
 
             System.out.println("Comptes créés avec succès !");
 
-        } catch (UtilisateurDejaExistantException e) {
+        } catch (UtilisateurDejaExistantException | CompteDejaActiveException | TokenExpirationException e){
             System.out.println("Erreur lors de la création des comptes : " + e.getMessage());
         }
-
 
     }
 }

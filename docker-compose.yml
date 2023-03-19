@@ -47,7 +47,7 @@ services:
 ####################################################################################
 
   # Base de données Postgres
-  db_postgres_auth:
+  db-postgres-auth:
     image: postgres:alpine
     container_name: bdd_auth
     environment:
@@ -67,7 +67,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_postgres_auth -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_auth
+        -DDB_HOST=db-postgres-auth -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_auth
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=5672
     ports:
       - "8081:8081"
@@ -76,9 +76,8 @@ services:
       - consul
     depends_on:
       - discovery
-      - db_postgres_auth
+      - db-postgres-auth
       - rabbitmq
-      - api-gateway
 
 
 
@@ -87,7 +86,7 @@ services:
 ####################################################################################
 
   # Base de données Postgres
-  db_postgres_notif:
+  db-postgres-notif:
     image: postgres:alpine
     container_name: bdd_notif
     environment:
@@ -107,7 +106,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_postgres_notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
+        -DDB_HOST=db-postgres-notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
     ports:
       - "8082:8082"
@@ -116,9 +115,8 @@ services:
       - consul
     depends_on:
       - discovery
-      - db_postgres_notif
+      - db-postgres-notif
       - rabbitmq
-      - api-gateway
     #      - service-auth
 
 
@@ -127,7 +125,7 @@ services:
 ####################################################################################
 
   # Base de données Mongo
-  db_mongo_rdv_patients:
+  db-mongo-rdv-patients:
     image: mongo:latest
     container_name: bdd_rdv_patients
     ports:
@@ -143,7 +141,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_mongo_rdv_patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
+        -DDB_HOST=db-mongo-rdv-patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
     ports:
       - "8083:8083"
@@ -152,8 +150,7 @@ services:
       - consul
     depends_on:
       - discovery
-      - db_mongo_rdv_patients
-      - api-gateway
+      - db-mongo-rdv-patients
 #      - rabbitmq
 
 ####################################################################################
@@ -161,22 +158,22 @@ services:
 ####################################################################################
 
   # Base de données Mongo
-  db_mongo_stockfournisseur:
+  db-mongo-stockfournisseurs:
     image: mongo:latest
-    container_name: bdd_stockfournisseur
+    container_name: bdd_stockfournisseurs
     ports:
-      - 27017:27017
+      - "27017:27017"
     networks:
       - consul
 
   # Application Spring Boot
-  service-stockfournisseur:
+  service-stockfournisseurs:
     image: projet-hopital/service-gestion-stock-fournisseurs:latest
-    container_name: service-stockfournisseur
+    container_name: service-stockfournisseurs
     environment:
       JAVA_TOOL_OPTIONS:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
-        -DDB_HOST=db_mongo_stockfournisseur -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
+        -DDB_HOST=db-mongo-stockfournisseurs -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
     ports:
       - "8084:8084"
@@ -185,8 +182,7 @@ services:
       - consul
     depends_on:
       - discovery
-      - db_mongo_stockfournisseur
-      - api-gateway
+      - db-mongo-stockfournisseurs
   #     - rabbitmq
 
 

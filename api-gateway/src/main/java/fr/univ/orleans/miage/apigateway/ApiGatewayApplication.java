@@ -34,7 +34,7 @@ public class ApiGatewayApplication {
 						.uri("http://service-notif:8082")
 				)
 				// Route vers le service de gestion rdv patients
-				.route(r -> r.path("/rdvpatients/*")
+				.route(r -> r.path("/rdvpatients/**")
 						.filters(f -> f.rewritePath("/rdvpatients/(?<remains>.*)", "/api/v1/rdvpatients/${remains}")
 								.preserveHostHeader()
 						)

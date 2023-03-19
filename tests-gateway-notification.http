@@ -1,0 +1,95 @@
+### Endpoint for sending an email
+POST http://localhost:8080/api/notification/send-email
+Content-Type: application/json
+
+{
+  "destinataire": "rachida.el-ouariachi@etu.univ-orleans.fr",
+  "objet": "Test du service de messagerie du micro-service Hopital (M2 MIAGE)",
+  "contenu": "Bonjour, ceci est un e-mail de test pour vérifier que notre service de messagerie fonctionne correctement.\n\nCordialement, \n\nDes étudiants en M2 MIAGE de l'Université d'Orléans."
+
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### Endpoint for sending an email
+POST http://localhost:8080/api/notification/send-email
+Content-Type: application/json
+
+{
+  "destinataire": "noreply.hopital@gmail.com",
+  "objet": "Test Email Microservice",
+  "contenu": "Bonjour, ceci est un email de test. Le microservice de messagerie fonctionne."
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### Endpoint for sending an notif
+POST http://localhost:8080/api/notification/push/send-notif
+Content-Type: application/json
+
+{
+  "token": "token de l'appareil",
+  "titre": "Test envoi de notif",
+  "message": "Bonjour, ceci est un notif de test. Le microservice de messagerie fonctionne."
+}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### Endpoint for getting all the emails
+GET http://localhost:8080/api/notification/emails
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+
+### Endpoint for getting all the notifs
+GET http://localhost:8080/api/notification/push/notifs
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 401, "Response status is not 401");
+    });
+%}
+
+
+
+### Connexion d'un compte admin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "admin@hopital.fr",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("admin_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Endpoint for getting all the emails
+GET http://localhost:8080/api/notification/emails
+Authorization: {{admin_token}}
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}

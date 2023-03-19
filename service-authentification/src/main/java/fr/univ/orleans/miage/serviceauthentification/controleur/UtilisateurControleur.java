@@ -68,7 +68,7 @@ public class UtilisateurControleur {
      * Permet à un utilisateur de créer un compte
      * @param userDTO
      */
-    @PostMapping(value = "/inscription-v0")
+    @PostMapping(value = "/inscription/sans-confirmation")
     public ResponseEntity<String> inscription(@Valid @RequestBody UserDTO userDTO) {
         try {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
@@ -93,11 +93,15 @@ public class UtilisateurControleur {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
             String u = utilisateurService.inscriptionConfirmation(userDTO.getEmail(), encodedPassword);
 
+            HttpHeaders reponseHeaders = new HttpHeaders();
+            reponseHeaders.set("Token-Confirmation", u);
+
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{email}")
                     .buildAndExpand(userDTO.getEmail()).toUri();
             return ResponseEntity
                     .created(location)
+                    .headers(reponseHeaders)
                     .body("Utilisateur créé avec succès " + u);
         } catch (UtilisateurDejaExistantException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
