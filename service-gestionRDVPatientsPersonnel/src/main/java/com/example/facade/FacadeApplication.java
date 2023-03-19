@@ -13,7 +13,7 @@ public interface FacadeApplication {
     void modifierAntecedentsPatient(String numSecu, String antecedents) throws PatientInexistantException;
     void assignerMedecinTraitant(String numSecu, String nomMedecin, String prenomMedecin) throws PatientInexistantException, MedecinInexistantException;
     void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException;
-    List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException;
+    List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException;
     void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException;
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;

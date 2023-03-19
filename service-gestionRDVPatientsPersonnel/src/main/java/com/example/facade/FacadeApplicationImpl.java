@@ -152,18 +152,23 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException {
+    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException {
         if(medecinRepository.existsById(idMedecin)){
             Medecin medecin = medecinRepository.findMedecinById(idMedecin);
             List<Consultation> reponse = new ArrayList<>();
-            for (int idConsult: medecin.getListeConsultations()) {
-                if (consultationRepository.existsById(idConsult)){
-                    reponse.add(consultationRepository.findConsultationById(idConsult));
+            if (medecin.getListeConsultations().size()==0){
+                for (int idConsult: medecin.getListeConsultations()) {
+                    if (consultationRepository.existsById(idConsult)){
+                        reponse.add(consultationRepository.findConsultationById(idConsult));
+                    }
+                    else {
+                        throw new ConsultationInexistanteException();
+                    }
                 }
-                else {
-                    throw new ConsultationInexistanteException();
-                }
+            }else {
+                throw new PasDeConsultationAssigneAuMedecinException();
             }
+
             return reponse;
         }else{
             throw new MedecinInexistantException();
