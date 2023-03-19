@@ -7,7 +7,7 @@ services:
       - 27017:27017
 
   springboot-mongodb-stockfournisseur:
-    image: springboot-servicegestionstock:1.0
+    image: springboot-mongodb:1.0
     container_name: "springboot-mongodb-stockfournisseur"
     ports:
       - 8080:8080

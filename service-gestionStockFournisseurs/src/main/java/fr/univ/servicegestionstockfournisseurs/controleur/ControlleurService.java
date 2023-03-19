@@ -110,19 +110,21 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/fournisseurs/{id}/catalogue")
-    public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestBody ProduitMedical produitMedical) throws ProduitDejaExistantException
+    public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestParam int idProduit) throws ProduitDejaExistantException
     {
         try {
             //String identifiant = authentication.getName();
-            ProduitMedical p = facadeServiceGestionStock.getProduitMedicaleByNom(produitMedical.getNomProduitMedical());
-            facadeServiceGestionStock.ajouterProduitFournisseur(id, p.getNomProduitMedical());
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idProduit}").buildAndExpand(produitMedical.getIdProduitMedical()).toUri();
+            ProduitMedical produitMedical = facadeServiceGestionStock.getProduitMedicaleById(idProduit);
+            facadeServiceGestionStock.ajouterProduitFournisseur(id, idProduit);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idProduit}").buildAndExpand(idProduit).toUri();
 
             return ResponseEntity.created(location).body("Produit ajouté au catalogue fournisseur");
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
         } catch (ProduitDejaDansCatalogueException e) {
             return ResponseEntity.badRequest().body("Produit déjà dans le catalogue");
+        } catch (ProduitInexistantException e) {
+            return ResponseEntity.badRequest().body("Produit inexistant");
         }
     }
 
@@ -243,6 +245,18 @@ public class ControlleurService {
         }
     }
 
+    @GetMapping(value = "/utilisateurs/{id}/panier")
+    public ResponseEntity<String> getPanierUtilisateur(@PathVariable int id)
+    {
+        try {
+            //String identifiant = authentication.getName();
+            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(id));
+        } catch (UtilisateurInexistantException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 //    @GetMapping(value = "/fournisseurs/{id}/produits/{idProduit}")
 //    public ResponseEntity<String> getProduitFromFournisseur(@PathVariable int id, @PathVariable int idProduit)
 //    {
@@ -286,7 +300,7 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idCommande).toString());
+            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idCommande));
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.notFound().build();
         }

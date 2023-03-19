@@ -3,9 +3,9 @@ POST http://localhost:8080/gestionnaire/utilisateurs
 Content-Type: application/json
 
 {
-    "nomUtilisateur": "utilisateur1",
-    "prenomUtilisateur": "prenom1",
-    "emailUtilisateur": "email1"
+    "nomUtilisateur": "tata ",
+    "prenomUtilisateur": "tata",
+    "emailUtilisateur": "zegzgz"
 }
 
 #### Ajout Produit####
@@ -14,9 +14,9 @@ POST http://localhost:8080/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
-    "nomProduitMedical": "produit30",
+    "nomProduitMedical": "paracetamol",
     "prixProduitMedical": 10.0,
-    "descriptionProduitMedical": "gagagagagaga"
+    "descriptionProduitMedical": "Maux de tête"
 }
 
 ### Ajout Fournisseur###
@@ -25,39 +25,25 @@ POST http://localhost:8080/gestionnaire/fournisseurs
 Content-Type: application/json
 
     {
-    "nomFournisseur": "fournisseur5",
-    "adresseFournisseur": "adresse1",
+    "nomFournisseur": "Rachida",
+    "adresseFournisseur": "Chez Rachida",
     "telephoneFournisseur": "061516511"
     }
 
 ### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8080/gestionnaire/fournisseurs/2/catalogue
-Content-Type: application/json
-
-{
-    "nomProduitMedical": "produit1",
-    "prixProduitMedical": 10.0,
-    "descriptionProduitMedical": "gagagagagaga"
-}
-
+POST http://localhost:8080/gestionnaire/fournisseurs/6/catalogue?idProduit=6
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8080/gestionnaire/utilisateurs/{idUtilisateur}/panier
-Content-Type: application/json
-
-{
-    "idProduit": 1,
-    "quantite": 1
-}
+POST http://localhost:8080/gestionnaire/utilisateurs/6/panier?idProduit=1&quantite=3
 
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8080/gestionnaire/utilisateurs/{idUtilisateur}/panier/{idProduit}
+DELETE http://localhost:8080/gestionnaire/utilisateurs/2/panier/1
 
 
-### Supprimer commande###
+### Annuler commande###
 
 DELETE http://localhost:8080/gestionnaire/commandes/{idCommande}
 
@@ -85,6 +71,8 @@ PATCH http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
 
 GET http://localhost:8080/gestionnaire/commandes/{idCommande}
 
+### get panier utilisateur###
+GET http://localhost:8080/gestionnaire/utilisateurs/6/panier
 
 ### get fournisseur by id###
 
@@ -92,7 +80,7 @@ GET http://localhost:8080/gestionnaire/fournisseurs/2
 
 ### get stock produit###
 
-GET http://localhost:8080/gestionnaire/produitsMedical/{idProduit}/stock
+GET http://localhost:8080/gestionnaire/produitsMedical/4/stock
 
 ### get catalogue fournisseur###
 

@@ -7,6 +7,7 @@ import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface FacadeServiceGestionStock {
@@ -16,7 +17,7 @@ public interface FacadeServiceGestionStock {
 
     void ajouterProduit(String nomProduit, double prixProduit, String descriptionProduit) throws ProduitDejaExistantException;
 
-    void ajouterProduitFournisseur(int idFournisseur, String produitMedical) throws FournisseurInexistantException,ProduitDejaDansCatalogueException;
+    void ajouterProduitFournisseur(int idFournisseur, int idproduitMedical) throws FournisseurInexistantException,ProduitDejaDansCatalogueException;
 
     void ajouterFournisseur( Fournisseur fournisseur) throws FournisseurDejaExistantException;
 
@@ -52,5 +53,8 @@ public interface FacadeServiceGestionStock {
 
     ProduitMedical getProduitMedicaleByNom(String nomProduit);
 
-    Map<Integer, Integer> getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
+    ProduitMedical getProduitMedicaleById(int idProduit) throws ProduitInexistantException;
+
+    String getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
+
 }
