@@ -1,13 +1,7 @@
 package fr.univ.servicegestionstockfournisseurs.service;
 
-import fr.univ.servicegestionstockfournisseurs.modele.Commande;
-import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
-import fr.univ.servicegestionstockfournisseurs.modele.Panier;
-import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
-import fr.univ.servicegestionstockfournisseurs.repository.CommandeRepository;
-import fr.univ.servicegestionstockfournisseurs.repository.FournisseurRepository;
-import fr.univ.servicegestionstockfournisseurs.repository.PanierRepository;
-import fr.univ.servicegestionstockfournisseurs.repository.ProduitMedicalRepository;
+import fr.univ.servicegestionstockfournisseurs.modele.*;
+import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,90 +18,118 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         @Autowired
         ProduitMedicalRepository produitMedicalRepository;
         @Autowired
-        PanierRepository panierRepository;
-
-        //
-////        //Ma Fake base de données
-////        private Map<Integer, Fournisseur> fournisseurs;
-////        private Map<Integer, Commande> commandes;
-////        private Map<ProduitMedical,Integer> stock;
-////        private Map<Integer,Integer> panier;
-
+        UtilisateurRepository utilisateurRepository;
 
         @Override
-        public void passerCommande(int idPanier) throws ProduitNonDisponibleException {
+        public void passerCommande(int idUtilisateur) throws ProduitNonDisponibleException {
                 Commande commande = new Commande(new Date());
-                commandeRepository.save(commande);
-                boolean trouve =false;
-                Panier p = panierRepository.findByIdPanier(idPanier);
-                Map<ProduitMedical, Integer> panier = p.getPanierProduits();
-                if (panierRepository.existsByIdPanier(idPanier)) {
-                        for (Map.Entry<ProduitMedical, Integer> entry : panier.entrySet()) {
-                                for (Fournisseur fournisseur : fournisseurRepository.findAll()) {
-                                        if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey())) {
-                                                trouve=true;
-                                                for (ProduitMedical pro : panier.keySet()){
-                                                        if (pro.equals(entry.getKey())){
-                                                                int stockproduit = pro.getStockProduitMedical();
-                                                                pro.setStockProduitMedical(stockproduit+=entry.getValue());
+
+                if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
+                {
+                        Map<Integer, Integer> panier = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur).getPanierUtilisateur();
+                        for (Map.Entry<Integer, Integer> entry : panier.entrySet())
+                        {
+                                for (Fournisseur fournisseur : fournisseurRepository.findAll())
+                                {
+                                        if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
+                                        {
+                                                for (ProduitMedical pro : produitMedicalRepository.findAll())
+                                                {
+                                                        if (pro.getIdProduitMedical()==entry.getKey())
+                                                        {
+                                                                // pro c'est un produit dans le bdd et si pro est égale au produit dans le panier, alors son stock augmente du int indiqué dans le panier
+                                                                pro.setStockProduitMedical(pro.getStockProduitMedical()+entry.getValue());
+                                                                produitMedicalRepository.save(pro);
                                                         }
                                                 }
                                         }
+                                        throw new ProduitNonDisponibleException();
                                 }
-                        }
-                        if(!trouve){
-                                throw new ProduitNonDisponibleException();
+                                ProduitMedical produit = produitMedicalRepository.findByIdProduitMedical(entry.getKey());
+                                commande.setPrixCommande(commande.getPrixCommande() + produit.getPrixProduitMedical() * entry.getValue());
                         }
                 }
+                commandeRepository.save(commande);
         }
+
         @Override
-        public void ajouterFournisseur(String nomFournisseur, Map<Integer, ProduitMedical> catalogueFournisseur) throws FournisseurDejaExistantException {
-                if (fournisseurRepository.existsByNomFournisseur(nomFournisseur)) {
+        public void ajouterUtilisateur(Utilisateur utilisateur) throws UtilisateurDejaExistantException {
+                if (utilisateurRepository.existsUtilisateurByIdUtilisateur(utilisateur.getIdUtilisateur())) {
+                        throw new UtilisateurDejaExistantException();
+                } else {
+                        utilisateurRepository.save(utilisateur);
+                }
+        }
+
+        @Override
+        public void ajouterProduit(String nomProduit, double prixProduit, String descriptionProduit) throws ProduitDejaExistantException {
+                if (produitMedicalRepository.existsByNomProduitMedical(nomProduit)) {
+                        throw new ProduitDejaExistantException();
+                } else {
+                        ProduitMedical produitMedical = new ProduitMedical(nomProduit,prixProduit, descriptionProduit );
+                        produitMedicalRepository.save(produitMedical);
+                }
+        }
+
+        @Override
+        public void ajouterProduitFournisseur(int idFournisseur, int idProduit) throws FournisseurInexistantException, ProduitDejaDansCatalogueException
+        {
+                if (fournisseurRepository.existsByIdFournisseur(idFournisseur))
+                {
+                        Fournisseur fournisseur = fournisseurRepository.findByIdFournisseur(idFournisseur);
+                        if(fournisseurRepository.existsByCatalogueFournisseur(idProduit))
+                        {
+                                throw new ProduitDejaDansCatalogueException();
+                        }
+                        ProduitMedical produitMedical1 = produitMedicalRepository.findByIdProduitMedical(idProduit);
+                        fournisseur.getCatalogueFournisseur().put(produitMedical1.getIdProduitMedical(), produitMedical1.getNomProduitMedical());
+                        fournisseurRepository.save(fournisseur);
+                } else {
+                        throw new FournisseurInexistantException();
+                }
+        }
+
+        @Override
+        public void ajouterFournisseur(Fournisseur fournisseur) throws FournisseurDejaExistantException {
+                if (fournisseurRepository.existsByNomFournisseur(fournisseur.getNomFournisseur())) {
                         throw new FournisseurDejaExistantException();
                 } else {
-                        Fournisseur fournisseur = new Fournisseur(nomFournisseur, catalogueFournisseur);
                         fournisseurRepository.save(fournisseur);
                 }
         }
 
         @Override
-        public void ajouterProduitPanier(int idPanier, ProduitMedical produitMedical) {
-                if (panierRepository.existsByIdPanier(idPanier)) {
-
-                        Panier p = panierRepository.findByIdPanier(idPanier);
-                        Map<ProduitMedical, Integer> panier = p.getPanierProduits();
-
-                        if (panier.containsKey(produitMedical)) {
-                                panier.put(produitMedical, panier.get(produitMedical) + 1);
-                                panierRepository.save(p);
+        public void ajouterProduitPanier(int idUtilisateur, int idProduit,int quantite) throws UtilisateurInexistantException {
+                if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
+                {
+                        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
+                        Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
+                        if (panier.containsKey(idProduit)) {
+                                panier.put(idProduit, panier.get(idProduit) + quantite);
+                                utilisateurRepository.save(utilisateur);
                         } else {
-                                panier.put(produitMedical, 1);
-                                panierRepository.save(p);
-
+                                panier.put(idProduit, 1);
+                                utilisateurRepository.save(utilisateur);
                         }
-                } else {
-                        Map<ProduitMedical, Integer> newpanier = new HashMap<>();
-                        newpanier.put(produitMedical, 1);
-                        Panier pa = new Panier(newpanier);
-                        panierRepository.save(pa);
+                }
+                else {
+                        throw new UtilisateurInexistantException();
                 }
         }
 
 
         @Override
-        public void supprimerProduitPanier(int idPanier, int idProduit) throws ProduitInexistantException {
-                if (panierRepository.existsByIdPanier(idPanier)) {
-                        Panier p = panierRepository.findByIdPanier(idPanier);
-                        Map<ProduitMedical, Integer> panier = p.getPanierProduits();
-
+        public void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException {
+                if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur)) {
+                        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
+                        Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
                         if (panier.containsKey(idProduit)) {
                                 panier.remove(idProduit);
-                                panierRepository.save(p);
+                                utilisateurRepository.save(utilisateur);
                         } else {
                                 throw new ProduitInexistantException();
                         }
                 }
-
         }
 
 
@@ -134,7 +156,6 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         public void supprimerProduitFromCatalogue(int idProduit, int idFournisseur) throws ProduitInexistantException {
                 if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
                         fournisseurRepository.findByIdFournisseur(idFournisseur).deleteProduit(idProduit);
-                        fournisseurRepository.save(fournisseurRepository.findByIdFournisseur(idFournisseur));
                 } else {
                         throw new ProduitInexistantException();
                 }
@@ -142,7 +163,8 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
 
         @Override
-        public void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException {
+        public void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException
+        {
                 if (fournisseurRepository.existsByIdFournisseur(fournisseur.getIdFournisseur())) {
                         fournisseurRepository.save(fournisseur);
                 } else {
@@ -150,15 +172,15 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 }
         }
 
-        @Override
-        public void modifierProduitFromCatalogue(ProduitMedical produitMedicalPatcher, int idProduit, int idFournisseur) throws ProduitInexistantException {
-                if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
-                        fournisseurRepository.findByIdFournisseur(idFournisseur).updateProduit(idProduit, produitMedicalPatcher);
-                        fournisseurRepository.save(fournisseurRepository.findByIdFournisseur(idFournisseur));
-                } else {
-                        throw new ProduitInexistantException();
-                }
-        }
+//        @Override
+//        public void modifierProduitFromCatalogue(ProduitMedical produitMedicalPatcher, int idProduit, int idFournisseur) throws ProduitInexistantException {
+//                if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
+//                        fournisseurRepository.findByIdFournisseur(idFournisseur).updateProduit(idProduit, produitMedicalPatcher);
+//                        fournisseurRepository.save(fournisseurRepository.findByIdFournisseur(idFournisseur));
+//                } else {
+//                        throw new ProduitInexistantException();
+//                }
+//        }
 
         @Override
         public Commande getCommande(int idCommande) throws CommandeInexistanteException {
@@ -179,21 +201,21 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 return fournisseurRepository.findByIdFournisseur(idFournisseur);
         }
 
-        @Override
-        public ProduitMedical getProduitFromCatalogueFournisseur(int idProduit, int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException {
-                if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
-                        if (!fournisseurRepository.findByIdFournisseur(idFournisseur).getCatalogueFournisseur().containsKey(idProduit)) {
-                                throw new ProduitInexistantException();
-                        }
-                        return fournisseurRepository.findByIdFournisseur(idFournisseur).getCatalogueFournisseur().get(idProduit);
-                } else {
-                        throw new FournisseurInexistantException();
-                }
-        }
+//        @Override
+//        public ProduitMedical getProduitFromCatalogueFournisseur(int idProduit, int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException {
+//                if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
+//                        if (!fournisseurRepository.findByIdFournisseur(idFournisseur).getCatalogueFournisseur().containsKey(idProduit)) {
+//                                throw new ProduitInexistantException();
+//                        }
+//                        return fournisseurRepository.findByIdFournisseur(idFournisseur).getCatalogueFournisseur().get(idProduit);
+//                } else {
+//                        throw new FournisseurInexistantException();
+//                }
+//        }
 
 
         @Override
-        public Map<Integer, ProduitMedical> getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException {
+        public Map<Integer, String> getCatalogueFournisseur(int idFournisseur) throws FournisseurInexistantException {
 
                 if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
                         return fournisseurRepository.findByIdFournisseur(idFournisseur).getCatalogueFournisseur();
@@ -217,7 +239,6 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         @Override
         public Collection<ProduitMedical> getStock() {
                 return produitMedicalRepository.findAll();
-
         }
 
         @Override
@@ -225,6 +246,14 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 return produitMedicalRepository.findProduitMedicalByNomProduitMedical(nomProduit);
         }
 
+        @Override
+        public ProduitMedical getProduitMedicaleById(int idProduit) throws ProduitInexistantException {
+                if (produitMedicalRepository.existsByIdProduitMedical(idProduit))
+                        return produitMedicalRepository.findByIdProduitMedical(idProduit);
+                else
+                        throw new ProduitInexistantException();
+
+        }
 
         @Override
         public int getStockProduit(int idProduit) throws ProduitInexistantException {
@@ -240,12 +269,21 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public Map<ProduitMedical, Integer> getAllProduitsFromPanier(int idPanier) throws PanierInexistantException {
-                if (panierRepository.existsByIdPanier(idPanier)) {
-                        return panierRepository.findByIdPanier(idPanier).getPanierProduits();
-
+        public String getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException
+        {
+                if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
+                {
+                        Map<Integer,Integer> panier = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur).getPanierUtilisateur();
+                        List<String> sortie = new ArrayList<>();
+                        for (Integer idProduit: panier.keySet())
+                        {
+                              sortie.add(produitMedicalRepository.findByIdProduitMedical(idProduit).getNomProduitMedical()+" : "+panier.get(idProduit));
+                        }
+                        return sortie.toString();
                 }
-                throw new PanierInexistantException();
+                else{
+                        throw new UtilisateurInexistantException();
+                }
 
         }
 

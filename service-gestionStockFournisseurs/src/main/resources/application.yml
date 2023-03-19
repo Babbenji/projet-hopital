@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      database: stockfournisseurs
-      host: service-gestionrdvpatientspersonnel_mongo_db_1
-      port: 27018
+      database: gestionStock
+      host: service-gestionstockfournisseur_mongo_db_1
+      port: 27017
 

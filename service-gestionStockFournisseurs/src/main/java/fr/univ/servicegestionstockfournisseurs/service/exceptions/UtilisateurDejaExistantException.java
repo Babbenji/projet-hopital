@@ -1,4 +1,4 @@
 package fr.univ.servicegestionstockfournisseurs.service.exceptions;
 
-public class PanierInexistantException extends Exception {
+public class UtilisateurDejaExistantException extends Exception {
 }

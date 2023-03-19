@@ -3,13 +3,11 @@ package fr.univ.servicegestionstockfournisseurs.modele;
 import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import javax.annotation.processing.Generated;
 import java.util.Date;
 import java.util.Map;
 
-@Document(collection = "commande")
-
+@Document(collection = "Commande")
 public class Commande {
 
 //    @Id
@@ -39,6 +37,7 @@ public class Commande {
     public void setDateCommande(Date dateCommande) {
         this.dateCommande = dateCommande;
     }
+
 
     public Double getPrixCommande() {
         return prixCommande;

@@ -1,0 +1,95 @@
+### Ajout utilisateur###
+POST http://localhost:8080/gestionnaire/utilisateurs
+Content-Type: application/json
+
+{
+    "nomUtilisateur": "tata ",
+    "prenomUtilisateur": "tata",
+    "emailUtilisateur": "zegzgz"
+}
+
+#### Ajout Produit####
+
+POST http://localhost:8080/gestionnaire/produitsMedical
+Content-Type: application/json
+
+{
+    "nomProduitMedical": "paracetamol",
+    "prixProduitMedical": 10.0,
+    "descriptionProduitMedical": "Maux de tête"
+}
+
+### Ajout Fournisseur###
+
+POST http://localhost:8080/gestionnaire/fournisseurs
+Content-Type: application/json
+
+    {
+    "nomFournisseur": "Rachida",
+    "adresseFournisseur": "Chez Rachida",
+    "telephoneFournisseur": "061516511"
+    }
+
+### Ajout produit dans le catalogue fournisseur ###
+POST http://localhost:8080/gestionnaire/fournisseurs/6/catalogue?idProduit=6
+
+### Ajouter un produit dans un panier###
+
+POST http://localhost:8080/gestionnaire/utilisateurs/6/panier?idProduit=1&quantite=3
+
+
+### Supprimer un produit dans un panier###
+
+DELETE http://localhost:8080/gestionnaire/utilisateurs/2/panier/1
+
+
+### Annuler commande###
+
+DELETE http://localhost:8080/gestionnaire/commandes/{idCommande}
+
+### supprimer un fournisseur###
+
+DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
+
+### supprimer un produit###
+
+DELETE http://localhost:8080/gestionnaire/produitsMedical/{idProduit}
+
+### supprimer un produit d'un catalogue fournisseur###
+
+DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+
+### modifier un fournisseur###
+
+PATCH http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
+
+### modifier un produit###
+//PATC
+
+
+### get commande by id###
+
+GET http://localhost:8080/gestionnaire/commandes/{idCommande}
+
+### get panier utilisateur###
+GET http://localhost:8080/gestionnaire/utilisateurs/6/panier
+
+### get fournisseur by id###
+
+GET http://localhost:8080/gestionnaire/fournisseurs/2
+
+### get stock produit###
+
+GET http://localhost:8080/gestionnaire/produitsMedical/4/stock
+
+### get catalogue fournisseur###
+
+GET http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue
+
+### Get panier d une commande ###
+
+GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
+
+### Get all commandes ###
+
+GET http://localhost:8080/gestionnaire/commandes
