@@ -55,7 +55,7 @@ Content-Type: application/json
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
-PATCH http://localhost:8083/rdvpatients/consultation/1/confirmer
+PATCH http://localhost:8083/rdvpatients/consultation/4/confirmer
 
 ### Cette requete permet d'ajouter un compte rendu a une consultation
 PATCH http://localhost:8083/rdvpatients/consultation/1/compterendu
@@ -66,7 +66,7 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de voir les consultations d'un medecin
-GET http://localhost:8083/rdvpatients/medecin/2/consultations
+GET http://localhost:8083/rdvpatients/medecin/9/consultations
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
 DELETE http://localhost:8083/rdvpatients/consultation/1/annulation

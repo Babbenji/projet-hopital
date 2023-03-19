@@ -83,7 +83,7 @@ public class Controleur {
     public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
         Patient patient;
         try {
-            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
+            patient = facadeApplication.getPatientByEmail("joel.dino@etu.univ-orleans.fr");
             //patient = facadeApplication.getPatientByEmail(principal.getName());
         } catch (PatientInexistantException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
