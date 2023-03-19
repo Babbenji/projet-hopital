@@ -4,6 +4,7 @@ import com.example.exceptions.*;
 import com.example.modele.*;
 import com.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,14 +22,21 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Autowired
     PatientRepository patientRepository;
 
+    public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository) {
+        this.patientRepository = patientRepository;
+        this.medecinRepository = medecinRepository;
+        this.consultationRepository = consultationRepository;
+        this.creneauRepository = creneauRepository;
+    }
+
     @Override
     public Medecin ajouterMedecin(String prenom, String nom, String email) throws AdresseMailDejaUtiliseeException {
         if(medecinRepository.existsByEmail(email)){
             throw new AdresseMailDejaUtiliseeException();
         }else{
             Medecin medecin =  new Medecin(prenom, nom, email);
-            medecinRepository.save(medecin);
-            return medecin;
+            Medecin nouveauMedecin =  medecinRepository.save(medecin);
+            return nouveauMedecin;
         }
     }
     @Override
@@ -71,7 +79,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
     public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
         List<TypeCons> typePossible = Arrays.asList(TypeCons.values());
         if(typePossible.contains(TypeCons.valueOf(type))){
-            System.out.println("OK");
             Creneau creneau;
             if (!(creneauRepository.existsByDateAndHeure(dateRDV, heureRDV))){//Creneau inexistant
                 creneau = new Creneau(dateRDV, heureRDV);
@@ -130,7 +137,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
             Creneau creneau = consultation.getCreneau();
             if (medecinRepository.existsById(consultation.getIdMedecin())){
                 Medecin medecin = medecinRepository.findMedecinById(consultation.getIdMedecin());
+                medecin.retirerConsultation(idConsultation);
+                medecinRepository.save(medecin);
                 creneau.setDisponibilite(true);
+                System.out.println(creneau);
+                creneauRepository.save(creneau);
                 consultationRepository.removeConsultationById(idConsultation);
                 //Envoyer notif à Medecin(email)
             }else{
@@ -141,18 +152,23 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException {
+    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException {
         if(medecinRepository.existsById(idMedecin)){
             Medecin medecin = medecinRepository.findMedecinById(idMedecin);
             List<Consultation> reponse = new ArrayList<>();
-            for (int idConsult: medecin.getListeConsultations()) {
-                if (consultationRepository.existsById(idConsult)){
-                    reponse.add(consultationRepository.findConsultationById(idConsult));
+            if (medecin.getListeConsultations().size()==0){
+                for (int idConsult: medecin.getListeConsultations()) {
+                    if (consultationRepository.existsById(idConsult)){
+                        reponse.add(consultationRepository.findConsultationById(idConsult));
+                    }
+                    else {
+                        throw new ConsultationInexistanteException();
+                    }
                 }
-                else {
-                    throw new ConsultationInexistanteException();
-                }
+            }else {
+                throw new PasDeConsultationAssigneAuMedecinException();
             }
+
             return reponse;
         }else{
             throw new MedecinInexistantException();
