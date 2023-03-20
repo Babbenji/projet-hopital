@@ -40,8 +40,6 @@ builder.Services.AddHostedService<ConsulRegisterService>();
 
 builder.Services.AddHostedService<RabbitMQListener>();
 
-//builder.Services.BuildServiceProvider().GetService<IRabbitMQConsumer>().SubcribeQueue("boite_recept");
-
 
 builder.Services.AddHealthChecks();
 
