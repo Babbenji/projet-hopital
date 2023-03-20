@@ -9,28 +9,25 @@ namespace micro_service.EventBus
     {
         public RabbitMQPublisher(IOptions<RabbitMQConfig> config) : base(config.Value) { }
 
-        public void Publish<T>(T message)
+        public void Publish<T>(T message, string queueName, string exchangeName, string routingKey)
         {
             using (IModel channel = this.connection.CreateModel())
             {
-                channel.ExchangeDeclare("CustomerNotification", ExchangeType.Direct);
+                channel.ExchangeDeclare(exchangeName, ExchangeType.Direct);
 
                 channel.QueueDeclare(
-                    queue: "sending",
+                    queue: queueName,
                     durable: false,
                     exclusive: false,
                     autoDelete: false,
                     arguments: null);
 
-                channel.QueueBind("sending", "CustomerNotification", "recept", null);
+                channel.QueueBind(queueName, exchangeName, routingKey, null);
 
                 var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                channel.BasicPublish("CustomerNotification", "recept", null, body);
+                channel.BasicPublish(exchangeName, routingKey, null, body);
             }
-            
-
-
         }
     }
 }
