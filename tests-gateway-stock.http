@@ -1,5 +1,5 @@
 ### Ajout utilisateur###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs
+POST http://localhost:8080/gestionnaire/utilisateurs
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 #### Ajout Produit####
 
-POST http://localhost:8084/api/v1/gestionnaire/produitsMedical
+POST http://localhost:8080/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 ### Ajout Fournisseur###
 
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs
+POST http://localhost:8080/gestionnaire/fournisseurs
 Content-Type: application/json
 
     {
@@ -31,7 +31,7 @@ Content-Type: application/json
     }
 
 ### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue
+POST http://localhost:8080/gestionnaire/fournisseurs/2/catalogue
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/{idUtilisateur}/panier
+POST http://localhost:8080/gestionnaire/utilisateurs/{idUtilisateur}/panier
 Content-Type: application/json
 
 {
@@ -54,28 +54,28 @@ Content-Type: application/json
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/{idUtilisateur}/panier/{idProduit}
+DELETE http://localhost:8080/gestionnaire/utilisateurs/{idUtilisateur}/panier/{idProduit}
 
 
 ### Supprimer commande###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/commandes/{idCommande}
+DELETE http://localhost:8080/gestionnaire/commandes/{idCommande}
 
 ### supprimer un fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}
+DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
 
 ### supprimer un produit###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/produitsMedical/{idProduit}
+DELETE http://localhost:8080/gestionnaire/produitsMedical/{idProduit}
 
 ### supprimer un produit d'un catalogue fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
 
 ### modifier un fournisseur###
 
-PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}
+PATCH http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
 
 ### modifier un produit###
 //PATC
@@ -83,25 +83,25 @@ PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}
 
 ### get commande by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes/{idCommande}
+GET http://localhost:8080/gestionnaire/commandes/{idCommande}
 
 
 ### get fournisseur by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+GET http://localhost:8080/gestionnaire/fournisseurs/2
 
 ### get stock produit###
 
-GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/{idProduit}/stock
+GET http://localhost:8080/gestionnaire/produitsMedical/{idProduit}/stock
 
 ### get catalogue fournisseur###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue
+GET http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue
 
 ### Get panier d une commande ###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes/{idCommande}/panier
+GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
 
 ### Get all commandes ###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes
+GET http://localhost:8080/gestionnaire/commandes

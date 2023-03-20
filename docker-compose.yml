@@ -190,10 +190,8 @@ services:
 #                            SERVICE DE FACTURATION
 ####################################################################################
 
-
-
-    # Base de données Mongo (service gestion de stocks)
-  db_mongo_facturation:
+  # Base de données Mongo
+  db-mongo-facturation:
     image: mongo:latest
     container_name: bdd_facturation
     ports:
@@ -222,7 +220,7 @@ services:
       - consul
     depends_on:
       - discovery
-      - db_mongo_facturation
+      - db-mongo-facturation
       - rabbitmq
 
 

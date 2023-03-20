@@ -11,7 +11,7 @@ spring:
   data:
     mongodb:
       database: ${DB_NAME:rdvpatients}
-      host: ${DB_HOST:db-mongo-rdv-patients}
+      host: ${DB_HOST:localhost}
       port: ${DB_PORT:27017}
   cloud:
     consul:

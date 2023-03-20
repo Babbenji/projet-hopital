@@ -1,0 +1,28 @@
+### creation d'une facture
+POST http://localhost:8080/api/facture/new-bill
+Content-Type: application/json
+
+{
+  "dateFature": "2023-03-17T22:02:15.806Z",
+  "nomPatient": "nomPatient",
+  "produits": [
+    {
+      "nom": "calpol",
+      "marque": "parcetamol",
+      "quantite": 5
+    },
+    {
+      "nom": "doliprane",
+      "marque": "parcetamol",
+      "quantite": 5
+    }
+  ]
+}
+
+### récupération de la facture
+GET http://localhost:8080/api/facture/bill/6417a347cc33dbd37d280d38
+
+
+
+### récupération toutes les factures
+GET http://localhost:8080/api/facture/bill

@@ -1,6 +1,6 @@
 
 ### Creation d'un compte medecin ancienne version
-POST http://localhost:8081/api/v1/auth/inscription-v0
+POST http://localhost:8081/api/v1/auth/inscription/sans-confirmation
 Content-Type: application/json
 
 {
