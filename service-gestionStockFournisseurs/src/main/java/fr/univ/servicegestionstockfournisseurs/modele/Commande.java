@@ -15,10 +15,11 @@ public class Commande {
     private int idCommande;
     private static int IDS = 1;
     private Date dateCommande;
-    private Double prixCommande;
+    private double prixCommande;
 
-    public Commande( Date dateCommande) {
+    public Commande(Date dateCommande) {
         this.dateCommande = dateCommande;
+        this.prixCommande = 0.0;
         this.idCommande = IDS++;
     }
 
@@ -39,11 +40,11 @@ public class Commande {
     }
 
 
-    public Double getPrixCommande() {
+    public double getPrixCommande() {
         return prixCommande;
     }
 
-    public void setPrixCommande(Double prixCommande) {
+    public void setPrixCommande(double prixCommande) {
         this.prixCommande = prixCommande;
     }
 

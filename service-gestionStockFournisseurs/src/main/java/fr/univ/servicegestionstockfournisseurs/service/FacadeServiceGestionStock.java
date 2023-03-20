@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface FacadeServiceGestionStock {
-    void passerCommande(int idPanier) throws PanierInexistantException, ProduitNonDisponibleException;
+    void passerCommande(int idPanier) throws UtilisateurInexistantException;
 
     void ajouterUtilisateur(Utilisateur utilisateur) throws UtilisateurDejaExistantException;
 
@@ -21,7 +21,7 @@ public interface FacadeServiceGestionStock {
 
     void ajouterFournisseur( Fournisseur fournisseur) throws FournisseurDejaExistantException;
 
-    void ajouterProduitPanier(int idPanier, int idProduit,int quantite) throws ProduitDejaExistantException, UtilisateurInexistantException;
+    void ajouterProduitPanier(int idPanier, int idProduit,int quantite) throws UtilisateurInexistantException, ProduitInexistantException;
 
     void annulerCommande(int idCommande) throws CommandeInexistanteException;
 

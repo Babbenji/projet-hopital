@@ -21,35 +21,34 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         UtilisateurRepository utilisateurRepository;
 
         @Override
-        public void passerCommande(int idUtilisateur) throws ProduitNonDisponibleException {
+        public void passerCommande(int idUtilisateur) throws UtilisateurInexistantException {
                 Commande commande = new Commande(new Date());
 
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
                 {
-                        Map<Integer, Integer> panier = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur).getPanierUtilisateur();
+                        Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
+                        Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
                         for (Map.Entry<Integer, Integer> entry : panier.entrySet())
                         {
+                                ProduitMedical produit = produitMedicalRepository.findByIdProduitMedical(entry.getKey());
                                 for (Fournisseur fournisseur : fournisseurRepository.findAll())
                                 {
                                         if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
                                         {
-                                                for (ProduitMedical pro : produitMedicalRepository.findAll())
-                                                {
-                                                        if (pro.getIdProduitMedical()==entry.getKey())
-                                                        {
-                                                                // pro c'est un produit dans le bdd et si pro est égale au produit dans le panier, alors son stock augmente du int indiqué dans le panier
-                                                                pro.setStockProduitMedical(pro.getStockProduitMedical()+entry.getValue());
-                                                                produitMedicalRepository.save(pro);
-                                                        }
-                                                }
+                                                produit.setStockProduitMedical(produit.getStockProduitMedical()+entry.getValue());
+                                                produitMedicalRepository.save(produit);
                                         }
-                                        throw new ProduitNonDisponibleException();
                                 }
-                                ProduitMedical produit = produitMedicalRepository.findByIdProduitMedical(entry.getKey());
                                 commande.setPrixCommande(commande.getPrixCommande() + produit.getPrixProduitMedical() * entry.getValue());
                         }
+                        commandeRepository.save(commande);
+                        panier.clear();
+                        utilisateurRepository.save(utilisateur);
                 }
-                commandeRepository.save(commande);
+                else {
+                        throw new UtilisateurInexistantException();
+                }
+
         }
 
         @Override
@@ -99,9 +98,13 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void ajouterProduitPanier(int idUtilisateur, int idProduit,int quantite) throws UtilisateurInexistantException {
+        public void ajouterProduitPanier(int idUtilisateur, int idProduit,int quantite) throws UtilisateurInexistantException, ProduitInexistantException {
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
                 {
+                        if (!produitMedicalRepository.existsByIdProduitMedical(idProduit))
+                        {
+                                throw new ProduitInexistantException();
+                        }
                         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
                         Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
                         if (panier.containsKey(idProduit)) {

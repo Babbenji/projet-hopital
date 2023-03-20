@@ -11,7 +11,7 @@ public class ProduitMedical {
     private int idProduitMedical;
     private static int IDS = 1;
 
-    private Double prixProduitMedical;
+    private double prixProduitMedical;
 
     private String nomProduitMedical;
 
@@ -20,7 +20,7 @@ public class ProduitMedical {
     private int stockProduitMedical;
 
 
-    public ProduitMedical(String nomProduitMedical,Double prixProduitMedical, String descriptionProduitMedical) {
+    public ProduitMedical(String nomProduitMedical,double prixProduitMedical, String descriptionProduitMedical) {
         this.idProduitMedical = IDS++;
         this.prixProduitMedical = prixProduitMedical;
         this.nomProduitMedical = nomProduitMedical;
@@ -61,11 +61,11 @@ public class ProduitMedical {
         this.descriptionProduitMedical = descriptionProduitMedical;
     }
 
-    public Double getPrixProduitMedical() {
+    public double getPrixProduitMedical() {
         return prixProduitMedical;
     }
 
-    public void setPrixProduitMedical(Double prixProduitMedical) {
+    public void setPrixProduitMedical(double prixProduitMedical) {
         this.prixProduitMedical = prixProduitMedical;
     }
 

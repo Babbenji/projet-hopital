@@ -60,5 +60,7 @@ public class Utilisateur {
         return panierUtilisateur;
     }
 
-
+    public void setPanierUtilisateur(Map<Integer, Integer> panierUtilisateur) {
+        this.panierUtilisateur = panierUtilisateur;
+    }
 }

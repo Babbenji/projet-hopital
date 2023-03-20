@@ -32,8 +32,7 @@ public class ControlleurService {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private Fournisseur applyPatchToFournisseur(
-            JsonPatch patch, Fournisseur targetFournisseur) throws JsonPatchException, JsonProcessingException
+    private Fournisseur applyPatchToFournisseur(JsonPatch patch, Fournisseur targetFournisseur) throws JsonPatchException, JsonProcessingException
     {
         JsonNode patched = patch.apply(objectMapper.convertValue(targetFournisseur, JsonNode.class));
         return objectMapper.treeToValue(patched, Fournisseur.class);
@@ -51,18 +50,18 @@ public class ControlleurService {
 //        return ResponseEntity.ok(authentication.getName());
 //    }
 
-    @PostMapping(value = "/utilisateur/{idUtilisateur}/passerCommande")
-    public ResponseEntity<String> passerCommande(@PathVariable int idUtilisateur) throws PanierInexistantException, ProduitNonDisponibleException
-    {
-        try {
+    @PostMapping(value = "/utilisateurs/{idUtilisateur}/passerCommande")
+    public ResponseEntity<String> passerCommande(@PathVariable int idUtilisateur) throws UtilisateurInexistantException {
+
             //String identifiant = authentication.getName();
+        try {
             facadeServiceGestionStock.passerCommande(idUtilisateur);
             return ResponseEntity.ok("Commande passée");
-        } catch (PanierInexistantException e) {
-            return ResponseEntity.notFound().build();
-        } catch (ProduitNonDisponibleException e) {
-            return ResponseEntity.badRequest().body("Produit non disponible");
+        } catch (UtilisateurInexistantException e) {
+            return ResponseEntity.badRequest().body("Utilisateur inexistant");
         }
+
+
     }
 
     @PostMapping(value = "/utilisateurs")
@@ -133,12 +132,12 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            facadeServiceGestionStock.ajouterProduitPanier(idUtilisateur, idProduit, 1);
+            facadeServiceGestionStock.ajouterProduitPanier(idUtilisateur, idProduit, quantite);
             return ResponseEntity.ok("Produit ajouté au panier");
-        }catch (ProduitDejaExistantException e) {
-            return ResponseEntity.badRequest().body("Produit déjà existant");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.notFound().build();
+        } catch (ProduitInexistantException e) {
+            return ResponseEntity.badRequest().body("Produit inexistant");
         }
     }
 

@@ -14,9 +14,9 @@ POST http://localhost:8084/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
-    "nomProduitMedical": "Eferalgan",
+    "nomProduitMedical": "Efralgan",
     "prixProduitMedical": 17.0,
-    "descriptionProduitMedical": "Maux de vomissement reduit"
+    "descriptionProduitMedical": "Maux de tete"
 }
 
 ### Ajout Fournisseur###
@@ -35,20 +35,19 @@ POST http://localhost:8084/gestionnaire/fournisseurs/2/catalogue?idProduit=3
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8084/gestionnaire/utilisateurs/4/panier?idProduit=7&quantite=8
+POST http://localhost:8084/gestionnaire/utilisateurs/2/panier?idProduit=3&quantite=12
 
 
 ### passer commande###
-POST http://localhost:8080/gestionnaire/utilisateurs/6/passerCommande
+POST http://localhost:8084/gestionnaire/utilisateurs/2/passerCommande
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8084/gestionnaire/utilisateurs/4/panier/7
-
+DELETE http://localhost:8084/gestionnaire/utilisateurs/2/panier/6
 
 ### Annuler commande###
 
-DELETE http://localhost:8080/gestionnaire/commandes/{idCommande}
+DELETE http://localhost:8080/gestionnaire/commandes/2
 
 ### supprimer un fournisseur###
 
@@ -56,15 +55,23 @@ DELETE http://localhost:8084/gestionnaire/fournisseurs/2
 
 ### supprimer un produit###
 
-DELETE http://localhost:8080/gestionnaire/produitsMedical/{idProduit}
+DELETE http://localhost:8084/gestionnaire/produitsMedical/{idProduit}
 
 ### supprimer un produit d'un catalogue fournisseur###
 
-DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+DELETE http://localhost:8084/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
 
 ### modifier un fournisseur###
 
-PATCH http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
+PATCH http://localhost:8084/gestionnaire/fournisseurs/2
+Content-Type: application/json-patch+json
+
+{
+    "op": "replace",
+    "path": "/0",
+    "value": "0713261147"
+}
+
 
 ### modifier un produit###
 //PATC
@@ -72,10 +79,10 @@ PATCH http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}
 
 ### get commande by id###
 
-GET http://localhost:8080/gestionnaire/commandes/{idCommande}
+GET http://localhost:8084/gestionnaire/commandes/1
 
 ### get panier utilisateur###
-GET http://localhost:8084/gestionnaire/utilisateurs/4/panier
+GET http://localhost:8084/gestionnaire/utilisateurs/2/panier
 
 ### get fournisseur by id###
 
