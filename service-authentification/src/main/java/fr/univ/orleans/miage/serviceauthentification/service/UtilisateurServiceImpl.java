@@ -30,7 +30,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             throw new UtilisateurDejaExistantException();
         }
         ERole role = determinerRole(email);
-        Utilisateur user = new Utilisateur(email,mdp,role,false);
+        Utilisateur user = new Utilisateur(email,mdp,role,true);
         this.utilisateurRepository.save(user);
 
         // Création du token de confirmation de compte

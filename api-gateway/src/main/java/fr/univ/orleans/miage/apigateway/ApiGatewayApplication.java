@@ -12,25 +12,17 @@ import org.springframework.context.annotation.Bean;
 @EnableDiscoveryClient
 public class ApiGatewayApplication {
 
-	// ENV. PRODUCTION
-	private String SERVICE_AUTH = "http://service-auth:8081";
-	private String SERVICE_NOTIF = "http://service-notif:8082";
-	private String SERVICE_RDV_PATIENTS = "http://service-rdv-patients:8083";
-	private String SERVICE_STOCK_FOURNISSEURS = "http://service-stockfournisseurs:8084";
-	private String SERVICE_FACTURATION = "http://service-facturation:80";
+	@Value("${uri.service-auth}")
+	private String SERVICE_AUTH;
+	@Value("${uri.service-notif}")
+	private String SERVICE_NOTIF;
+	@Value("${uri.service-rdv-patients}")
+	private String SERVICE_RDV_PATIENTS;
+	@Value("${uri.service-stock}")
+	private String SERVICE_STOCK_FOURNISSEURS;
+	@Value("${uri.service-facture}")
+	private String SERVICE_FACTURATION;
 
-	// ENV. DEVELOPPEMENT
-
-//	@Value("${dev.service-auth}")
-//	private String SERVICE_AUTH;
-//	@Value("${dev.service-notif}")
-//	private String SERVICE_NOTIF;
-//	@Value("${dev.service-rdv-patients}")
-//	private String SERVICE_RDV_PATIENTS;
-//	@Value("${dev.service-stock}")
-//	private String SERVICE_STOCK_FOURNISSEURS;
-//	@Value("${dev.service-facture}")
-//	private String SERVICE_FACTURATION;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);

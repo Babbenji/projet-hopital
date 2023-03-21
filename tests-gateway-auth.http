@@ -1,4 +1,4 @@
-### Creation d'un compte medecin ancienne version
+### Creation d'un compte medecin sans confirmation (compte validé directement)
 POST http://localhost:8080/api/auth/inscription/sans-confirmation
 Content-Type: application/json
 

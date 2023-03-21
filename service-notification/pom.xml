@@ -109,6 +109,15 @@
             <scope>test</scope>
         </dependency>
 
+
+        <!-- Swagger pour interface des endpoints -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.15</version>
+        </dependency>
+
+
     </dependencies>
 
     <dependencyManagement>

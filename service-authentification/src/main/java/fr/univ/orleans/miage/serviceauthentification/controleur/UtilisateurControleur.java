@@ -81,7 +81,6 @@ public class UtilisateurControleur {
                     .created(location)
                     .header(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX+" "+genereToken.apply(u))
                     .body("Utilisateur créé avec succès");
-//                    .build();
         } catch (UtilisateurDejaExistantException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
         }
