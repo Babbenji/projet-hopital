@@ -10,7 +10,7 @@
         }
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            this.consumer.SubcribeQueue("boite_recept");
+            this.consumer.SubcribeQueue("facture.queue");
             return Task.CompletedTask;
         }
 

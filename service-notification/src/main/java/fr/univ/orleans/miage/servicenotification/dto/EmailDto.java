@@ -3,13 +3,13 @@ package fr.univ.orleans.miage.servicenotification.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EmailDto {
 
     @NotBlank
@@ -24,6 +24,13 @@ public class EmailDto {
     @NotBlank
     private String type = "simple";
 
-
-
+    @Override
+    public String toString() {
+        return "EmailDto{" +
+                "destinataire='" + destinataire + '\'' +
+                ", objet='" + objet + '\'' +
+                ", contenu='" + contenu + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

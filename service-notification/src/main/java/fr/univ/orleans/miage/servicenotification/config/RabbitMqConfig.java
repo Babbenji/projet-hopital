@@ -17,10 +17,16 @@ public class RabbitMqConfig {
     private String queue;
 
     @Value("${spring.rabbitmq.exchange}")
-    private String exchange;
+    private String exchange_auth;
 
     @Value("${spring.rabbitmq.routingkey}")
-    private String routingKey;
+    private String routingKey_auth;
+
+    @Value("${spring.rabbitmq.exchange-facture}")
+    private String exchange_facture;
+
+    @Value("${spring.rabbitmq.routingkey-facture}")
+    private String routingKey_facture;
 
     @Value("${spring.rabbitmq.username}")
     private String username;
@@ -43,16 +49,30 @@ public class RabbitMqConfig {
 
 
     @Bean
-    Exchange myExchange() {
-        return ExchangeBuilder.directExchange(exchange).durable(true).build();
+    Exchange authExchange() {
+        return ExchangeBuilder.directExchange(exchange_auth).durable(true).build();
     }
 
     @Bean
-    Binding binding() {
+    Exchange factureExchange() {
+        return ExchangeBuilder.directExchange(exchange_facture).durable(true).build();
+    }
+
+    @Bean
+    Binding binding_auth() {
         return BindingBuilder
                 .bind(queue())
-                .to(myExchange())
-                .with(routingKey)
+                .to(authExchange())
+                .with(routingKey_auth)
+                .noargs();
+    }
+
+    @Bean
+    Binding binding_facture() {
+        return BindingBuilder
+                .bind(queue())
+                .to(factureExchange())
+                .with(routingKey_facture)
                 .noargs();
     }
 
