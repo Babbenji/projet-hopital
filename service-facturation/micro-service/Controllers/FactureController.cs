@@ -1,10 +1,6 @@
-﻿using micro_service.ConsulConfig;
-using micro_service.EventBus;
-using micro_service.Models;
+﻿using micro_service.Models;
 using micro_service.Service;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Options;
 
 namespace micro_service.Controllers
 {
