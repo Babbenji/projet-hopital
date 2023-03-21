@@ -53,20 +53,4 @@ public class Patient extends Utilisateur{
     public void setAntecedents(String antecedents) {
         this.antecedents = antecedents;
     }
-
-    @Override
-    public String toString() {
-        return "Patient{" +
-                "id=" + this.getId() +
-                ", prenom='" + this.getPrenom() + '\'' +
-                ", nom='" + this.getNom() + '\'' +
-                ", email='" + this.getEmail() + '\'' +
-                ", numSecu='" + numSecu + '\'' +
-                ", numTel='" + numTel + '\'' +
-                ", dateNaissance='" + dateNaissance + '\'' +
-                ", genre='" + genre + '\'' +
-                ", idMedecinTraitant=" + idMedecinTraitant +
-                ", antecedents='" + antecedents + '\'' +
-                '}';
-    }
 }

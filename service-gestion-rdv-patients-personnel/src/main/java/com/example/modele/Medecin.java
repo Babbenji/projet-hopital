@@ -1,4 +1,6 @@
 package com.example.modele;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -25,18 +27,8 @@ public class Medecin extends Utilisateur {
         this.listePatients.add(patient.getId());
     }
 
-    //Retirer un patient
-    //Retirer une consultation
-
-    @Override
-    public String toString() {
-        return "Medecin{" +
-                "id=" + this.getId() +
-                ", prenom='" + this.getPrenom() + '\'' +
-                ", nom='" + this.getNom() + '\'' +
-                ", email='" + this.getEmail() + '\'' +
-                ", listeConsultations=" + listeConsultations +
-                ", listePatients=" + listePatients +
-                '}';
+    public void retirerConsultation(int idConsultation){
+        this.listeConsultations.remove(this.listeConsultations.indexOf(idConsultation));
     }
+    //Retirer un patient
 }

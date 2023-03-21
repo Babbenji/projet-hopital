@@ -1,0 +1,11 @@
+server:
+  port: 8083
+spring:
+  data:
+    mongodb:
+      database: rdvpatients
+      host: service-gestionrdvpatientspersonnel_mongo_db_1
+      port: 27017
+jwt:
+  public:
+    key: classpath:app.pub

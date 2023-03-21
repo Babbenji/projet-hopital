@@ -1,5 +1,41 @@
+### Creation d'un compte secretaire nouvelle version (avec confirmation)
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-secretaire.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("token_confirm_secretaire", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### confirmation du compte utilisateur
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
+
+### Connexion d'un compte patient valide
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-secretaire.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("secretaire_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
 ### Cette requete permet de creer un medecin (que pr la secretaire)
-POST http://localhost:8080/rdvpatients/medecin
+POST http://localhost:8083/rdvpatients/medecin
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
@@ -9,7 +45,7 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de creer un patient (que pr la secretaire)
-POST http://localhost:8080/rdvpatients/patient
+POST http://localhost:8083/rdvpatients/patient
 Content-Type: application/json
 
 {
@@ -23,18 +59,18 @@ Content-Type: application/json
 }
 
 ### Cette requete permet d'ajouter les antécédents d'un patient à son profil
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/antecedents
+PATCH http://localhost:8083/rdvpatients/personnel/modif/patient/15/antecedents
 Content-Type: application/json
 
 {
   "antecedents": "Fragile"
 }
 
-### Cette requete permet d'ajouter les antécédents d'un patient à son profil
-GET http://localhost:8080/rdvpatients/patient/15
+### Cette requete permet de voir les données d'un patient
+GET http://localhost:8083/rdvpatients/patient/15
 
 ### Cette requete permet d'assigner un medecin à un patient
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/medecintraitant
+PATCH http://localhost:8083/rdvpatients/personnel/modif/patient/15/medecintraitant
 Content-Type: application/json
 
 {
@@ -43,22 +79,22 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de prendre un rendez vous pour un patient
-POST http://localhost:8080/rdvpatients/consultation
+POST http://localhost:8083/rdvpatients/consultation
 Content-Type: application/json
 
 {
   "dateRDV": "15-07-2022",
-  "heureRDV": "14H20",
+  "heureRDV": "18H20",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
-PATCH http://localhost:8080/rdvpatients/consultation/1/confirmer
+PATCH http://localhost:8083/rdvpatients/consultation/4/confirmer
 
 ### Cette requete permet d'ajouter un compte rendu a une consultation
-PATCH http://localhost:8080/rdvpatients/consultation/1/compterendu
+PATCH http://localhost:8083/rdvpatients/consultation/1/compterendu
 Content-Type: application/json
 
 {
@@ -66,8 +102,8 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de voir les consultations d'un medecin
-GET http://localhost:8080/rdvpatients/medecin/2/consultations
+GET http://localhost:8083/rdvpatients/medecin/9/consultations
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
-POST http://localhost:8080/rdvpatients/consultation/1/annulation
+DELETE http://localhost:8083/rdvpatients/consultation/1/annulation
 Content-Type: application/json

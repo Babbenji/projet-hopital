@@ -13,4 +13,6 @@ public interface PatientRepository extends MongoRepository<Patient, Integer>, Cr
     Patient findPatientByEmail(String email);
     Patient findPatientById(int id);
     void removePatientById(int id);
+    boolean existsByNumSecu(String numSecu);
+    boolean existsByEmail(String email);
 }

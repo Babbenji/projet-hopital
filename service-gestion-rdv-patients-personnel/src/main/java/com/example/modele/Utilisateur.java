@@ -14,6 +14,10 @@ public class Utilisateur {
         this.email = email;
     }
 
+    public Utilisateur() {
+
+    }
+
     public int getId() {
         return id;
     }

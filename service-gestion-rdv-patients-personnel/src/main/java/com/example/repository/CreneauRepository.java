@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CreneauRepository extends MongoRepository<Creneau, Integer>, CrudRepository<Creneau,Integer> {
+    Creneau findByDateAndHeure(String dateRDV, String heureRDV);
+
+    boolean existsByDateAndHeure(String dateRDV, String heureRDV);
 }
