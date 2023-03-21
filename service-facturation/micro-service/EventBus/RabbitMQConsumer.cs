@@ -3,14 +3,13 @@ using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace micro_service.EventBus
 {
     public class RabbitMQConsumer : RabbitMQProvider, IRabbitMQConsumer
     {
         private readonly ILogger<RabbitMQConsumer> logger;
-        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IOptions<RabbitMQConfig> config) : base(config.Value.Protocol + "://" + config.Value.Username + ":" + config.Value.Password + "@" + config.Value.Host + ":" + config.Value.Port + "")
+        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IOptions<RabbitMQConfig> config) : base(config.Value)
         {
             this.logger = logger;
         }

@@ -1,4 +1,22 @@
 
+
+### Reste à faire 
+
+- [ ] Tests http requests (service facturation)
+- [ ] Communication entre services ave RabbitMQ 
+- [ ] Sécurité des services (gestion des accès)
+- [ ] Serveur de configuration centralisé
+- [ ] Tests d'intégration avec karate
+- [ ] Tests controleur avec REST Assured
+- [ ] Tests services avec JUnit et Mockito
+- [ ] Frontend avec Ajax et jQuery (template bootstrap)
+
+### Optionnel
+- [ ] Documentation API REST DOC
+- [ ] Open ID Connect
+
+
+
 ### Déployer le service
 
 #### Commandes docker environnement de "production"

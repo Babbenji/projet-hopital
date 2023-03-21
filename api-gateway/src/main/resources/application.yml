@@ -1,3 +1,11 @@
+# Pour l'environnement de dev (localhost)
+#dev:
+#  service-auth: http://localhost:8081
+#  service-notif: http://localhost:8082
+#  service-rdv-patients: http://localhost:8083
+#  service-stock: http://localhost:8084
+#  service-facture: http://localhost:8085
+
 server:
   port: 8080
 

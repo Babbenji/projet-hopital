@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Connections;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Text;
+﻿using RabbitMQ.Client;
 
 namespace micro_service.EventBus
 {
@@ -10,14 +7,32 @@ namespace micro_service.EventBus
     {
         private readonly ConnectionFactory factory;
         protected readonly IConnection connection;
-        //amqp://guest:guest@localhost:5672
-        public RabbitMQProvider(string url)
+
+        public RabbitMQProvider(RabbitMQConfig rabbitMQConfig)
         {
             this.factory = new ConnectionFactory();
-            this.factory.Uri = new(url);
+            this.factory.Uri = new Uri($"{rabbitMQConfig.Protocol}://{rabbitMQConfig.Username}:{rabbitMQConfig.Password}@{rabbitMQConfig.Host}:{rabbitMQConfig.Port}");
             this.factory.AutomaticRecoveryEnabled = true;
             this.factory.DispatchConsumersAsync = false;
-            this.connection = factory.CreateConnection("DemoAppClient2");
+            this.connection = factory.CreateConnection("service-facturation");
+
+
+            using (var channel = connection.CreateModel())
+            {
+                channel.ExchangeDeclare("CustomerNotification", ExchangeType.Direct);
+
+                channel.QueueDeclare(
+                    queue: "boite_recept",
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                channel.QueueBind("boite_recept", "CustomerNotification", "recept", null);
+            }
+
+           
+
         }
 
     }

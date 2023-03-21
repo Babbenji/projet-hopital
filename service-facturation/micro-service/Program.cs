@@ -5,8 +5,6 @@ using micro_service.Repository;
 using micro_service.Security;
 using micro_service.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using System.Security.Claims;
 
@@ -23,24 +21,24 @@ builder.Services.AddSingleton<IMongoClient>(p => new MongoClient(builder.Configu
 
 builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("RabbitMQ"));
 
-//builder.Services.AddSingleton<IRabbitMQConsumer,RabbitMQConsumer>();
+builder.Services.Configure<ServerHostConfiguration>(builder.Configuration.GetSection("ServeurDetails"));
 
-//builder.Services.AddSingleton<IRabbitMQPublisher,RabbitMQPublisher>();
+builder.Services.AddSingleton<IRabbitMQConsumer, RabbitMQConsumer>();
+
+builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
 
 builder.Services.AddSingleton<IFactureRepository, FactureRepository>();
 
 builder.Services.AddSingleton<IFactureService, FactureService>();
 
 
-//string f = builder.Configuration.GetSection("Consul:Uri").Value;
-
-//builder.Services.AddSingleton<IConsulClient, ConsulClient>( p => new ConsulClient(config => config.Address = new Uri(f)));
-
-//builder.Services.AddHostedService<ConsulRegisterService>();
-
-//builder.Services.BuildServiceProvider().GetService<IRabbitMQConsumer>().SubcribeQueue("boite_recept");
 
 
+builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(config => config.Address = new Uri("http://"+builder.Configuration.GetSection("Consul:Host").Value + ":" + builder.Configuration.GetSection("Consul:Port").Value)));
+
+builder.Services.AddHostedService<ConsulRegisterService>();
+
+builder.Services.BuildServiceProvider().GetService<IRabbitMQConsumer>().SubcribeQueue("boite_recept");
 
 
 builder.Services.AddHealthChecks();

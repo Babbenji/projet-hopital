@@ -2,6 +2,8 @@
 
 # commande pour construire une image docker pour chaque service
 
+docker build -t service-facturation:1.0 ./service-facturation
+
 for dir in */ ; do
     if [ -e "$dir/pom.xml" ]; then
         echo "Building image for $dir"
