@@ -2,13 +2,13 @@
 {
     public class Email
     {
-        public string? destinataire { get; set; }
+        public string destinataire { get; set; } = string.Empty;
 
-        public string? objet { get; set; }
+        public string objet { get; set; } = string.Empty;
 
-        public string? contenu { get; set; }
+        public string contenu { get; set; } = string.Empty;
 
-        public string? type { get; set; }
+        public string type { get; set; } = string.Empty;
 
 
        

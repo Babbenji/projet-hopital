@@ -17,7 +17,7 @@ namespace micro_service.EventBus
             this.connection = factory.CreateConnection("service-facturation");
 
 
-            using (var channel = connection.CreateModel())
+            using (IModel channel = connection.CreateModel())
             {
                 channel.ExchangeDeclare("facture.exchange", ExchangeType.Direct,durable: true);
 

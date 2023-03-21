@@ -51,14 +51,15 @@ namespace micro_service.Service
             Facture? facture = this.GetFacturePatient(idfacture, username);
             if(facture != null)
             {
-                Email email = Email.Builder().SetDestination(username)
-               .SetObjet("Facture " + idfacture)
-               .SetContenu("<html><body><p>Bonjour," +
-               "</p><p>Voici votre facture :</p>" +
-               "<p>Voici votre facture :</p>" +
-               "<p> Désignation: <br/> " + this.GetProduit(facture) + "</p>" )
-               .SetType("html")
-               .Build();
+                Email email = Email.Builder()
+                    .SetDestination(username)
+                    .SetObjet("Facture " + idfacture)
+                    .SetContenu("<html><body><p>Bonjour," +
+                    "</p><p>Voici votre facture :</p>" +
+                    "<p>Voici votre facture :</p>" +
+                    "<p> Désignation: <br/> " + this.GetProduit(facture) + "</p>" )
+                    .SetType("html")
+                    .Build();
                 this.rabbitMQPublisher.Publish<Email>(email, "facture.exchange", "facture.routingKey.notif");
             }
             else

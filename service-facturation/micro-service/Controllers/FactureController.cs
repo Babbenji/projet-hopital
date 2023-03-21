@@ -1,6 +1,7 @@
 ﻿using micro_service.Models;
 using micro_service.Service;
 using micro_service.Service.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
@@ -11,15 +12,15 @@ namespace micro_service.Controllers
     {
         private readonly ILogger<FactureController> logger;
         private readonly IFactureService factureService;
-        
-        public FactureController(ILogger<FactureController> logger, IFactureService factureService) 
+
+        public FactureController(ILogger<FactureController> logger, IFactureService factureService)
         {
             this.logger = logger;
             this.factureService = factureService;
         }
 
         [HttpPost("v1/new-bill")]
-        public IActionResult CreationFacture([FromBody] Facture facture) 
+        public IActionResult CreationFacture([FromBody] Facture facture)
         {
             Facture entity = this.factureService.Create(facture);
             return CreatedAtAction(nameof(GetFacture), new { id = entity.Id }, entity);
@@ -50,6 +51,7 @@ namespace micro_service.Controllers
             return Ok(entity);
         }
 
+        
         [HttpGet("v1/patients/{id}")]
         public IActionResult GetFacturesPatient(string id)
         {
