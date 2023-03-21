@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -23,6 +24,7 @@ public class Controleur {
     FacadeApplication facadeApplication;
 
     @PostMapping("/medecin")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<?> ajouterMedecin(@RequestBody Medecin medecin){
         try {
             Medecin nouveauMedecin = facadeApplication.ajouterMedecin(medecin.getPrenom(), medecin.getNom(), medecin.getEmail());
@@ -80,7 +82,8 @@ public class Controleur {
         }
     }
     @PostMapping("/consultation")
-    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
+    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO){
         Patient patient;
         try {
             patient = facadeApplication.getPatientByEmail("joel.dino@etu.univ-orleans.fr");

@@ -1,3 +1,23 @@
+### Creation d'un compte medecin nouvelle version (avec confirmation)
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-secretaire.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("token_confirm_secretaire", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+
+### confirmation du compte utilisateur
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
+
+
 ### Cette requete permet de creer un medecin (que pr la secretaire)
 POST http://localhost:8083/rdvpatients/medecin
 Content-Type: application/json
