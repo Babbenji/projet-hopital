@@ -6,6 +6,12 @@ namespace micro_service.Service
     {
         List<Facture> GetAll();
 
+        List<Facture> GetAllFacturePatient(string username);
+
+        Facture? GetFacturePatient(string idfacture, string username);
+
+        void SendFactureEmail(string idfacture, string username);
+
         Facture GetById(string id);
 
         Facture Create(Facture entity);

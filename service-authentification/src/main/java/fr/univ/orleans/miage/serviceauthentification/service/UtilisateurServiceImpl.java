@@ -10,6 +10,8 @@ import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
 import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -22,6 +24,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
     private final TokenConfirmationService tokenConfirmationService;
     private final RabbitMqSender rabbitMqSender;
+
+    private static final Logger logger = LoggerFactory.getLogger(UtilisateurServiceImpl.class);
 
     @Override
     public String inscriptionConfirmation(String email, String mdp) throws UtilisateurDejaExistantException {
@@ -52,14 +56,23 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         contenu += "<p>Attention, ce lien sera valide pendant 5 minutes.</p>";
         contenu += "</body></html>";
 
-        EmailDto emailDto = new EmailDto();
-        emailDto.setDestinataire(user.getEmail());
-        emailDto.setObjet("Confirmation de compte");
-        emailDto.setContenu(contenu);
-        emailDto.setType("html");
+//        EmailDto emailDto = new EmailDto();
+//        emailDto.setDestinataire(user.getEmail());
+//        emailDto.setObjet("Confirmation de compte");
+//        emailDto.setContenu(contenu);
+//        emailDto.setType("html");
+
+        EmailDto emailDto = EmailDto.builder()
+                .destinataire(user.getEmail())
+                .objet("Confirmation de compte")
+                .contenu(contenu)
+                .type("html")
+                .build();
 //        emailDto.setContenu("Bonjour, merci de cliquer sur le lien suivant pour valider votre compte : " + lienValidation);
 
         this.rabbitMqSender.send(emailDto);
+
+        logger.info("Event Producer Email send to rabbitmq : " + emailDto);
 
         return token;
     }

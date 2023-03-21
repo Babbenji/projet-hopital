@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class EmailDto {
 
     @NotBlank
@@ -22,6 +24,13 @@ public class EmailDto {
     @NotBlank
     private String type = "simple";
 
-
-
+    @Override
+    public String toString() {
+        return "EmailDto{" +
+                "destinataire='" + destinataire + '\'' +
+                ", objet='" + objet + '\'' +
+                ", contenu='" + contenu + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
 }

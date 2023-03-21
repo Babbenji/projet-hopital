@@ -38,7 +38,7 @@ builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient
 
 builder.Services.AddHostedService<ConsulRegisterService>();
 
-builder.Services.BuildServiceProvider().GetService<IRabbitMQConsumer>().SubcribeQueue("boite_recept");
+builder.Services.AddHostedService<RabbitMQListener>();
 
 
 builder.Services.AddHealthChecks();

@@ -17,18 +17,18 @@ namespace micro_service.EventBus
             this.connection = factory.CreateConnection("service-facturation");
 
 
-            using (var channel = connection.CreateModel())
+            using (IModel channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare("CustomerNotification", ExchangeType.Direct);
+                channel.ExchangeDeclare("facture.exchange", ExchangeType.Direct,durable: true);
 
                 channel.QueueDeclare(
-                    queue: "boite_recept",
-                    durable: false,
+                    queue: "facture.queue",
+                    durable: true,
                     exclusive: false,
                     autoDelete: false,
                     arguments: null);
 
-                channel.QueueBind("boite_recept", "CustomerNotification", "recept", null);
+                channel.QueueBind("facture.queue", "facture.exchange", "facture.routingKey", null);
             }
 
            

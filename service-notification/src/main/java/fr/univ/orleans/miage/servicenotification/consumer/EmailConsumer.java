@@ -23,6 +23,8 @@ public class EmailConsumer {
     @RabbitListener(queues = "${spring.rabbitmq.queue}")
     public void listen(@Payload EmailDto emailDto) throws MessagingException {
 
+        logger.info("Event consumer email réceptionné: " + emailDto);
+
         Email email = new Email();
 
         BeanUtils.copyProperties(emailDto, email);

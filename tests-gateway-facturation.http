@@ -1,10 +1,10 @@
 ### creation d'une facture
-POST http://localhost:8080/api/facture/new-bill
+POST http://localhost:41487/api/facture/v1/new-bill
 Content-Type: application/json
 
 {
   "dateFature": "2023-03-17T22:02:15.806Z",
-  "nomPatient": "nomPatient",
+  "nomPatient": "rachida.el-ouariachi@etu.univ-orleans.fr",
   "produits": [
     {
       "nom": "calpol",
@@ -26,3 +26,9 @@ GET http://localhost:8080/api/facture/bill/6417a347cc33dbd37d280d38
 
 ### récupération toutes les factures
 GET http://localhost:8080/api/facture/bill
+
+
+64147fca8e51103e04984680
+
+###
+GET http://localhost:41487/api/facture/v1/send/patients?idFacture=6419b1b58d08b399c2607130&idPatients=rachida.el-ouariachi@etu.univ-orleans.fr

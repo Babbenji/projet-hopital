@@ -1,9 +1,5 @@
 ﻿using Consul;
-using micro_service.EventBus;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.Options;
-using static System.Net.WebRequestMethods;
 
 namespace micro_service.ConsulConfig
 {

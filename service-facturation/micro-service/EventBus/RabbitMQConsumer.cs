@@ -9,28 +9,38 @@ namespace micro_service.EventBus
     public class RabbitMQConsumer : RabbitMQProvider, IRabbitMQConsumer
     {
         private readonly ILogger<RabbitMQConsumer> logger;
+        
+        private readonly IModel channel;
+
         public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IOptions<RabbitMQConfig> config) : base(config.Value)
         {
             this.logger = logger;
+            this.channel = this.connection.CreateModel();
         }
         
         public void SubcribeQueue(string queueName)
         {
-            IModel channel = this.connection.CreateModel();
+            EventingBasicConsumer consume = new(this.channel);
+            consume.Received += Listennig;
 
-            EventingBasicConsumer consume = new(channel);
-            consume.Received += (sender, args) =>
-            {
-                byte[] body = args.Body.ToArray();
+            this.channel.BasicConsume(queue: queueName, autoAck: false, consumer: consume);
+        }
 
-                string message = Encoding.UTF8.GetString(body);
+        private void Listennig(object? sender, BasicDeliverEventArgs e)
+        {
+            byte[] body = e.Body.ToArray();
 
-                channel.BasicAck(args.DeliveryTag, false);
+            string message = Encoding.UTF8.GetString(body);
 
-                logger.LogInformation($" message reçu le : {message}");
-            };
+            this.channel.BasicAck(e.DeliveryTag, false);
 
-            channel.BasicConsume(queue: queueName, autoAck: false, consumer: consume);
+            logger.LogInformation($" message reçu le : {message}");
+        }
+
+        public void ClosingChannelAndConnection()
+        {
+            this.channel.Close();
+            this.connection.Close();
         }
     }
 }

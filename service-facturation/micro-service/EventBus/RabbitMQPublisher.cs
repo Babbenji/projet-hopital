@@ -7,30 +7,22 @@ namespace micro_service.EventBus
 {
     public class RabbitMQPublisher : RabbitMQProvider, IRabbitMQPublisher
     {
-        public RabbitMQPublisher(IOptions<RabbitMQConfig> config) : base(config.Value) { }
+        private readonly ILogger<RabbitMQPublisher> logger;
 
-        public void Publish<T>(T message)
+        public RabbitMQPublisher(IOptions<RabbitMQConfig> config, ILogger<RabbitMQPublisher> logger) : base(config.Value) 
+        { 
+            this.logger = logger;
+        }
+
+        public void Publish<T>(T message, string exchangeName, string routingKey)
         {
             using (IModel channel = this.connection.CreateModel())
             {
-                channel.ExchangeDeclare("CustomerNotification", ExchangeType.Direct);
+                this.logger.LogInformation(JsonConvert.SerializeObject(message));
+                byte[] body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                channel.QueueDeclare(
-                    queue: "sending",
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
-
-                channel.QueueBind("sending", "CustomerNotification", "recept", null);
-
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
-
-                channel.BasicPublish("CustomerNotification", "recept", null, body);
+                channel.BasicPublish(exchangeName, routingKey, null, body);
             }
-            
-
-
         }
     }
 }

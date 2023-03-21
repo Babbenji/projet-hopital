@@ -25,16 +25,23 @@ spring:
     port: ${RABBITMQ_PORT:15672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
+    # communication service-auth
     exchange: user.exchange
-    queue: user.queue
     routingkey: user.routingkey
+
+    # communication service-facture
+    exchange-facture: facture.exchange
+    routingkey-facture: facture.routingKey.notif
+
+    # queue globale pour tous les exchanges (envoi d'émails)
+    queue: email.queue
 
 ##################   BASE DE DONNEES   ###############
 
   datasource:
     driver-class-name: org.postgresql.Driver
 #    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:bdd_notif}  #--> prod
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bdd_notif}  #--> dev
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}  #--> dev
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
 
