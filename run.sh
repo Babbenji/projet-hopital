@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# commande pour construire une image docker pour chaque service
-
-docker build -t service-facturation:1.0 ./service-facturation
+# commande pour construire une image docker de chaque service spring boot
 
 for dir in */ ; do
     if [ -e "$dir/pom.xml" ]; then
@@ -13,17 +11,24 @@ for dir in */ ; do
     fi
 done
 
-#
-#cd service-gestion-rdv-patients-personnel
-#mvn spring-boot:build-image -DskipTests
-# commande pour construire et executer les containers docker
 
+# commande pour construite l'image docker du service .NET
+docker build -t service-facturation:1.0 ./service-facturation
+
+
+# commande pour construire et executer les containers docker
 docker compose build
 docker compose up
 
 
 
+
+
 # ancienne version :
+
+#
+#cd service-gestion-rdv-patients-personnel
+#mvn spring-boot:build-image -DskipTests
 
 # commande pour générer le fichier .jar de chaque service en ignorant les tests
 #./mvn clean package -DskipTests

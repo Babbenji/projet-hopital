@@ -15,12 +15,12 @@
 - [ ] Documentation API REST DOC
 - [ ] Open ID Connect
 - [ ] Swagger pour afficher l'api design
-- [ ] ENV. PROD et ENV. DEV à mettre en place +++
+- [ ] ENV. PROD et ENV. DEV à mettre en place +++   
 
 ### Problèmes à resoudre
 - [ ] Location
 - [ ] Clé publique à générer et à récupérer de facon plus propre (la stocké server config ou consul)
-- [ ] ...
+- [ ] Améliorer la gestion de la gateway (prod et dev)
 
 ### Déployer le service
 
