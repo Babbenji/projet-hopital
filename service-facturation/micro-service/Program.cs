@@ -23,6 +23,8 @@ builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("Rab
 
 builder.Services.Configure<ServerHostConfiguration>(builder.Configuration.GetSection("ServeurDetails"));
 
+builder.Services.AddSingleton<RabbitMQProvider>();
+
 builder.Services.AddSingleton<IRabbitMQConsumer, RabbitMQConsumer>();
 
 builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisher>();
