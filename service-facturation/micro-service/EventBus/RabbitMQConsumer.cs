@@ -1,21 +1,38 @@
-﻿using micro_service.Controllers;
-using Microsoft.Extensions.Options;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 
 namespace micro_service.EventBus
 {
-    public class RabbitMQConsumer : RabbitMQProvider, IRabbitMQConsumer
+    public class RabbitMQConsumer : IRabbitMQConsumer
     {
         private readonly ILogger<RabbitMQConsumer> logger;
-        
+        private readonly RabbitMQProvider rabbitMQProvider;
         private readonly IModel channel;
 
-        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, IOptions<RabbitMQConfig> config) : base(config.Value)
+        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, RabbitMQProvider rabbitMQProvider)
         {
             this.logger = logger;
-            this.channel = this.connection.CreateModel();
+            this.rabbitMQProvider = rabbitMQProvider;
+            this.DeclarationExchangeQueue();
+            this.channel = this.rabbitMQProvider.Connection.CreateModel();
+        }
+
+        public void DeclarationExchangeQueue()
+        {
+            using (IModel channel = this.rabbitMQProvider.Connection.CreateModel())
+            {
+                channel.ExchangeDeclare("facture.exchange", ExchangeType.Direct, durable: true);
+
+                channel.QueueDeclare(
+                    queue: "facture.queue",
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                channel.QueueBind("facture.queue", "facture.exchange", "facture.routingKey", null);
+            }
         }
         
         public void SubcribeQueue(string queueName)
@@ -40,7 +57,7 @@ namespace micro_service.EventBus
         public void ClosingChannelAndConnection()
         {
             this.channel.Close();
-            this.connection.Close();
+            this.rabbitMQProvider.Connection.Close();
         }
     }
 }
