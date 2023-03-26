@@ -18,18 +18,14 @@ spring:
       ribbon:
         enabled: false
 
-# ENV. PROD (docker)
-uri:
-  service-auth: http://service-auth:8081
-  service-notif: http://service-notif:8082
-  service-rdv-patients: http://service-rdv-patients:8083
-  service-stock: http://service-stockfournisseurs:8084
-  service-facture: http://service-facturation:80
 
-# ENV. DEV (localhost)
-#uri:
-#  service-auth: http://localhost:8081
-#  service-notif: http://localhost:8082
-#  service-rdv-patients: http://localhost:8083
-#  service-stock: http://localhost:8084
-#  service-facture: http://localhost:8085
+# ENV. PROD (docker)
+prod:
+  uri:
+    service-auth: lb://service-auth
+    service-notif: lb://service-notif
+    service-rdv-patients: lb://service-rdv-patients
+    service-stock: lb://service-stockfournisseurs
+    service-facture: lb://service-facturation
+
+# ENV. DEV (localhost) => gérer dans la classe main de la gateway

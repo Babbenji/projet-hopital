@@ -69,7 +69,6 @@ public class AuthConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/api/producer/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()

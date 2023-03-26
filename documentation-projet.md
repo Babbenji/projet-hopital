@@ -18,9 +18,9 @@
 - [ ] ENV. PROD et ENV. DEV à mettre en place +++   
 
 ### Problèmes à resoudre
-- [ ] Location
+- [x] Location
 - [ ] Clé publique à générer et à récupérer de facon plus propre (la stocké server config ou consul)
-- [ ] Améliorer la gestion de la gateway (prod et dev)
+- [x] Améliorer la gestion de la gateway (prod et dev)
 
 ### Déployer le service
 

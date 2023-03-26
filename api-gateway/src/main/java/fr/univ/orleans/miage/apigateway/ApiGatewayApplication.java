@@ -12,17 +12,16 @@ import org.springframework.context.annotation.Bean;
 @EnableDiscoveryClient
 public class ApiGatewayApplication {
 
-	@Value("${uri.service-auth}")
+	@Value("${prod.uri.service-auth:http://localhost:8081}")
 	private String SERVICE_AUTH;
-	@Value("${uri.service-notif}")
+	@Value("${prod.uri.service-notif:http://localhost:8082}")
 	private String SERVICE_NOTIF;
-	@Value("${uri.service-rdv-patients}")
+	@Value("${prod.uri.service-rdv-patients:http://localhost:8083}")
 	private String SERVICE_RDV_PATIENTS;
-	@Value("${uri.service-stock}")
+	@Value("${prod.uri.service-stock:http://localhost:8084}")
 	private String SERVICE_STOCK_FOURNISSEURS;
-	@Value("${uri.service-facture}")
+	@Value("${prod.uri.service-facture:http://localhost:8085}")
 	private String SERVICE_FACTURATION;
-
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiGatewayApplication.class, args);
@@ -36,7 +35,7 @@ public class ApiGatewayApplication {
 				.route(r -> r.path("/api/auth/**")
 						.filters(f -> f.rewritePath("/api/auth/(?<remains>.*)", "/api/v1/auth/${remains}")
 								.preserveHostHeader()
-								.rewriteLocationResponseHeader("ALWAYS_STRIP","Location","","")
+								.rewriteResponseHeader("Location","/api/v1/auth/","/api/auth/")
 						)
 						.uri(SERVICE_AUTH)
 				)
@@ -44,6 +43,7 @@ public class ApiGatewayApplication {
 				.route(r -> r.path("/api/notification/**")
 						.filters(f -> f.rewritePath("/api/notification/(?<remains>.*)", "/api/v1/notif/${remains}")
 								.preserveHostHeader()
+								.rewriteResponseHeader("Location","/api/v1/notif/","/api/notification/")
 						)
 						.uri(SERVICE_NOTIF)
 				)
@@ -51,6 +51,7 @@ public class ApiGatewayApplication {
 				.route(r -> r.path("/rdvpatients/**")
 						.filters(f -> f.rewritePath("/rdvpatients/(?<remains>.*)", "/api/v1/rdvpatients/${remains}")
 								.preserveHostHeader()
+								.rewriteResponseHeader("Location","/api/v1/rdvpatients/","/rdvpatients/")
 						)
 						.uri(SERVICE_RDV_PATIENTS)
 				)
@@ -58,6 +59,7 @@ public class ApiGatewayApplication {
 				.route(r -> r.path("/gestionnaire/**")
 						.filters(f -> f.rewritePath("/gestionnaire/(?<remains>.*)", "/api/v1/gestionnaire/${remains}")
 								.preserveHostHeader()
+								.rewriteResponseHeader("Location","/api/v1/gestionnaire/","/gestionnaire/")
 						)
 						.uri(SERVICE_STOCK_FOURNISSEURS)
 				)
@@ -65,6 +67,7 @@ public class ApiGatewayApplication {
 				.route(r -> r.path("/api/facture/**")
 						.filters(f -> f.rewritePath("/api/facture/(?<remains>.*)", "/api/facture/v1/${remains}")
 								.preserveHostHeader()
+								.rewriteResponseHeader("Location","/api/facture/v1/","/api/facture/")
 						)
 						.uri(SERVICE_FACTURATION)
 				)
