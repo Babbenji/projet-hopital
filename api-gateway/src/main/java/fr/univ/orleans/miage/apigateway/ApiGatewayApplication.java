@@ -48,12 +48,12 @@ public class ApiGatewayApplication {
 						.uri(SERVICE_NOTIF)
 				)
 				// Route vers le service de gestion rdv patients
-				.route(r -> r.path("/rdvpatients/**")
-						.filters(f -> f.rewritePath("/rdvpatients/(?<remains>.*)", "/api/v1/rdvpatients/${remains}")
+				.route(r -> r.path("/api/rdvpatients/**")
+						.filters(f -> f.rewritePath("/api/rdvpatients/(?<remains>.*)", "/api/v1/rdvpatients/${remains}")
 								.preserveHostHeader()
-								.rewriteResponseHeader("Location","/api/v1/rdvpatients/","/rdvpatients/")
+								.rewriteResponseHeader("Location","/api/v1/rdvpatients/","/api/rdvpatients/")
 						)
-						.uri(SERVICE_RDV_PATIENTS)
+						.uri("http://localhost:8083")
 				)
 				// Route vers le service de gestion de stocks
 				.route(r -> r.path("/gestionnaire/**")
