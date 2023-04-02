@@ -35,6 +35,7 @@ public class Controleur {
         }
     }
     @PostMapping("/patient")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<?> ajouterPatient(@RequestBody Patient patient){
         try {
             Patient nouveauPatient = facadeApplication.ajouterPatient(
@@ -53,6 +54,7 @@ public class Controleur {
         }
     }
     @GetMapping("/patient/{numSecu}")
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<?> afficherPatient(@PathVariable("numSecu") String numSecu){
         try {
             Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
@@ -62,6 +64,7 @@ public class Controleur {
         }
     }
     @PatchMapping("/personnel/modif/patient/{numSecu}/antecedents")
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> modifierAntecedents(@PathVariable("numSecu") String numSecu, @RequestBody Patient patient) {
         try {
             facadeApplication.modifierAntecedentsPatient(numSecu,patient.getAntecedents());
@@ -104,6 +107,7 @@ public class Controleur {
         }
     }
     @PatchMapping("/consultation/{idConsultation}/confirmer")
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> confirmerRDV( @PathVariable("idConsultation") int idConsultation) {
         try {
             facadeApplication.confirmerRDV(idConsultation);
@@ -115,6 +119,7 @@ public class Controleur {
         }
     }
     @PatchMapping("/consultation/{idConsultation}/compterendu")
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
         try {
             facadeApplication.modifierCRConsultation(idConsultation,consultation.getCompteRendu());
@@ -124,6 +129,7 @@ public class Controleur {
         }
     }
     @GetMapping("/medecin/{idMedecin}/consultations")
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<?> voirConsultationsMedecin(@PathVariable("idMedecin") int idMedecin) {
         List<Consultation> consultations = null;
         try {
@@ -138,6 +144,7 @@ public class Controleur {
         return ResponseEntity.ok().body(consultations);
     }
     @DeleteMapping("/consultation/{idConsultation}/annulation")
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
     public ResponseEntity<String> annulationRDV(@PathVariable("idConsultation") int idConsultation) {
         try {
             facadeApplication.annulerConsultation(idConsultation);
