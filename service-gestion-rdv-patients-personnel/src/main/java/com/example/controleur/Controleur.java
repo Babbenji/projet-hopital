@@ -53,6 +53,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce numéro de sécurité sociale est déjà attribué à un autre patient.");
         }
     }
+
     @GetMapping("/patient/{numSecu}")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<?> afficherPatient(@PathVariable("numSecu") String numSecu){
@@ -63,6 +64,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
         }
     }
+
     @PatchMapping("/personnel/modif/patient/{numSecu}/antecedents")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> modifierAntecedents(@PathVariable("numSecu") String numSecu, @RequestBody Patient patient) {
@@ -73,7 +75,9 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
         }
     }
+
     @PatchMapping("/personnel/modif/patient/{numSecu}/medecintraitant")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> assignerMedecinTraitant(@PathVariable("numSecu") String numSecu, @RequestBody Medecin medecin) {
         try {
             facadeApplication.assignerMedecinTraitant(numSecu,medecin.getPrenom(),medecin.getNom());
@@ -84,6 +88,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
         }
     }
+
     @PostMapping("/consultation")
     @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
     public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO){
@@ -106,6 +111,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veuillez définir votre médecin traitant avant de prendre RDV !");
         }
     }
+
     @PatchMapping("/consultation/{idConsultation}/confirmer")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> confirmerRDV( @PathVariable("idConsultation") int idConsultation) {
@@ -118,6 +124,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Cette consultation est déjà confirmée !");
         }
     }
+
     @PatchMapping("/consultation/{idConsultation}/compterendu")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
@@ -128,6 +135,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
         }
     }
+
     @GetMapping("/medecin/{idMedecin}/consultations")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<?> voirConsultationsMedecin(@PathVariable("idMedecin") int idMedecin) {
@@ -143,6 +151,7 @@ public class Controleur {
         }
         return ResponseEntity.ok().body(consultations);
     }
+
     @DeleteMapping("/consultation/{idConsultation}/annulation")
     @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
     public ResponseEntity<String> annulationRDV(@PathVariable("idConsultation") int idConsultation) {
