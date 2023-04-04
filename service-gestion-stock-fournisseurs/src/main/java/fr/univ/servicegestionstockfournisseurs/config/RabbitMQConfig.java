@@ -46,7 +46,7 @@ public class RabbitMQConfig {
         return new Queue(queue);
     }
 
-    @Bean
+    @Bean(name = "service-gestion-stock-fournisseurs")
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(host);
         cachingConnectionFactory.setUsername(username);
