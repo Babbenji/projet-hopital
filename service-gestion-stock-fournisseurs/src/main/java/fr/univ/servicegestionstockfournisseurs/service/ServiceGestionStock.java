@@ -175,6 +175,17 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 }
         }
 
+        @Override
+        public void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException {
+                if (produitMedicalRepository.existsByNomProduitMedical(nomProduit)) {
+                        ProduitMedical produitMedical = produitMedicalRepository.findByNomProduitMedical(nomProduit);
+                        produitMedical.setStockProduitMedical(quantite);
+                        produitMedicalRepository.save(produitMedical);
+                } else {
+                        throw new ProduitInexistantException();
+                }
+        }
+
 //        @Override
 //        public void modifierProduitFromCatalogue(ProduitMedical produitMedicalPatcher, int idProduit, int idFournisseur) throws ProduitInexistantException {
 //                if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {

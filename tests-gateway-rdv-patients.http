@@ -1,4 +1,4 @@
-### Creation d'un compte secretaire nouvelle version (avec confirmation)
+### Inscription d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
@@ -14,10 +14,7 @@ Content-Type: application/json
     });
 %}
 
-#### confirmation du compte utilisateur
-#GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
-
-### Connexion d'un compte
+### Connexion d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
@@ -33,7 +30,7 @@ Content-Type: application/json
     });
 %}
 
-### Cette requete permet de creer un medecin (que pr la secretaire)
+### Cette requete permet de créer un medecin // SECRETAIRE
 POST http://localhost:8083/api/v1/rdvpatients/medecin
 Authorization: {{secretaire_token}}
 Content-Type: application/json
@@ -41,11 +38,12 @@ Content-Type: application/json
 {
   "prenom": "Hind",
   "nom": "HACHEMI",
-  "email": "hind.hachemi9@etu.univ-orleans.fr"
+  "email": "hind.hachemi@etu.univ-orleans.fr"
 }
 
-### Cette requete permet de creer un patient (que pr la secretaire)
+### Cette requete permet de créer un patient // SECRETAIRE
 POST http://localhost:8083/api/v1/rdvpatients/patient
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
@@ -58,8 +56,9 @@ Content-Type: application/json
   "genre": "Homme"
 }
 
-### Cette requete permet d'ajouter les antécédents d'un patient à son profil
+### Cette requete permet d'ajouter les antécédents d'un patient à son profil // MEDECIN
 PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/antecedents
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
@@ -68,9 +67,11 @@ Content-Type: application/json
 
 ### Cette requete permet de voir les données d'un patient
 GET http://localhost:8083/api/v1/rdvpatients/patient/15
+Authorization: {{secretaire_token}}
 
 ### Cette requete permet d'assigner un medecin à un patient
 PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {

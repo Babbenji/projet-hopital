@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 public interface ProduitMedicalRepository extends MongoRepository<ProduitMedical, Integer>, CrudRepository<ProduitMedical,Integer> {
 
     ProduitMedical findByIdProduitMedical(int idProduitMedical);
+
+    ProduitMedical findByNomProduitMedical(String nomProduit);
     boolean existsByNomProduitMedical(String nomProduit);
     boolean existsByIdProduitMedical(int idProduitMedical);
     void deleteByIdProduitMedical(int idProduitMedical);

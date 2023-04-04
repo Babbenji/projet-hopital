@@ -3,7 +3,7 @@ POST http://localhost:8084/gestionnaire/utilisateurs
 Content-Type: application/json
 
 {
-    "nomUtilisateur": "Hackime ",
+    "nomUtilisateur": "Hackime",
     "prenomUtilisateur": "BOUJDI",
     "emailUtilisateur": "tktmonreuf"
 }
@@ -14,7 +14,7 @@ POST http://localhost:8084/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
-    "nomProduitMedical": "Efralgan",
+    "nomProduitMedical": "Eferalgan",
     "prixProduitMedical": 17.0,
     "descriptionProduitMedical": "Maux de tete"
 }
