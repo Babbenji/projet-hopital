@@ -1,8 +1,9 @@
 package com.example.modele;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Document(collection = "consultation")
 public class Consultation {
@@ -18,6 +19,7 @@ public class Consultation {
     private int idPatient;
     private String dateCreation;
     private String dateModification;
+    private Collection<String> listeProduitsMedicaux;
     public Consultation(Creneau creneau, String motif, TypeCons type, String ordonnance, int idMedecin, int idPatient) {
         this.id=IDS++;
         this.creneau = creneau;
@@ -30,6 +32,7 @@ public class Consultation {
         this.idPatient = idPatient;
         this.dateCreation = LocalDate.now().toString();
         this.dateModification = LocalDate.now().toString();
+        this.listeProduitsMedicaux =new ArrayList<>();
     }
     public int getId() {
         return id;
@@ -93,5 +96,11 @@ public class Consultation {
     }
     public void setDateModification(String dateModification) {
         this.dateModification = dateModification;
+    }
+    public Collection<String> getListeProduitsMedicaux() {
+        return listeProduitsMedicaux;
+    }
+    public void addProduitMedical(String nomProduitMedical) {
+        this.listeProduitsMedicaux.add(nomProduitMedical);
     }
 }
