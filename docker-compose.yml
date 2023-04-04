@@ -152,6 +152,7 @@ services:
       - discovery
       - db-mongo-rdv-patients
 #      - rabbitmq
+      - service-auth
 
 ####################################################################################
 #                  SERVICE DE GESTION DES STOCKS ET FOURNISSEURS

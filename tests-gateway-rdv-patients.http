@@ -14,10 +14,10 @@ Content-Type: application/json
     });
 %}
 
-### confirmation du compte utilisateur
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
+#### confirmation du compte utilisateur
+#GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
 
-### Connexion d'un compte patient valide
+### Connexion d'un compte
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
@@ -34,18 +34,18 @@ Content-Type: application/json
 %}
 
 ### Cette requete permet de creer un medecin (que pr la secretaire)
-POST http://localhost:8083/rdvpatients/medecin
+POST http://localhost:8083/api/v1/rdvpatients/medecin
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
   "prenom": "Hind",
   "nom": "HACHEMI",
-  "email": "hind.hachemi@etu.univ-orleans.fr"
+  "email": "hind.hachemi9@etu.univ-orleans.fr"
 }
 
 ### Cette requete permet de creer un patient (que pr la secretaire)
-POST http://localhost:8083/rdvpatients/patient
+POST http://localhost:8083/api/v1/rdvpatients/patient
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ### Cette requete permet d'ajouter les antécédents d'un patient à son profil
-PATCH http://localhost:8083/rdvpatients/personnel/modif/patient/15/antecedents
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/antecedents
 Content-Type: application/json
 
 {
@@ -67,10 +67,10 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de voir les données d'un patient
-GET http://localhost:8083/rdvpatients/patient/15
+GET http://localhost:8083/api/v1/rdvpatients/patient/15
 
 ### Cette requete permet d'assigner un medecin à un patient
-PATCH http://localhost:8083/rdvpatients/personnel/modif/patient/15/medecintraitant
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
 Content-Type: application/json
 
 {
@@ -79,7 +79,7 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de prendre un rendez vous pour un patient
-POST http://localhost:8083/rdvpatients/consultation
+POST http://localhost:8083/api/v1/rdvpatients/consultation
 Content-Type: application/json
 
 {
@@ -91,10 +91,10 @@ Content-Type: application/json
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
-PATCH http://localhost:8083/rdvpatients/consultation/4/confirmer
+PATCH http://localhost:8083/api/v1/rdvpatients/consultation/4/confirmer
 
 ### Cette requete permet d'ajouter un compte rendu a une consultation
-PATCH http://localhost:8083/rdvpatients/consultation/1/compterendu
+PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/compterendu
 Content-Type: application/json
 
 {
@@ -102,8 +102,8 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de voir les consultations d'un medecin
-GET http://localhost:8083/rdvpatients/medecin/9/consultations
+GET http://localhost:8083/api/v1/rdvpatients/medecin/9/consultations
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
-DELETE http://localhost:8083/rdvpatients/consultation/1/annulation
+DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
 Content-Type: application/json
