@@ -33,6 +33,8 @@ public interface FacadeServiceGestionStock {
 
     void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
 
+    void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException;
+
     //void modifierProduitFromCatalogue(ProduitMedical produitMedical,int idProduit, int idFournisseur) throws ProduitInexistantException;
 
     Commande getCommande(int idCommande) throws CommandeInexistanteException;
