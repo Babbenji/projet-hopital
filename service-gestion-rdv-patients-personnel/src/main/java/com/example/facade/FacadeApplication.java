@@ -4,6 +4,8 @@ import com.example.exceptions.*;
 import com.example.modele.Consultation;
 import com.example.modele.Medecin;
 import com.example.modele.Patient;
+
+import java.util.Collection;
 import java.util.List;
 
 public interface FacadeApplication {
@@ -18,17 +20,21 @@ public interface FacadeApplication {
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
+
+    Collection<String> voirProduitsConsultation(int idConsultation);
+    Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
+    void utiliserProduit(int idConsultation, String nomProduit);
+    Collection<Consultation> getAllConsultations();
+    Collection<Consultation> getAllConsultationsParType(String type);
+
     //Afficher un patient
     //Modifier un patient
     //Afficher un medecin
     //Modifier un médecin
+
     //Voir son dossier avec la liste des consultations et les données du patient (Pour le patient et pour les médecins/personnel)
-    //Voir toutes les consultations
     //Modifier la date d'un RDV
-    //Liste de Médicaments utilisés dans un RDV
-    //Diminuer la quantité d'un produit médicale dans une consultation
-    //Liste des patients d'un medecin
-    //Voir toutes les consultations par type
+    //Terminer une consultation ? Pour réduire les stock de produits médicaux
 
     //REQUETES
     Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, MedecinInexistantException;
