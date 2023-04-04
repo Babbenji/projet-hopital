@@ -12,7 +12,7 @@ spring:
     mongodb:
       database: ${DB_NAME:rdvpatients}
       host: ${DB_HOST:localhost}
-      port: ${DB_PORT:27017}
+      port: ${DB_PORT:27018}
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}

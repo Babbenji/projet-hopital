@@ -1,4 +1,4 @@
-Feature: Tests Integration
+Feature: Tests Integration gestion rdv patients et personnels
   Background:
     * url 'http://localhost:8083/rdvpatients'
     * header Accept = 'application/json'

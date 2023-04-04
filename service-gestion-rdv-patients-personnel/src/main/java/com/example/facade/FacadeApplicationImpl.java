@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Component("facadeApplication")
@@ -106,6 +107,39 @@ public class FacadeApplicationImpl implements FacadeApplication{
             throw new TypeConsultationInexistantException();
         }
     }
+
+    @Override
+    public Collection<String> voirProduitsConsultation(int idConsultation) {
+        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+        return consultation.getListeProduitsMedicaux();
+    }
+
+    @Override
+    public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) {
+        Medecin medecin = medecinRepository.findMedecinById(idMedecin);
+        Collection<Patient> res = new ArrayList<>();
+        medecin.getListePatients().forEach(idPatient->{
+            res.add(patientRepository.findPatientById(idPatient));
+        });
+        return res;
+    }
+
+    @Override
+    public void utiliserProduit(int idConsultation, String nomProduit) {
+        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+        consultation.addProduitMedical(nomProduit);
+    }
+
+    @Override
+    public Collection<Consultation> getAllConsultations() {
+        return consultationRepository.findAll();
+    }
+
+    @Override
+    public Collection<Consultation> getAllConsultationsParType(String type) {
+        return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
+    }
+
     @Override
     public void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException {
         if(consultationRepository.existsById(idConsultation)){

@@ -100,6 +100,26 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Tests Karaté -->
+
+            <dependency>
+                <groupId>com.intuit.karate</groupId>
+                <artifactId>karate-core</artifactId>
+                <version>1.4.0.RC3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.intuit.karate</groupId>
+                <artifactId>karate-apache</artifactId>
+                <version>0.9.6</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.intuit.karate</groupId>
+                <artifactId>karate-junit4</artifactId>
+                <version>1.4.0.RC3</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -117,5 +137,6 @@
         </plugins>
         <finalName>service-gestion-stock-fournisseurs</finalName>
     </build>
+
 
 </project>
