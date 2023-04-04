@@ -19,7 +19,7 @@ public class RabbitMQConsumer {
      * Recois un objet de type Map<String,Integer> contenant la liste des médicaments utilisés pour un patients et permettera de mettre à jour le stock
      * @param listeMedicaments
      */
-    @RabbitListener(queues = {"${rabbitmq.queue.name}"})
+    @RabbitListener(queues = {"${rabbitmq.queue}"})
     public void consume(Map<String,Integer> listeMedicaments) throws ProduitInexistantException {
         for (Map.Entry<String, Integer> entry : listeMedicaments.entrySet())
         {

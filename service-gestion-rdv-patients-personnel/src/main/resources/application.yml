@@ -18,12 +18,13 @@ spring:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
 
+rabbitmq:
+  host: ${RABBITMQ_HOST:localhost}
+  port: ${RABBITMQ_PORT:5672}
+  username: ${RABBITMQ_USERNAME:guest}
+  password: ${RABBITMQ_PASSWORD:guest}
 
-#  rabbitmq:
-#    host: ${RABBITMQ_HOST:localhost}
-#    port: ${RABBITMQ_PORT:15672}
-#    username: ${RABBITMQ_USERNAME:guest}
-#    password: ${RABBITMQ_PASSWORD:guest}
-#    exchange: user.exchange
-#    queue: user.queue
-#    routingkey: user.routingkey
+
+  exchange-msg: rdv.exchange
+  queue-msg: rdv.queue
+  routingkey-msg: rdv.routingkey

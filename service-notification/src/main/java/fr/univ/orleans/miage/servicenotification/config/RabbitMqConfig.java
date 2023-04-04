@@ -42,10 +42,6 @@ public class RabbitMqConfig {
         return new Queue(queue, true);
     }
 
-//    @Bean
-//    public Jackson2JsonMessageConverter messageConverter() {
-//        return new Jackson2JsonMessageConverter();
-//    }
 
 
     @Bean

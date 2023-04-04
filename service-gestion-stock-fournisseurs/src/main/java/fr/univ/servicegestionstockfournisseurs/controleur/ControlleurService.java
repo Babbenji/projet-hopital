@@ -10,6 +10,7 @@ import fr.univ.servicegestionstockfournisseurs.modele.Commande;
 import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
+import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
 import fr.univ.servicegestionstockfournisseurs.service.FacadeServiceGestionStock;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class ControlleurService {
 
     @Autowired
     FacadeServiceGestionStock facadeServiceGestionStock;
+
+    @Autowired
+    RabbitMQProducer rabbitMQProducer;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,6 +60,7 @@ public class ControlleurService {
             //String identifiant = authentication.getName();
         try {
             facadeServiceGestionStock.passerCommande(idUtilisateur);
+            rabbitMQProducer.alerteStock("Commande passée");
             return ResponseEntity.ok("Commande passée");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.badRequest().body("Utilisateur inexistant");
