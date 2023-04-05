@@ -20,14 +20,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    @Value("${rabbitmq.username}")
-    private String username;
-
-    @Value("${rabbitmq.password}")
-    private String password;
 
     @Value("${rabbitmq.host}")
     private String host;
+    @Value("${rabbitmq.username}")
+    private String username;
+    @Value("${rabbitmq.password}")
+    private String password;
+
     @Value("rabbitmq.queue-msg")
     public String QUEUE_NAME;
     @Value("rabbitmq.exchange-msg")

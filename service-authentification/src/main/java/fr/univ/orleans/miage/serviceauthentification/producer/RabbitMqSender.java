@@ -19,6 +19,5 @@ public class RabbitMqSender {
 
     public void send(EmailDto emailDto){
         rabbitTemplate.convertAndSend(exchange,routingkey, emailDto);
-
     }
 }

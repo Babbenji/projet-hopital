@@ -2,9 +2,10 @@ package com.example.facade;
 
 import com.example.exceptions.*;
 import com.example.modele.*;
+import com.example.modele.DTO.EmailDTO;
+import com.example.producer.RabbitMQProducer;
 import com.example.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,11 +24,16 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Autowired
     PatientRepository patientRepository;
 
-    public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository) {
+    @Autowired
+    private final RabbitMQProducer rabbitMQProducer;
+
+
+    public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository, RabbitMQProducer rabbitMQProducer) {
         this.patientRepository = patientRepository;
         this.medecinRepository = medecinRepository;
         this.consultationRepository = consultationRepository;
         this.creneauRepository = creneauRepository;
+        this.rabbitMQProducer = rabbitMQProducer;
     }
 
     @Override
@@ -147,6 +153,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
             if(!(consultation.estConfirme())){
                 consultation.setConfirmation(true);
                 consultationRepository.save(consultation);
+                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+                //-------RabbitMQ-------
+                EmailDTO email = new EmailDTO();
+                email.setDestinataire(patient.getEmail());
+                email.setObjet("Confirmation de RDV");
+                email.setContenu("Votre consultation n°"+idConsultation+" a bien été confirmée !");
+                //Type ?
+                this.rabbitMQProducer.sendEmail(email);
+                //----------------------
             }else{
                 throw new ConsultationDejaConfirmeeException();
             }

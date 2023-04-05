@@ -24,7 +24,12 @@ rabbitmq:
   username: ${RABBITMQ_USERNAME:guest}
   password: ${RABBITMQ_PASSWORD:guest}
 
+  #  Communication Service Notification
+  exchange-rdvpatients: rdvpatients.exchange
+  routingkey-rdvpatients: rdvpatients.routingkey
+  queue-rdvpatients: rdvpatients.queue
 
+  # Communication Service Stock
   exchange-msg: rdv.exchange
   queue-msg: rdv.queue
   routingkey-msg: rdv.routingkey

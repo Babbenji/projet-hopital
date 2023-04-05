@@ -28,6 +28,12 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.routingkey-facture}")
     private String routingKey_facture;
 
+    @Value("${spring.rabbitmq.exchange-rdvpatients}")
+    private String exchange_rdvpatients;
+
+    @Value("${spring.rabbitmq.routingkey-rdvpatients}")
+    private String routingKey_rdvpatients;
+
     @Value("${spring.rabbitmq.username}")
     private String username;
 
@@ -55,6 +61,11 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    Exchange rdvpatientsExchange() {
+        return ExchangeBuilder.directExchange(exchange_rdvpatients).durable(true).build();
+    }
+
+    @Bean
     Binding binding_auth() {
         return BindingBuilder
                 .bind(queue())
@@ -69,6 +80,14 @@ public class RabbitMqConfig {
                 .bind(queue())
                 .to(factureExchange())
                 .with(routingKey_facture)
+                .noargs();
+    }
+    @Bean
+    Binding binding_rdvpatients() {
+        return BindingBuilder
+                .bind(queue())
+                .to(rdvpatientsExchange())
+                .with(routingKey_rdvpatients)
                 .noargs();
     }
 
