@@ -108,6 +108,14 @@ public class FacadeApplicationImpl implements FacadeApplication{
             medecin.ajouterConsultation(consultation);
             consultationRepository.save(consultation);
             medecinRepository.save(medecin);
+            //-------RabbitMQ-------
+            EmailDTO email = new EmailDTO();
+            email.setDestinataire(patient.getEmail());
+            email.setObjet("Prise de RDV");
+            email.setContenu("Vous avez pris RDV avec le médecin "+medecin.getPrenom()+" "+medecin.getNom()+" le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+". Vous recevrez un nouveau mail une fois que cette consultation sera confirmée par le médecin.");
+            //Type ?
+            this.rabbitMQProducer.sendEmail(email);
+            //----------------------
             return consultation;
         }else{
             throw new TypeConsultationInexistantException();
@@ -153,8 +161,8 @@ public class FacadeApplicationImpl implements FacadeApplication{
             if(!(consultation.estConfirme())){
                 consultation.setConfirmation(true);
                 consultationRepository.save(consultation);
-                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
                 //-------RabbitMQ-------
+                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
                 EmailDTO email = new EmailDTO();
                 email.setDestinataire(patient.getEmail());
                 email.setObjet("Confirmation de RDV");
@@ -173,8 +181,25 @@ public class FacadeApplicationImpl implements FacadeApplication{
     public void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            String ancienCompteRendu = consultation.getCompteRendu();
             consultation.setCompteRendu(compteRendu);
+            String nouveauCompteRendu = consultation.getCompteRendu();
             consultationRepository.save(consultation);
+            //-------RabbitMQ-------
+            Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+            EmailDTO email = new EmailDTO();
+            email.setDestinataire(patient.getEmail());
+            if (consultation.getCompteRendu().equals("")){
+                email.setObjet("Ajout d'un compte-rendu pour la consultation n°"+idConsultation);
+                email.setContenu("Nouveau compte-rendu pour votre consultation : "+nouveauCompteRendu);
+            }
+            else{
+                email.setObjet("Modification du compte-rendu pour la consultation n°"+idConsultation);
+                email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
+            }
+            //Type ?
+            this.rabbitMQProducer.sendEmail(email);
+            //----------------------
         }else{
             throw new ConsultationInexistanteException();
         }
@@ -191,7 +216,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 creneau.setDisponibilite(true);
                 creneauRepository.save(creneau);
                 consultationRepository.removeConsultationById(idConsultation);
-                //Envoyer notif à Medecin(email)
+                //-------RabbitMQ-------
+                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+                EmailDTO email = new EmailDTO();
+                email.setDestinataire(medecin.getEmail());
+                email.setObjet("Annulation du RDV n°"+idConsultation);
+                email.setContenu("La consultation n°"+idConsultation+" du patient "+ patient.getPrenom()+" "+patient.getNom()+" prévue le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+" a été annulée.");
+                //Type ?
+                this.rabbitMQProducer.sendEmail(email);
+                //----------------------
             }else{
                 throw new MedecinInexistantException();
             }

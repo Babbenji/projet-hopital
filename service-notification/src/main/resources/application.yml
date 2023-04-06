@@ -32,11 +32,11 @@ spring:
 
     # communication service-facture
     exchange-facture: facture.exchange
-    routingkey-facture: facture.routingKey.notif
+    routingkey-facture: facture.routingKey
 
     # communication service-rdvpatients
     exchange-rdvpatients: rdvpatients.exchange
-    routingkey-rdvpatients: rdvpatients.routingKey.notif
+    routingkey-rdvpatients: rdvpatients.routingkey
 
     # queue globale pour tous les exchanges (envoi d'émails)
     queue: email.queue

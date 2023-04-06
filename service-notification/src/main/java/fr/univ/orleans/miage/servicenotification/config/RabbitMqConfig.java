@@ -91,7 +91,7 @@ public class RabbitMqConfig {
                 .noargs();
     }
 
-    @Bean
+    @Bean(name="service-notification")
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(host);
         cachingConnectionFactory.setUsername(username);

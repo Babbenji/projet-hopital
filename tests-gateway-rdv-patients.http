@@ -13,7 +13,8 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-
+### confirmation du compte utilisateur
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
 ### Connexion d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
@@ -81,11 +82,12 @@ Content-Type: application/json
 
 ### Cette requete permet de prendre un rendez vous pour un patient
 POST http://localhost:8083/api/v1/rdvpatients/consultation
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
   "dateRDV": "15-07-2022",
-  "heureRDV": "18H20",
+  "heureRDV": "18H10",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"

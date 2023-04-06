@@ -20,7 +20,6 @@ public interface FacadeApplication {
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
-
     Collection<String> voirProduitsConsultation(int idConsultation);
     Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
     void utiliserProduit(int idConsultation, String nomProduit);
@@ -33,7 +32,8 @@ public interface FacadeApplication {
     //Modifier un médecin
 
     //Voir son dossier avec la liste des consultations et les données du patient (Pour le patient et pour les médecins/personnel)
-    //Modifier la date d'un RDV
+    //Modifier la date d'un RDV -> BOF
+
     //Terminer une consultation ? Pour réduire les stock de produits médicaux
 
     //REQUETES

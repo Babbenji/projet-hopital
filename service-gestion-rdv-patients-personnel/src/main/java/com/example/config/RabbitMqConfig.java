@@ -21,45 +21,45 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfig {
 
 
-    @Value("${rabbitmq.host}")
+    @Value("${spring.rabbitmq.host}")
     private String host;
-    @Value("${rabbitmq.username}")
+    @Value("${spring.rabbitmq.username}")
     private String username;
-    @Value("${rabbitmq.password}")
+    @Value("${spring.rabbitmq.password}")
     private String password;
 
-    @Value("rabbitmq.queue-msg")
-    public String QUEUE_NAME;
-    @Value("rabbitmq.exchange-msg")
-    public String EXCHANGE_NAME;
-    @Value("rabbitmq.routingkey-msg")
-    public  String ROUTING_KEY;
+//    @Value("spring.rabbitmq.queue-msg")
+//    public String QUEUE_NAME;
+//    @Value("spring.rabbitmq.exchange-msg")
+//    public String EXCHANGE_NAME;
+//    @Value("spring.rabbitmq.routingkey-msg")
+//    public  String ROUTING_KEY;
+//
+//
+//    @Bean
+//    public Queue queue() {
+//        return new Queue(QUEUE_NAME, true);
+//    }
 
+//    @Bean
+//    public TopicExchange exchange() {
+//        return new TopicExchange(EXCHANGE_NAME);
+//    }
 
-    @Bean
-    public Queue queue() {
-        return new Queue(QUEUE_NAME, true);
-    }
-
-    @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE_NAME);
-    }
-
-    @Bean
+    @Bean(name = "service-rdvpatients")
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(host);
         cachingConnectionFactory.setUsername(username);
         cachingConnectionFactory.setPassword(password);
         return cachingConnectionFactory;
     }
-    @Bean
-    public Binding binding() {
-        return BindingBuilder
-                .bind(queue())
-                .to(exchange())
-                .with(ROUTING_KEY);
-    }
+//    @Bean
+//    public Binding binding() {
+//        return BindingBuilder
+//                .bind(queue())
+//                .to(exchange())
+//                .with(ROUTING_KEY);
+//    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
