@@ -5,13 +5,12 @@ import com.example.modele.*;
 import com.example.modele.DTO.EmailDTO;
 import com.example.producer.RabbitMQProducer;
 import com.example.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Component("facadeApplication")
 public class FacadeApplicationImpl implements FacadeApplication{
@@ -26,6 +25,8 @@ public class FacadeApplicationImpl implements FacadeApplication{
 
     @Autowired
     private final RabbitMQProducer rabbitMQProducer;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FacadeApplicationImpl.class);
 
 
     public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository, RabbitMQProducer rabbitMQProducer) {
@@ -123,7 +124,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
 
     @Override
-    public Collection<String> voirProduitsConsultation(int idConsultation) {
+    public List<String> voirProduitsConsultation(int idConsultation) {
         Consultation consultation = consultationRepository.findConsultationById(idConsultation);
         return consultation.getListeProduitsMedicaux();
     }
@@ -138,11 +139,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
         return res;
     }
 
-    @Override
-    public void utiliserProduit(int idConsultation, String nomProduit) {
-        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-        consultation.addProduitMedical(nomProduit);
-    }
+//    @Override
+//    public void utiliserProduit(int idConsultation, String nomProduit, int quantite) {
+//        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+//        consultation.addProduitMedical(nomProduit,quantite);
+//    }
 
     @Override
     public Collection<Consultation> getAllConsultations() {
@@ -178,13 +179,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException {
+    public void modifierCRConsultation(int idConsultation, String compteRendu, List<String> listeProduitsMedicaux) throws ConsultationInexistanteException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
             String ancienCompteRendu = consultation.getCompteRendu();
             consultation.setCompteRendu(compteRendu);
+            consultation.setListeProduitsMedicaux(listeProduitsMedicaux);
             String nouveauCompteRendu = consultation.getCompteRendu();
             consultationRepository.save(consultation);
+            this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
             //-------RabbitMQ-------
             Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
             EmailDTO email = new EmailDTO();

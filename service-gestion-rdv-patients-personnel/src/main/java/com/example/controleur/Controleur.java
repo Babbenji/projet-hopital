@@ -4,6 +4,9 @@ import com.example.exceptions.*;
 import com.example.modele.*;
 import com.example.facade.FacadeApplication;
 import com.example.modele.DTO.ConsultationDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/v1/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -55,7 +60,7 @@ public class Controleur {
     }
 
     @GetMapping("/patient/{numSecu}")
-    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<?> afficherPatient(@PathVariable("numSecu") String numSecu){
         try {
             Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
@@ -66,7 +71,7 @@ public class Controleur {
     }
 
     @PatchMapping("/personnel/modif/patient/{numSecu}/antecedents")
-    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<String> modifierAntecedents(@PathVariable("numSecu") String numSecu, @RequestBody Patient patient) {
         try {
             facadeApplication.modifierAntecedentsPatient(numSecu,patient.getAntecedents());
@@ -129,7 +134,14 @@ public class Controleur {
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
         try {
-            facadeApplication.modifierCRConsultation(idConsultation,consultation.getCompteRendu());
+            Map<String, Integer> map = new HashMap<>();
+            for (String couple:consultation.getListeProduitsMedicaux()) {
+                String[] keyValue = couple.split(":");
+                String key = keyValue[0];
+                Integer value = Integer.valueOf(keyValue[1]);
+                map.put(key, value);
+            }
+            facadeApplication.modifierCRConsultation(idConsultation,consultation.getCompteRendu(), consultation.getListeProduitsMedicaux());
             return ResponseEntity.ok().body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+consultation.getCompteRendu());
         } catch (ConsultationInexistanteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");

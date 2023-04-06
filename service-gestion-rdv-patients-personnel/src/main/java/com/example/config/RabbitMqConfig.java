@@ -28,23 +28,6 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.password}")
     private String password;
 
-//    @Value("spring.rabbitmq.queue-msg")
-//    public String QUEUE_NAME;
-//    @Value("spring.rabbitmq.exchange-msg")
-//    public String EXCHANGE_NAME;
-//    @Value("spring.rabbitmq.routingkey-msg")
-//    public  String ROUTING_KEY;
-//
-//
-//    @Bean
-//    public Queue queue() {
-//        return new Queue(QUEUE_NAME, true);
-//    }
-
-//    @Bean
-//    public TopicExchange exchange() {
-//        return new TopicExchange(EXCHANGE_NAME);
-//    }
 
     @Bean(name = "service-rdvpatients")
     public ConnectionFactory connectionFactory() {
@@ -53,13 +36,7 @@ public class RabbitMqConfig {
         cachingConnectionFactory.setPassword(password);
         return cachingConnectionFactory;
     }
-//    @Bean
-//    public Binding binding() {
-//        return BindingBuilder
-//                .bind(queue())
-//                .to(exchange())
-//                .with(ROUTING_KEY);
-//    }
+
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {

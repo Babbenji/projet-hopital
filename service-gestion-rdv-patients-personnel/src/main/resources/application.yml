@@ -27,7 +27,6 @@ spring:
     exchange-rdvpatients: rdvpatients.exchange
     routingkey-rdvpatients: rdvpatients.routingkey
 
-    # Communication Service Stock
-    exchange-msg: rdv.exchange
-    queue-msg: rdv.queue
-    routingkey-msg: rdv.routingkey
+    #  Communication Service Stock
+    exchange-stock: stock.exchange
+    routingkey-stock: stock.routingkey

@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class RabbitMQProducer {
-    @Value("rabbitmq.exchange-msg")
+    @Value("spring.rabbitmq.exchange-msg")
     private String exchange;
 
-    @Value("rabbitmq.routingkey-msg")
+    @Value("spring.rabbitmq.routingkey-msg")
     private String routingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);

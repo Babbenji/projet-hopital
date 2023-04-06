@@ -86,22 +86,26 @@ Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "dateRDV": "15-07-2022",
-  "heureRDV": "18H10",
+  "dateRDV": "28-08-2022",
+  "heureRDV": "18H00",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
-PATCH http://localhost:8083/api/v1/rdvpatients/consultation/4/confirmer
+PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/confirmer
+Authorization: {{secretaire_token}}
+
 
 ### Cette requete permet d'ajouter un compte rendu a une consultation
 PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/compterendu
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "compteRendu" : "Patient fievreux"
+  "compteRendu" : "Patient fievreux",
+  "listeProduitsMedicaux" : ["Doliprane:1","Pansement:2"]
 }
 
 ### Cette requete permet de voir les consultations d'un medecin

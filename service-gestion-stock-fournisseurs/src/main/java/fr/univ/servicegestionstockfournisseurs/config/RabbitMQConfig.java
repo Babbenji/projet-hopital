@@ -16,27 +16,32 @@ import org.springframework.stereotype.Component;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${rabbitmq.username}")
+    @Value("${spring.rabbitmq.username}")
     private String username;
 
-    @Value("${rabbitmq.password}")
+    @Value("${spring.rabbitmq.password}")
     private String password;
 
-    @Value("${rabbitmq.host}")
+    @Value("${spring.rabbitmq.host}")
     private String host;
 
-    @Value("${rabbitmq.queue}")
-
+    @Value("${spring.rabbitmq.queue}")
     private String queue;
 
-    @Value("${rabbitmq.exchange}")
-    private String exchange;
+//    @Value("${spring.rabbitmq.exchange}")
+//    private String exchange;
 
-    @Value("${rabbitmq.exchange}")
-    private String exchangeFacture;
+//    @Value("${spring.rabbitmq.exchange}")
+//    private String exchangeFacture;
 
-    @Value("${rabbitmq.routingkey}")
-    private String routingKey;
+//    @Value("${spring.rabbitmq.routingkey}")
+//    private String routingKey;
+
+    @Value("${spring.rabbitmq.exchange-stock}")
+    private String exchangeStock;
+
+    @Value("${spring.rabbitmq.routingkey-stock}")
+    private String routingKeyStock;
 
 
 
@@ -55,36 +60,49 @@ public class RabbitMQConfig {
     }
 
     // spring bean for rabbitmq exchange
+//    @Bean
+//    public TopicExchange exchange(){
+//        return new TopicExchange(exchange);
+//    }
     @Bean
-    public TopicExchange exchange(){
-        return new TopicExchange(exchange);
+    public TopicExchange stockExchange(){
+        return new TopicExchange(exchangeStock);
     }
 
-    @Bean
-    public Exchange factureExchange()
-    {
-        return ExchangeBuilder.topicExchange(exchangeFacture).durable(true).build();
-    }
+//    @Bean
+//    public Exchange factureExchange()
+//    {
+//        return ExchangeBuilder.topicExchange(exchangeFacture).durable(true).build();
+//    }
+//
 
 
     // binding between queue and exchange using routing key
-    @Bean
-    public Binding binding()
-    {
-        return BindingBuilder
-                .bind(queue())
-                .to(exchange())
-                .with(routingKey);
-    }
+//    @Bean
+//    public Binding binding()
+//    {
+//        return BindingBuilder
+//                .bind(queue())
+//                .to(exchange())
+//                .with(routingKey);
+//    }
 
+//    @Bean
+//    public Binding factureBinding()
+//    {
+//        return BindingBuilder
+//                .bind(queue())
+//                .to(factureExchange())
+//                .with(routingKey)
+//                .noargs();
+//    }
     @Bean
-    public Binding factureBinding()
+    public Binding stockBinding()
     {
         return BindingBuilder
                 .bind(queue())
-                .to(factureExchange())
-                .with(routingKey)
-                .noargs();
+                .to(stockExchange())
+                .with(routingKeyStock);
     }
 
     @Bean

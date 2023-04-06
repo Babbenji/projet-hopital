@@ -16,13 +16,12 @@ public interface FacadeApplication {
     void assignerMedecinTraitant(String numSecu, String nomMedecin, String prenomMedecin) throws PatientInexistantException, MedecinInexistantException;
     void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException;
     List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException;
-    void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException;
+    void modifierCRConsultation(int idConsultation, String compteRendu, List<String> listeProduitsMedicaux) throws ConsultationInexistanteException;
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
-    Collection<String> voirProduitsConsultation(int idConsultation);
+    List<String> voirProduitsConsultation(int idConsultation);
     Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
-    void utiliserProduit(int idConsultation, String nomProduit);
     Collection<Consultation> getAllConsultations();
     Collection<Consultation> getAllConsultationsParType(String type);
 
