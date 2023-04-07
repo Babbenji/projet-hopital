@@ -3,6 +3,7 @@ package com.example.facade;
 import com.example.exceptions.*;
 import com.example.modele.*;
 import com.example.modele.DTO.EmailDTO;
+import com.example.modele.DTO.FactureDTO;
 import com.example.producer.RabbitMQProducer;
 import com.example.repository.*;
 import org.slf4j.Logger;
@@ -187,9 +188,18 @@ public class FacadeApplicationImpl implements FacadeApplication{
             consultation.setListeProduitsMedicaux(listeProduitsMedicaux);
             String nouveauCompteRendu = consultation.getCompteRendu();
             consultationRepository.save(consultation);
+
+            //-------RabbitMQ STOCK-------
             this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
-            //-------RabbitMQ-------
+            //-----------------------------------
+            //-------RabbitMQ NOTIFICATION & FACTURATION-------
             Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+
+            FactureDTO facture = new FactureDTO();
+            facture.setIdPatient(consultation.getIdPatient());
+            facture.setType(String.valueOf(consultation.getType()));
+            facture.setListeProduits(consultation.getListeProduitsMedicaux());
+            this.rabbitMQProducer.sendTypeConsultation(facture);
             EmailDTO email = new EmailDTO();
             email.setDestinataire(patient.getEmail());
             if (consultation.getCompteRendu().equals("")){
@@ -200,9 +210,8 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 email.setObjet("Modification du compte-rendu pour la consultation n°"+idConsultation);
                 email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
             }
-            //Type ?
             this.rabbitMQProducer.sendEmail(email);
-            //----------------------
+            //-----------------------------------
         }else{
             throw new ConsultationInexistanteException();
         }

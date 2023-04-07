@@ -1,6 +1,7 @@
 package com.example.producer;
 
 import com.example.modele.DTO.EmailDTO;
+import com.example.modele.DTO.FactureDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -18,14 +19,19 @@ public class RabbitMQProducer {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
 
     @Value("${spring.rabbitmq.exchange-rdvpatients}")
-    private String exchange;
+    private String exchangeNotif;
     @Value("${spring.rabbitmq.routingkey-rdvpatients}")
-    private String routingKey;
+    private String routingkeyNotif;
 
     @Value("${spring.rabbitmq.exchange-stock}")
     private String exchangeStock;
     @Value("${spring.rabbitmq.routingkey-stock}")
-    private String routingKeyStock;
+    private String routingkeyStock;
+
+    @Value("${spring.rabbitmq.exchange-facturation}")
+    private String exchangeFacture;
+    @Value("${spring.rabbitmq.routingkey-facturation}")
+    private String routingkeyFacture;
     private RabbitTemplate rabbitTemplate;
     @Autowired
     public RabbitMQProducer(RabbitTemplate rabbitTemplate){
@@ -33,12 +39,17 @@ public class RabbitMQProducer {
     }
     public void sendEmail(EmailDTO emailDTO){
         LOGGER.info(String.format("Email envoyé -> %s", emailDTO.toString()));
-        rabbitTemplate.convertAndSend(exchange,routingKey,emailDTO);
+        rabbitTemplate.convertAndSend(exchangeNotif,routingkeyNotif,emailDTO);
     }
     public void sendProduits(List<String> listeProduits){
         for (String prod : listeProduits){
             LOGGER.info("-------------------- Produit -> {}", prod);
         }
-        rabbitTemplate.convertAndSend(exchangeStock,routingKeyStock,listeProduits);
+        rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,listeProduits);
+    }
+
+    public void sendTypeConsultation(FactureDTO factureDTO){
+        LOGGER.info(String.format("Informations envoyés -> %s", factureDTO.toString()));
+        rabbitTemplate.convertAndSend(exchangeFacture,routingkeyFacture,factureDTO);
     }
 }

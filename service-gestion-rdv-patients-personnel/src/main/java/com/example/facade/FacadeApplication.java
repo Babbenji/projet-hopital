@@ -32,8 +32,8 @@ public interface FacadeApplication {
 
     //Voir son dossier avec la liste des consultations et les données du patient (Pour le patient et pour les médecins/personnel)
     //Modifier la date d'un RDV -> BOF
-
-    //Terminer une consultation ? Pour réduire les stock de produits médicaux
+    //Voir les erreurs de doublons dans les listes du medecin
+    //Confirmer une consultation avant de pouvoir faire son compte-rendu ?
 
     //REQUETES
     Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, MedecinInexistantException;

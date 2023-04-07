@@ -13,7 +13,7 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### confirmation du compte utilisateur
+### Confirmation du compte secretaire
 GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
 ### Connexion d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/connexion
@@ -87,7 +87,7 @@ Content-Type: application/json
 
 {
   "dateRDV": "28-08-2022",
-  "heureRDV": "18H00",
+  "heureRDV": "18H30",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"
@@ -110,7 +110,10 @@ Content-Type: application/json
 
 ### Cette requete permet de voir les consultations d'un medecin
 GET http://localhost:8083/api/v1/rdvpatients/medecin/9/consultations
+Authorization: {{secretaire_token}}
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
+Authorization: {{secretaire_token}}
+
 Content-Type: application/json
