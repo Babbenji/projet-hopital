@@ -2,15 +2,15 @@ package com.example.facade;
 
 import com.example.exceptions.*;
 import com.example.modele.*;
+import com.example.modele.DTO.EmailDTO;
+import com.example.producer.RabbitMQProducer;
 import com.example.repository.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.cassandra.CassandraRepositoriesAutoConfiguration;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Component("facadeApplication")
 public class FacadeApplicationImpl implements FacadeApplication{
@@ -23,11 +23,18 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Autowired
     PatientRepository patientRepository;
 
-    public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository) {
+    @Autowired
+    private final RabbitMQProducer rabbitMQProducer;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FacadeApplicationImpl.class);
+
+
+    public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository, RabbitMQProducer rabbitMQProducer) {
         this.patientRepository = patientRepository;
         this.medecinRepository = medecinRepository;
         this.consultationRepository = consultationRepository;
         this.creneauRepository = creneauRepository;
+        this.rabbitMQProducer = rabbitMQProducer;
     }
 
     @Override
@@ -102,6 +109,14 @@ public class FacadeApplicationImpl implements FacadeApplication{
             medecin.ajouterConsultation(consultation);
             consultationRepository.save(consultation);
             medecinRepository.save(medecin);
+            //-------RabbitMQ-------
+            EmailDTO email = new EmailDTO();
+            email.setDestinataire(patient.getEmail());
+            email.setObjet("Prise de RDV");
+            email.setContenu("Vous avez pris RDV avec le médecin "+medecin.getPrenom()+" "+medecin.getNom()+" le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+". Vous recevrez un nouveau mail une fois que cette consultation sera confirmée par le médecin.");
+            //Type ?
+            this.rabbitMQProducer.sendEmail(email);
+            //----------------------
             return consultation;
         }else{
             throw new TypeConsultationInexistantException();
@@ -109,7 +124,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
 
     @Override
-    public Collection<String> voirProduitsConsultation(int idConsultation) {
+    public List<String> voirProduitsConsultation(int idConsultation) {
         Consultation consultation = consultationRepository.findConsultationById(idConsultation);
         return consultation.getListeProduitsMedicaux();
     }
@@ -124,11 +139,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
         return res;
     }
 
-    @Override
-    public void utiliserProduit(int idConsultation, String nomProduit) {
-        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-        consultation.addProduitMedical(nomProduit);
-    }
+//    @Override
+//    public void utiliserProduit(int idConsultation, String nomProduit, int quantite) {
+//        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+//        consultation.addProduitMedical(nomProduit,quantite);
+//    }
 
     @Override
     public Collection<Consultation> getAllConsultations() {
@@ -147,6 +162,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
             if(!(consultation.estConfirme())){
                 consultation.setConfirmation(true);
                 consultationRepository.save(consultation);
+                //-------RabbitMQ-------
+                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+                EmailDTO email = new EmailDTO();
+                email.setDestinataire(patient.getEmail());
+                email.setObjet("Confirmation de RDV");
+                email.setContenu("Votre consultation n°"+idConsultation+" a bien été confirmée !");
+                //Type ?
+                this.rabbitMQProducer.sendEmail(email);
+                //----------------------
             }else{
                 throw new ConsultationDejaConfirmeeException();
             }
@@ -155,11 +179,30 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void modifierCRConsultation(int idConsultation, String compteRendu) throws ConsultationInexistanteException {
+    public void modifierCRConsultation(int idConsultation, String compteRendu, List<String> listeProduitsMedicaux) throws ConsultationInexistanteException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            String ancienCompteRendu = consultation.getCompteRendu();
             consultation.setCompteRendu(compteRendu);
+            consultation.setListeProduitsMedicaux(listeProduitsMedicaux);
+            String nouveauCompteRendu = consultation.getCompteRendu();
             consultationRepository.save(consultation);
+            this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
+            //-------RabbitMQ-------
+            Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+            EmailDTO email = new EmailDTO();
+            email.setDestinataire(patient.getEmail());
+            if (consultation.getCompteRendu().equals("")){
+                email.setObjet("Ajout d'un compte-rendu pour la consultation n°"+idConsultation);
+                email.setContenu("Nouveau compte-rendu pour votre consultation : "+nouveauCompteRendu);
+            }
+            else{
+                email.setObjet("Modification du compte-rendu pour la consultation n°"+idConsultation);
+                email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
+            }
+            //Type ?
+            this.rabbitMQProducer.sendEmail(email);
+            //----------------------
         }else{
             throw new ConsultationInexistanteException();
         }
@@ -176,7 +219,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 creneau.setDisponibilite(true);
                 creneauRepository.save(creneau);
                 consultationRepository.removeConsultationById(idConsultation);
-                //Envoyer notif à Medecin(email)
+                //-------RabbitMQ-------
+                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+                EmailDTO email = new EmailDTO();
+                email.setDestinataire(medecin.getEmail());
+                email.setObjet("Annulation du RDV n°"+idConsultation);
+                email.setContenu("La consultation n°"+idConsultation+" du patient "+ patient.getPrenom()+" "+patient.getNom()+" prévue le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+" a été annulée.");
+                //Type ?
+                this.rabbitMQProducer.sendEmail(email);
+                //----------------------
             }else{
                 throw new MedecinInexistantException();
             }

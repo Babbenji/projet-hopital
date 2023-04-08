@@ -12,13 +12,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ProducerRabbitMqConfig {
 
-
     @Value("${spring.rabbitmq.host}")
     String host;
-
     @Value("${spring.rabbitmq.username}")
     String username;
-
     @Value("${spring.rabbitmq.password}")
     String password;
 

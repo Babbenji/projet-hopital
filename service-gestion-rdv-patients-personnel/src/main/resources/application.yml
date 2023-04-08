@@ -17,13 +17,16 @@ spring:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
 
+  #  Communication Service Notification
+    exchange-rdvpatients: rdvpatients.exchange
+    routingkey-rdvpatients: rdvpatients.routingkey
 
-#  rabbitmq:
-#    host: ${RABBITMQ_HOST:localhost}
-#    port: ${RABBITMQ_PORT:15672}
-#    username: ${RABBITMQ_USERNAME:guest}
-#    password: ${RABBITMQ_PASSWORD:guest}
-#    exchange: user.exchange
-#    queue: user.queue
-#    routingkey: user.routingkey
+    #  Communication Service Stock
+    exchange-stock: stock.exchange
+    routingkey-stock: stock.routingkey

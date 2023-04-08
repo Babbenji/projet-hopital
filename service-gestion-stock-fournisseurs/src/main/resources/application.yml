@@ -20,11 +20,18 @@ spring:
       port: ${CONSUL_PORT:8500}
 
 # TODO configurer le service de messagerie
-#  rabbitmq:
-#    host: ${RABBITMQ_HOST:localhost}
-#    port: ${RABBITMQ_PORT:15672}
-#    username: ${RABBITMQ_USERNAME:guest}
-#    password: ${RABBITMQ_PASSWORD:guest}
-#    exchange: user.exchange
-#    queue: user.queue
-#    routingkey: user.routingkey
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+    #### Modif stock####
+    exchange-stock: stock.exchange
+    queue: stock.queue
+    routingkey-stock: stock.routingkey
+
+#    ###  confirmation génération de la facture ou annulation ###
+#    exchange-facture: facture.exchange
+#    queue-facture: facture.queue
+#    routingkey-facture: facture.routingkey

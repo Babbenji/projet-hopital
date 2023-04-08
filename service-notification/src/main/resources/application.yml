@@ -25,13 +25,18 @@ spring:
     port: ${RABBITMQ_PORT:15672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
+
     # communication service-auth
     exchange: user.exchange
     routingkey: user.routingkey
 
     # communication service-facture
     exchange-facture: facture.exchange
-    routingkey-facture: facture.routingKey.notif
+    routingkey-facture: facture.routingKey
+
+    # communication service-rdvpatients
+    exchange-rdvpatients: rdvpatients.exchange
+    routingkey-rdvpatients: rdvpatients.routingkey
 
     # queue globale pour tous les exchanges (envoi d'émails)
     queue: email.queue

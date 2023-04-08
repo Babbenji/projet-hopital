@@ -1,5 +1,6 @@
 package fr.univ.servicegestionstockfournisseurs.service;
 
+import fr.univ.servicegestionstockfournisseurs.consumer.RabbitMQConsumer;
 import fr.univ.servicegestionstockfournisseurs.modele.*;
 import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
@@ -183,7 +184,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         public void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException {
                 if (produitMedicalRepository.existsByNomProduitMedical(nomProduit)) {
                         ProduitMedical produitMedical = produitMedicalRepository.findByNomProduitMedical(nomProduit);
-                        produitMedical.setStockProduitMedical(quantite);
+                        produitMedical.setStockProduitMedical(produitMedical.getStockProduitMedical()-quantite);
                         produitMedicalRepository.save(produitMedical);
                 } else {
                         throw new ProduitInexistantException();
