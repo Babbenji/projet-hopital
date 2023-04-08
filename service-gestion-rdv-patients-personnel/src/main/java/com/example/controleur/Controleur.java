@@ -134,13 +134,7 @@ public class Controleur {
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
         try {
-            Map<String, Integer> map = new HashMap<>();
-            for (String couple:consultation.getListeProduitsMedicaux()) {
-                String[] keyValue = couple.split(":");
-                String key = keyValue[0];
-                Integer value = Integer.valueOf(keyValue[1]);
-                map.put(key, value);
-            }
+
             facadeApplication.modifierCRConsultation(idConsultation,consultation.getCompteRendu(), consultation.getListeProduitsMedicaux());
             return ResponseEntity.ok().body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+consultation.getCompteRendu());
         } catch (ConsultationInexistanteException e) {

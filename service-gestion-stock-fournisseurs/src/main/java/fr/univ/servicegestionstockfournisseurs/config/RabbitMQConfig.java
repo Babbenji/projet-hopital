@@ -59,11 +59,6 @@ public class RabbitMQConfig {
         return cachingConnectionFactory;
     }
 
-    // spring bean for rabbitmq exchange
-//    @Bean
-//    public TopicExchange exchange(){
-//        return new TopicExchange(exchange);
-//    }
     @Bean
     public TopicExchange stockExchange(){
         return new TopicExchange(exchangeStock);
@@ -76,16 +71,6 @@ public class RabbitMQConfig {
 //    }
 //
 
-
-    // binding between queue and exchange using routing key
-//    @Bean
-//    public Binding binding()
-//    {
-//        return BindingBuilder
-//                .bind(queue())
-//                .to(exchange())
-//                .with(routingKey);
-//    }
 
 //    @Bean
 //    public Binding factureBinding()
@@ -117,8 +102,5 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-// Spring boot autoconfiguration provides following beans
-    // ConnectionFactory
-    // RabbitTemplate
-    // RabbitAdmin
+
 }

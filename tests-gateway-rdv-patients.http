@@ -87,7 +87,7 @@ Content-Type: application/json
 
 {
   "dateRDV": "28-08-2022",
-  "heureRDV": "18H00",
+  "heureRDV": "18H30",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS",
   "ordonnance": "Doliprane 2 fois par jour"
@@ -105,7 +105,7 @@ Content-Type: application/json
 
 {
   "compteRendu" : "Patient fievreux",
-  "listeProduitsMedicaux" : ["Doliprane:1","Pansement:2"]
+  "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}
 }
 
 ### Cette requete permet de voir les consultations d'un medecin

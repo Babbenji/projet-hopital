@@ -124,7 +124,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
 
     @Override
-    public List<String> voirProduitsConsultation(int idConsultation) {
+    public Map<String,Integer> voirProduitsConsultation(int idConsultation) {
         Consultation consultation = consultationRepository.findConsultationById(idConsultation);
         return consultation.getListeProduitsMedicaux();
     }
@@ -179,7 +179,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void modifierCRConsultation(int idConsultation, String compteRendu, List<String> listeProduitsMedicaux) throws ConsultationInexistanteException {
+    public void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
             String ancienCompteRendu = consultation.getCompteRendu();

@@ -60,7 +60,6 @@ public class ControlleurService {
             //String identifiant = authentication.getName();
         try {
             facadeServiceGestionStock.passerCommande(idUtilisateur);
-            rabbitMQProducer.alerteStock("Commande passée");
             return ResponseEntity.ok("Commande passée");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.badRequest().body("Utilisateur inexistant");

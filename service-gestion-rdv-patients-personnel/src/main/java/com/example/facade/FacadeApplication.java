@@ -7,6 +7,7 @@ import com.example.modele.Patient;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface FacadeApplication {
 
@@ -16,11 +17,11 @@ public interface FacadeApplication {
     void assignerMedecinTraitant(String numSecu, String nomMedecin, String prenomMedecin) throws PatientInexistantException, MedecinInexistantException;
     void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException;
     List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException;
-    void modifierCRConsultation(int idConsultation, String compteRendu, List<String> listeProduitsMedicaux) throws ConsultationInexistanteException;
+    void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException;
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
-    List<String> voirProduitsConsultation(int idConsultation);
+    Map<String,Integer> voirProduitsConsultation(int idConsultation);
     Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
     Collection<Consultation> getAllConsultations();
     Collection<Consultation> getAllConsultationsParType(String type);

@@ -24,19 +24,12 @@ public class RabbitMQConsumer {
      * @param listeMedicaments
      */
     @RabbitListener(queues = {"${spring.rabbitmq.queue}"})
-    public void consume(List<String> listeMedicaments) throws ProduitInexistantException {
-        Map<String, Integer> map = new HashMap<>();
-        for (String couple:listeMedicaments) {
-            String[] keyValue = couple.split(":");
-            String key = keyValue[0];
-            Integer value = Integer.valueOf(keyValue[1]);
-            map.put(key, value);
-        }
-
-        for (Map.Entry<String, Integer> entry : map.entrySet())
+    public void consume(Map<String,Integer> listeMedicaments) throws ProduitInexistantException
+    {
+        for (Map.Entry<String, Integer> entry : listeMedicaments.entrySet())
         {
-            facadeServiceGestionStock.modifierQuantiteProduitMedical(entry.getKey(),entry.getValue());
-            LOGGER.info(String.format("La quantite du produit" + entry.getKey() + "a été modifiée de " + entry.getValue()));
+            LOGGER.info(String.format("La quantite du produit " + entry.getKey() + " a été modifiée de " + entry.getValue()));
+            //facadeServiceGestionStock.modifierQuantiteProduitMedical(entry.getKey(),entry.getValue());
         }
     }
 }
