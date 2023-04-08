@@ -171,9 +171,12 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException {
+    public void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException, ConsultationNonConfirmeeException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            if (!consultation.estConfirme()){
+                throw new ConsultationNonConfirmeeException();
+            }
             String ancienCompteRendu = consultation.getCompteRendu();
             consultation.setCompteRendu(compteRendu);
             consultation.setListeProduitsMedicaux(listeProduitsMedicaux);
@@ -199,7 +202,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
             }
             this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
-            this.rabbitMQProducer.sendTypeConsultation(facture);
+            this.rabbitMQProducer.sendFacture(facture);
             this.rabbitMQProducer.sendEmail(email);
             //----------------------
         }else{

@@ -159,6 +159,8 @@ public class Controleur {
             return ResponseEntity.ok().body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+consultation.getCompteRendu());
         } catch (ConsultationInexistanteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
+        } catch (ConsultationNonConfirmeeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Veuillez confirmer la consultation avant de pouvoir mettre à jour son compte-rendu !");
         }
     }
     @GetMapping("/medecin/{idMedecin}/consultations")

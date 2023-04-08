@@ -41,13 +41,12 @@ public class RabbitMQProducer {
     }
     public void sendProduits(Map<String,Integer> listeProduits){
         for (Map.Entry entry : listeProduits.entrySet()){
-            LOGGER.info("--------------------"+ entry.getKey()+" -> {}", entry.getValue()+"--------------------");
+            LOGGER.info("-------------------- {} --> {} --------------------",entry.getKey(), entry.getValue());
         }
         rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,listeProduits);
     }
-
-    public void sendTypeConsultation(FactureDTO factureDTO){
-        LOGGER.info(String.format("Informations envoyés -> %s", factureDTO.toString()));
+    public void sendFacture(FactureDTO factureDTO){
+        LOGGER.info(String.format("Facture envoyée -> %s", factureDTO.toString()));
         rabbitTemplate.convertAndSend(exchangeFacture,routingkeyFacture,factureDTO);
     }
 }
