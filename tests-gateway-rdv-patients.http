@@ -1,3 +1,7 @@
+##################################################
+#################AUTHENTIFICATION#################
+##################################################
+
 ### Inscription d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
@@ -31,6 +35,77 @@ Content-Type: application/json
     });
 %}
 
+
+### Inscription d'un compte médecin
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-medecin.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("token_confirm_medecin", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+### Confirmation du compte médecin
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_medecin}}
+### Connexion d'un compte médecin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-medecin.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("medecin_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+### Inscription d'un compte patient
+POST http://localhost:8081/api/v1/auth/inscription
+Content-Type: application/json
+
+{
+  "email": "fred@univ-orleans.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("token_confirm_patient", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+%}
+### Confirmation du compte patient
+GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_patient}}
+### Connexion d'un compte patient
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "fred@univ-orleans.fr",
+  "password": "fred"
+}
+
+> {%
+    client.global.set("patient_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+###################################################
+################SERVICE RDVPATIENTS################
+###################################################
+
 ### Cette requete permet de créer un medecin // SECRETAIRE
 POST http://localhost:8083/api/v1/rdvpatients/medecin
 Authorization: {{secretaire_token}}
@@ -39,7 +114,7 @@ Content-Type: application/json
 {
   "prenom": "Hind",
   "nom": "HACHEMI",
-  "email": "hind.hachemi@etu.univ-orleans.fr"
+  "email": "hind.hachemi@hopital-medecin.fr"
 }
 
 ### Cette requete permet de créer un patient // SECRETAIRE
@@ -66,7 +141,7 @@ Content-Type: application/json
   "antecedents": "Fragile"
 }
 
-### Cette requete permet de voir les données d'un patient
+### Cette requete permet de voir les données d'un patient // MEDECIN OU PATIENT OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/patient/15
 Authorization: {{secretaire_token}}
 
