@@ -3,20 +3,20 @@ POST http://localhost:8084/api/v1/gestionnaire/utilisateurs
 Content-Type: application/json
 
 {
-    "nomUtilisateur": "Hackime",
-    "prenomUtilisateur": "BOUJDI",
-    "emailUtilisateur": "tktmonreuf"
+  "nomUtilisateur": "utilisateur",
+  "prenomUtilisateur": "prenom1",
+  "emailUtilisateur": "email10"
 }
 
-### Ajout Produit####
+#### Ajout Produit####
 
 POST http://localhost:8084/api/v1/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
-    "nomProduitMedical": "Eferalgan",
-    "prixProduitMedical": 17.0,
-    "descriptionProduitMedical": "Maux de tete"
+  "nomProduitMedical": "produit2",
+  "prixProduitMedical": 10.0,
+  "descriptionProduitMedical": "gagagagagaga"
 }
 
 ### Ajout Fournisseur###
@@ -24,82 +24,71 @@ Content-Type: application/json
 POST http://localhost:8084/api/v1/gestionnaire/fournisseurs
 Content-Type: application/json
 
-    {
-    "nomFournisseur": "HindIndustry",
-    "adresseFournisseur": "Chez Hind ",
-    "telephoneFournisseur": "061516511"
-    }
+{
+  "nomFournisseur": "fournisseur5",
+  "adresseFournisseur": "adresse1",
+  "telephoneFournisseur": "061516511"
+}
 
 ### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue?idProduit=3
+POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/catalogue?idProduit=3
+Content-Type: application/json
+
+
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier?idProduit=3&quantite=12
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/panier?idProduit=29&quantite=5
+Content-Type: application/json
 
 
-### passer commande###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/passerCommande
+#### passer commande###
+
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/passerCommande
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier/6
+DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/panier/13
 
 ### Annuler commande###
-
-DELETE http://localhost:8080/gestionnaire/commandes/2
+DELETE http://localhost:8084/api/v1/gestionnaire/commandes/4
 
 ### supprimer un fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/6
 
-### supprimer un produit###
+### supprimer un produit d'un catalogue fournisseur
+DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/produits/3
 
-DELETE http://localhost:8084/api/v1/gestionnaire/produitsMedical/{idProduit}
+### modifier un fournisseur
+PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/12
+##marche pas
 
-### supprimer un produit d'un catalogue fournisseur###
+#### modifier un produit###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
-
-### modifier un fournisseur###
-
-PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
-Content-Type: application/json-patch+json
-
-{
-    "op": "replace",
-    "path": "/0",
-    "value": "0713261147"
-}
-
-
-### modifier un produit###
-//PATC
-
+PATCH http://localhost:8084/api/v1/gestionnaire/produitMedical/{idProduit}
+#marche pas
 
 ### get commande by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes/1
+GET http://localhost:8084/api/v1/gestionnaire/commandes/6
 
-### get panier utilisateur###
-GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier
 
 ### get fournisseur by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/12
 
 ### get stock produit###
 
-GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/3/stock
+GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/13/stock
 
 ### get catalogue fournisseur###
+GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/catalogue
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/4/catalogue
 
-### Get panier d une commande ###
+#### Get produits d un panier ###
+GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/13/panier
 
-GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
+### Get all commandes
+GET http://localhost:8084/api/v1/gestionnaire/commandes
 
-### Get all commandes ###
-
-GET http://localhost:8080/gestionnaire/commandes

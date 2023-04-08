@@ -149,7 +149,7 @@ public class Controleur {
     }
 
     @GetMapping("/medecin/{idMedecin}/consultations")
-    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN','SCOPE_SECRETAIRE')")
     public ResponseEntity<?> voirConsultationsMedecin(@PathVariable("idMedecin") int idMedecin) {
         List<Consultation> consultations = null;
         try {

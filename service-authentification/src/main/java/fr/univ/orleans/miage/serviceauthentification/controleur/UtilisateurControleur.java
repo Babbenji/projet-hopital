@@ -8,6 +8,8 @@ import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
 import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -98,10 +100,17 @@ public class UtilisateurControleur {
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{email}")
                     .buildAndExpand(userDTO.getEmail()).toUri();
+            String string = "{\"token\": \"Bearer "+u+"\"}";
+            JSONObject json = null;
+            try {
+                json = new JSONObject(string);;
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
             return ResponseEntity
                     .created(location)
                     .headers(reponseHeaders)
-                    .body("Utilisateur créé avec succès " + u);
+                    .body(json.toString());
         } catch (UtilisateurDejaExistantException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
         }
@@ -136,7 +145,14 @@ public class UtilisateurControleur {
         }
         if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
             String token = genereToken.apply(u);
-            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION,"Bearer "+token).build();
+            String string = "{\"token\": \""+ token+"\"}";
+            JSONObject json = null;
+            try {
+                json = new JSONObject(string);;
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION,"Bearer "+token).body(json.toString());
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }

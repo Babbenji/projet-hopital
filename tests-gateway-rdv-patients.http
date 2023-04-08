@@ -3,7 +3,7 @@ POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
+  "email": "fred1@hopital-secretaire.fr",
   "password": "fred"
 }
 
@@ -13,14 +13,13 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### confirmation du compte utilisateur
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
+
 ### Connexion d'un compte secretaire
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
+  "email": "fred1@hopital-secretaire.fr",
   "password": "fred"
 }
 
@@ -39,7 +38,7 @@ Content-Type: application/json
 {
   "prenom": "Hind",
   "nom": "HACHEMI",
-  "email": "hind.hachemi@etu.univ-orleans.fr"
+  "email": "hind.hachemi1@hopital-medecin.fr"
 }
 
 ### Cette requete permet de créer un patient // SECRETAIRE
@@ -109,8 +108,12 @@ Content-Type: application/json
 }
 
 ### Cette requete permet de voir les consultations d'un medecin
-GET http://localhost:8083/api/v1/rdvpatients/medecin/9/consultations
+GET http://localhost:8083/api/v1/rdvpatients/medecin/2/consultations
+Authorization: {{secretaire_token}}
+
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
+Authorization: {{secretaire_token}}
+
 Content-Type: application/json
