@@ -163,7 +163,6 @@ public class Controleur {
     }
     @GetMapping("/medecin/{idMedecin}/consultations")
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN','SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
     public ResponseEntity<?> voirConsultationsMedecin(@PathVariable("idMedecin") int idMedecin, Principal principal) {
         try {
             Medecin medecinConnecte = facadeApplication.getMedecinByEmail(principal.getName());
