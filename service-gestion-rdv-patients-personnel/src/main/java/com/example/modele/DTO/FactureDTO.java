@@ -1,11 +1,12 @@
 package com.example.modele.DTO;
 
 import java.util.List;
+import java.util.Map;
 
 public class FactureDTO {
     private int idPatient;
     private String type;
-    private List<String> listeProduits;
+    private Map<String,Integer> listeProduits;
 
     public int getIdPatient() {
         return idPatient;
@@ -23,13 +24,14 @@ public class FactureDTO {
         this.type = type;
     }
 
-    public List<String> getListeProduits() {
+    public Map<String, Integer> getListeProduits() {
         return listeProduits;
     }
 
-    public void setListeProduits(List<String> listeProduits) {
+    public void setListeProduits(Map<String, Integer> listeProduits) {
         this.listeProduits = listeProduits;
     }
+
     @Override
     public String toString() {
         return "FactureDTO{" +

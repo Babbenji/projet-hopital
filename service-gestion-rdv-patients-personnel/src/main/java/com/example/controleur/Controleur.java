@@ -111,7 +111,7 @@ public class Controleur {
         } catch (MedecinInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
         } catch (PatientDejaAttribueAuMedecinException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient est déjà assigné au médecin !");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce patient est déjà assigné au médecin !");
         }
     }
     @PostMapping("/consultation")
@@ -126,7 +126,7 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
         }
         try {
-            Consultation nouvelleConsultation = facadeApplication.prendreRDV(patient,consultationDTO.getDateRDV(),consultationDTO.getHeureRDV(),consultationDTO.getMotif(),consultationDTO.getOrdonnance(),consultationDTO.getType());
+            Consultation nouvelleConsultation = facadeApplication.prendreRDV(patient,consultationDTO.getDateRDV(),consultationDTO.getHeureRDV(),consultationDTO.getMotif(),consultationDTO.getType());
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idConsultation}").buildAndExpand(nouvelleConsultation.getId()).toUri();
             return ResponseEntity.created(location).body(nouvelleConsultation);
         } catch (TypeConsultationInexistantException e) {

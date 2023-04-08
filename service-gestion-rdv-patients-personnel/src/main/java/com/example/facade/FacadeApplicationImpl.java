@@ -87,7 +87,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
         medecinRepository.save(m);
     }
     @Override
-    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
+    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
         Medecin medecin = getMedecinTraitant(patient.getNumSecu());
         if(medecin==null){
             throw new PasDeMedecinTraitantAssigneException();
@@ -108,7 +108,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
                     throw new CreneauIndisponibleException();
                 }
             }
-            Consultation consultation = new Consultation(creneau, motif, TypeCons.valueOf(type), ordonnance, medecin.getId(), patient.getId());
+            Consultation consultation = new Consultation(creneau, motif, TypeCons.valueOf(type), medecin.getId(), patient.getId());
             medecin.ajouterConsultation(consultation);
             consultationRepository.save(consultation);
             medecinRepository.save(medecin);
