@@ -41,9 +41,9 @@ public class RabbitMQProducer {
         LOGGER.info(String.format("Email envoyé -> %s", emailDTO.toString()));
         rabbitTemplate.convertAndSend(exchangeNotif,routingkeyNotif,emailDTO);
     }
-    public void sendProduits(List<String> listeProduits){
-        for (String prod : listeProduits){
-            LOGGER.info("-------------------- Produit -> {}", prod);
+    public void sendProduits(Map<String,Integer> listeProduits){
+        for (Map.Entry entry : listeProduits.entrySet()){
+            LOGGER.info("--------------------"+ entry.getKey()+" -> {}", entry.getValue()+"--------------------");
         }
         rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,listeProduits);
     }

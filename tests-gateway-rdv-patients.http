@@ -183,7 +183,7 @@ Content-Type: application/json
 
 {
   "compteRendu" : "Patient fievreux",
-  "listeProduitsMedicaux" : ["Doliprane:1","Pansement:2"]
+  "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}
 }
 ### Cette requete permet de voir les consultations d'un medecin // MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/medecin/9/consultations

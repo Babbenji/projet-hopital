@@ -1,5 +1,6 @@
 package fr.univ.servicegestionstockfournisseurs.producer;
 
+import fr.univ.servicegestionstockfournisseurs.modele.Commande;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -9,10 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class RabbitMQProducer {
-    @Value("spring.rabbitmq.exchange-msg")
+    @Value("spring.rabbitmq.exchange-facture")
     private String exchange;
 
-    @Value("spring.rabbitmq.routingkey-msg")
+    @Value("spring.rabbitmq.routingkey-facture")
     private String routingKey;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
@@ -25,9 +26,17 @@ public class RabbitMQProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void alerteStock(String message){
-        LOGGER.info(String.format("Message sent AARON BLABLA-> %s", message));
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+
+    public void envoieCommande(Commande commande)
+    {
+        LOGGER.info("Commande envoyée pour facture {}", commande);
+        rabbitTemplate.convertAndSend("facture.exchange", "facture.routingKey", commande);
     }
+
+//    public void envoieNotificationStockBas(EmailDTO emailDTO)
+//    {
+//        LOGGER.info(String.format("Notification envoyée pour stock bas", emailDTO));
+//        rabbitTemplate.convertAndSend("stock.exchange", "stock.routingKey", emailDTO);
+//    }
 }
 

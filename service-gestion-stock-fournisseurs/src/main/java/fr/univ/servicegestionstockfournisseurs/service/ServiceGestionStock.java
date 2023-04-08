@@ -2,6 +2,7 @@ package fr.univ.servicegestionstockfournisseurs.service;
 
 import fr.univ.servicegestionstockfournisseurs.consumer.RabbitMQConsumer;
 import fr.univ.servicegestionstockfournisseurs.modele.*;
+import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
 import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         @Autowired
         UtilisateurRepository utilisateurRepository;
 
+        @Autowired
+        RabbitMQProducer rabbitMQProducer;
+
         @Override
         public void passerCommande(int idUtilisateur) throws UtilisateurInexistantException {
                 Commande commande = new Commande(new Date());
@@ -38,6 +42,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                                         {
                                                 produit.setStockProduitMedical(produit.getStockProduitMedical()+entry.getValue());
                                                 produitMedicalRepository.save(produit);
+                                                commande.getProduitsCommande().put(produit.getNomProduitMedical(),entry.getValue());
                                         }
                                 }
                                 commande.setPrixCommande(commande.getPrixCommande() + produit.getPrixProduitMedical() * entry.getValue());
@@ -45,6 +50,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                         commandeRepository.save(commande);
                         panier.clear();
                         utilisateurRepository.save(utilisateur);
+                        rabbitMQProducer.envoieCommande(commande);
                 }
                 else {
                         throw new UtilisateurInexistantException();
