@@ -10,4 +10,5 @@ public interface UtilisateurRepository extends MongoRepository<Utilisateur, Inte
 {
     Utilisateur findUtilisateurByIdUtilisateur(int idUtilisateur);
     boolean existsUtilisateurByIdUtilisateur(int idUtilisateur);
+    boolean existsByEmailUtilisateur(String emailUtilisateur);
 }

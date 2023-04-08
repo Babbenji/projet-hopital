@@ -17,7 +17,7 @@ public interface FacadeServiceGestionStock {
 
     void ajouterProduit(String nomProduit, double prixProduit, String descriptionProduit) throws ProduitDejaExistantException;
 
-    void ajouterProduitFournisseur(int idFournisseur, int idproduitMedical) throws FournisseurInexistantException,ProduitDejaDansCatalogueException;
+    void ajouterProduitFournisseur(int idFournisseur, int idProduit) throws FournisseurInexistantException, ProduitDejaDansCatalogueException, ProduitInexistantException;
 
     void ajouterFournisseur( Fournisseur fournisseur) throws FournisseurDejaExistantException;
 
@@ -27,7 +27,7 @@ public interface FacadeServiceGestionStock {
 
     void supprimerFournisseur(int idFournisseur) throws FournisseurInexistantException;
 
-    void supprimerProduitFromCatalogue(int idProduit,int idFournisseur) throws ProduitInexistantException;
+    void supprimerProduitFromCatalogue(int idProduit,int idFournisseur) throws FournisseurInexistantException;
 
     void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException;
 

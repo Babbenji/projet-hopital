@@ -109,11 +109,12 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/fournisseurs/{id}/catalogue")
-    public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestParam int idProduit) throws ProduitDejaExistantException
+    public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestParam int idProduit)
     {
         try {
             //String identifiant = authentication.getName();
-            ProduitMedical produitMedical = facadeServiceGestionStock.getProduitMedicaleById(idProduit);
+
+//            ProduitMedical produitMedical = facadeServiceGestionStock.getProduitMedicaleById(idProduit);
             facadeServiceGestionStock.ajouterProduitFournisseur(id, idProduit);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idProduit}").buildAndExpand(idProduit).toUri();
 
@@ -177,6 +178,7 @@ public class ControlleurService {
         }
     }
 
+
     @DeleteMapping(value = "/fournisseurs/{idFournisseur}/produits/{idProduit}")
     public ResponseEntity<String> deleteProduitFournisseur(@PathVariable int idFournisseur, @PathVariable int idProduit)
     {
@@ -184,10 +186,11 @@ public class ControlleurService {
             //String identifiant = authentication.getName();
             facadeServiceGestionStock.supprimerProduitFromCatalogue(idFournisseur, idProduit);
             return ResponseEntity.ok("Produit supprimé du fournisseur");
-        } catch (ProduitInexistantException e) {
+        } catch ( FournisseurInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant pour qu'il soit supprimé");
         }
     }
+
 
     @PatchMapping(path = "/fournisseurs/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<Fournisseur> updateFournisseur(@PathVariable int id, @RequestBody JsonPatch patch) {
@@ -282,7 +285,7 @@ public class ControlleurService {
         }
     }
 
-    @GetMapping(value = "/fournisseurs/{id}/produits")
+    @GetMapping(value = "/fournisseurs/{id}/catalogue")
     public ResponseEntity<String> getCatalogueFournisseur(@PathVariable int id)
     {
         try {
@@ -294,16 +297,16 @@ public class ControlleurService {
         }
     }
 
-    @GetMapping(value = "/commandes/{idCommande}/panier")
-    public ResponseEntity<String> getProduitsCommande(@PathVariable int idCommande)
-    {
-        try {
-            //String identifiant = authentication.getName();
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idCommande));
-        } catch (UtilisateurInexistantException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @GetMapping(value = "/commandes/{idUtilisateur}/panier")
+//    public ResponseEntity<String> getProduitsPanier(@PathVariable int idUtilisateur)
+//    {
+//        try {
+//            //String identifiant = authentication.getName();
+//            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idUtilisateur));
+//        } catch (UtilisateurInexistantException e) {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
     @GetMapping(value = "/commandes")
     public ResponseEntity<String> getCommandes()
