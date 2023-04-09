@@ -3,6 +3,7 @@ package fr.univ.servicegestionstockfournisseurs.consumer;
 import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
 import fr.univ.servicegestionstockfournisseurs.service.FacadeServiceGestionStock;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.ProduitInexistantException;
+import fr.univ.servicegestionstockfournisseurs.service.exceptions.ProduitNonDisponibleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -26,15 +27,14 @@ public class RabbitMQConsumer {
      * @throws ProduitInexistantException
      */
     @RabbitListener(queues = {"${spring.rabbitmq.queue}"})
-    public FactureDTO consume(FactureDTO factureDTO) throws ProduitInexistantException
-    {
+    public void consume(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException {
+
+        LOGGER.info(String.valueOf(factureDTO.getPatient().toString()));
         for (Map.Entry<String, Integer> entry : factureDTO.getListeProduits().entrySet())
         {
             LOGGER.info(String.format("La quantite du produit " + entry.getKey() + " a été modifiée de " + entry.getValue()));
-            //facadeServiceGestionStock.modifierQuantiteProduitMedical(entry.getKey(),entry.getValue());
+            //facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
         }
-
-        return factureDTO;
     }
 
 }

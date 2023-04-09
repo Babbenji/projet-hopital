@@ -76,4 +76,19 @@ public class PatientDTO
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "PatientDTO{" +
+                "prenom='" + prenom + '\'' +
+                ", nom='" + nom + '\'' +
+                ", email='" + email + '\'' +
+                ", numSecu='" + numSecu + '\'' +
+                ", numTel='" + numTel + '\'' +
+                ", dateNaissance='" + dateNaissance + '\'' +
+                ", genre='" + genre + '\'' +
+                ", idMedecinTraitant=" + idMedecinTraitant +
+                ", antecedents='" + antecedents + '\'' +
+                '}';
+    }
 }
