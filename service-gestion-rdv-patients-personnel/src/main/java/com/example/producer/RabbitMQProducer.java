@@ -25,6 +25,7 @@ public class RabbitMQProducer {
     private String exchangeStock;
     @Value("${spring.rabbitmq.routingkey-stock}")
     private String routingkeyStock;
+
 //
 //    @Value("${spring.rabbitmq.exchange-facturation}")
 //    private String exchangeFacture;
@@ -46,7 +47,7 @@ public class RabbitMQProducer {
 //        rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,listeProduits);
 //    }
     public void sendFacture(FactureDTO factureDTO){
-        LOGGER.info(String.format("Facture envoyée -> %s", factureDTO.toString()));
+        LOGGER.info(String.format("Facture envoyée -> %s", factureDTO));
         rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,factureDTO);
     }
 }

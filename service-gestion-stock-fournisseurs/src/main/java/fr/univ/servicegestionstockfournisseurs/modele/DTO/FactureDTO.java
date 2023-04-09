@@ -11,10 +11,29 @@ public class FactureDTO {
 
     private Map<String,Integer> listeProduits;
 
+    private double coutDuPatient;
+
+
+    public double getCoutDuPatient() {
+        return coutDuPatient;
+    }
+
+    public void setCoutDuPatient(double coutDuPatient) {
+        this.coutDuPatient = coutDuPatient;
+    }
+
+    public PatientDTO getPatient() {
+        return patient;
+    }
+
+    public void setPatient(PatientDTO patient) {
+        this.patient = patient;
+    }
 
     public String getType() {
         return type;
     }
+
 
     public void setType(String type) {
         this.type = type;
@@ -26,5 +45,14 @@ public class FactureDTO {
 
     public void setListeProduits(Map<String, Integer> listeProduits) {
         this.listeProduits = listeProduits;
+    }
+
+    @Override
+    public String toString() {
+        return "FactureDTO{" +
+                "patient=" + patient +
+                ", type='" + type + '\'' +
+                ", listeProduits=" + listeProduits +
+                '}';
     }
 }

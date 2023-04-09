@@ -122,9 +122,9 @@ Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "Hind",
-  "nom": "HACHEMI",
-  "email": "hind.hachemi@hopital-medecin.fr"
+  "prenom": "Aziz",
+  "nom": "BEN JAZIA",
+  "email": "aziz.benjazia@hopital-medecin.fr"
 }
 
 ### Cette requete permet de créer un patient // SECRETAIRE
@@ -168,7 +168,7 @@ Content-Type: application/json
 
 {
   "dateRDV": "28-08-2022",
-  "heureRDV": "18H30",
+  "heureRDV": "18H10",
   "motif": "Mal de crâne",
   "type": "SOINS_DIVERS"
 }

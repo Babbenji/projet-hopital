@@ -13,14 +13,13 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class RabbitMQProducer {
-    @Value("spring.rabbitmq.exchange-facture-fournisseur")
-    private String exchangeFactureFournisseur;
+    @Value("spring.rabbitmq.exchange-facture")
+    private String exchangeFacture;
 
     @Value("spring.rabbitmq.routingkey-facture-fournisseur")
     private String routingKeyFactureFournisseur;
 
-    @Value("spring.rabbitmq.exchange-facture-patient")
-    private String exchangeFacturePatient;
+
 
     @Value("spring.rabbitmq.routingkey-facture-patient")
     private String routingKeyFacturePatient;
@@ -48,13 +47,13 @@ public class RabbitMQProducer {
     public void envoieCommande(Commande commande)
     {
         LOGGER.info("Commande envoyée pour facture {}", commande);
-        rabbitTemplate.convertAndSend(exchangeFactureFournisseur, routingKeyFactureFournisseur, commande);
+        rabbitTemplate.convertAndSend(exchangeFacture, routingKeyFactureFournisseur, commande);
     }
 
     public void envoieFacturePatient(FactureDTO factureDTO)
     {
         LOGGER.info("Facture envoyée pour patient {}", factureDTO);
-        rabbitTemplate.convertAndSend(exchangeFacturePatient, routingKeyFacturePatient, factureDTO);
+        rabbitTemplate.convertAndSend(exchangeFacture, routingKeyFacturePatient, factureDTO);
     }
 
     public void envoieNotificationStockBas(String nomProduit)

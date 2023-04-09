@@ -10,6 +10,7 @@ import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface FacadeServiceGestionStock {
     void passerCommande(int idPanier) throws UtilisateurInexistantException;
@@ -32,17 +33,15 @@ public interface FacadeServiceGestionStock {
 
     void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException;
 
-    void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
+    void modifierFournisseur(int idFournisseur,Map<String, Object> attributsModifies) throws FournisseurInexistantException;
+
+    void modifierProduit(int idProduit,Map<String, Object> attributsModifies) throws ProduitInexistantException;
 
     void modifierQuantiteProduitMedical(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException;
-
-    //void modifierProduitFromCatalogue(ProduitMedical produitMedical,int idProduit, int idFournisseur) throws ProduitInexistantException;
 
     Commande getCommande(int idCommande) throws CommandeInexistanteException;
 
     Fournisseur getFournisseur(int idFournisseur) throws FournisseurInexistantException;
-
-    //ProduitMedical getProduitFromCatalogueFournisseur(int idProduit,int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException;
 
     int getStockProduit(int idProduit) throws ProduitInexistantException;
 
