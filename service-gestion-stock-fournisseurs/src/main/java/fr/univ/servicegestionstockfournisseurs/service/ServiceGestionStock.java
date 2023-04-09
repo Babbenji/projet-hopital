@@ -2,6 +2,7 @@ package fr.univ.servicegestionstockfournisseurs.service;
 
 import fr.univ.servicegestionstockfournisseurs.consumer.RabbitMQConsumer;
 import fr.univ.servicegestionstockfournisseurs.modele.*;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
 import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
 import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
@@ -24,6 +25,9 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         @Autowired
         RabbitMQProducer rabbitMQProducer;
+
+        @Autowired
+        RabbitMQConsumer rabbitMQConsumer;
 
         @Override
         public void passerCommande(int idUtilisateur) throws UtilisateurInexistantException {
@@ -183,14 +187,27 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         }
 
         @Override
-        public void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException {
-                if (produitMedicalRepository.existsByNomProduitMedical(nomProduit)) {
-                        ProduitMedical produitMedical = produitMedicalRepository.findByNomProduitMedical(nomProduit);
-                        produitMedical.setStockProduitMedical(produitMedical.getStockProduitMedical()-quantite);
-                        produitMedicalRepository.save(produitMedical);
-                } else {
-                        throw new ProduitInexistantException();
+        public void modifierQuantiteProduitMedical(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException {
+                for (Map.Entry<String,Integer> entry : factureDTO.getListeProduits().entrySet())
+                {
+                        if (produitMedicalRepository.existsByNomProduitMedical(entry.getKey()))
+                        {
+                                ProduitMedical produitMedical = produitMedicalRepository.findByNomProduitMedical(entry.getKey());
+                                if (produitMedical.getStockProduitMedical() < entry.getValue())
+                                {
+                                        throw new ProduitNonDisponibleException();
+                                }
+                                if (produitMedical.getStockProduitMedical() < 6)
+                                {
+                                        rabbitMQProducer.envoieNotificationStockBas(produitMedical.getNomProduitMedical());
+                                }
+                                produitMedical.setStockProduitMedical(produitMedical.getStockProduitMedical()- entry.getValue());
+                                produitMedicalRepository.save(produitMedical);
+                        } else {
+                                throw new ProduitInexistantException();
+                        }
                 }
+                rabbitMQProducer.envoieFacturePatient(factureDTO);
         }
 
 //        @Override

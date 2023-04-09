@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 //import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -55,6 +56,7 @@ public class ControlleurService {
 //    }
 
     @PostMapping(value = "/utilisateurs/{idUtilisateur}/passerCommande")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> passerCommande(@PathVariable int idUtilisateur) throws UtilisateurInexistantException {
 
             //String identifiant = authentication.getName();
@@ -69,6 +71,7 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/utilisateurs")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewUtilisateur(@RequestBody Utilisateur utilisateur )
     {
         Utilisateur utilisateur1 = null;
@@ -85,6 +88,7 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/produitsMedical")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewProduit(@RequestBody ProduitMedical produitMedical) throws ProduitDejaExistantException
     {
         ProduitMedical produitMedical1 = new ProduitMedical(produitMedical.getNomProduitMedical(), produitMedical.getPrixProduitMedical(),produitMedical.getDescriptionProduitMedical());
@@ -99,6 +103,7 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/fournisseurs")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewFournisseur(@RequestBody Fournisseur fournisseur) throws FournisseurDejaExistantException
     {
         //String identifiant = authentication.getName();
@@ -113,6 +118,7 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/fournisseurs/{id}/catalogue")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestParam int idProduit) throws ProduitDejaExistantException
     {
         try {
@@ -132,6 +138,7 @@ public class ControlleurService {
     }
 
     @PostMapping(value = "/utilisateurs/{idUtilisateur}/panier")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> addProduitPanier(@PathVariable ("idUtilisateur") int idUtilisateur, @RequestParam int idProduit, @RequestParam int quantite)
     {
         try {
@@ -146,6 +153,7 @@ public class ControlleurService {
     }
 
     @DeleteMapping(value = "/utilisateurs/{idUtilisateur}/panier/{idProduit}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idProduit") int idProduit,@PathVariable ("idUtilisateur") int idUtilisateur)
     {
         try {
@@ -158,6 +166,7 @@ public class ControlleurService {
     }
 
     @DeleteMapping(value = "/commandes/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteCommande(@PathVariable int id)
     {
         try {
@@ -170,6 +179,7 @@ public class ControlleurService {
     }
 
     @DeleteMapping(value = "/fournisseurs/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteFournisseur(@PathVariable int id)
     {
         try {
@@ -182,6 +192,7 @@ public class ControlleurService {
     }
 
     @DeleteMapping(value = "/fournisseurs/{idFournisseur}/produits/{idProduit}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteProduitFournisseur(@PathVariable int idFournisseur, @PathVariable int idProduit)
     {
         try {
@@ -194,6 +205,7 @@ public class ControlleurService {
     }
 
     @PatchMapping(path = "/fournisseurs/{id}", consumes = "application/json-patch+json")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Fournisseur> updateFournisseur(@PathVariable int id, @RequestBody JsonPatch patch) {
         try {
             Fournisseur fournisseur = facadeServiceGestionStock.getFournisseur(id);
@@ -225,6 +237,7 @@ public class ControlleurService {
 //    }
 
     @GetMapping(value = "/commandes/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Commande> getCommande(@PathVariable int id)
     {
         try {
@@ -237,6 +250,7 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/fournisseurs/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getFournisseur(@PathVariable int id)
     {
         try {
@@ -249,6 +263,7 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/utilisateurs/{id}/panier")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getPanierUtilisateur(@PathVariable int id)
     {
         try {
@@ -275,6 +290,7 @@ public class ControlleurService {
 //    }
 
     @GetMapping(value = "/produitsMedical/{idProduit}/stock")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Integer> getStockProduit(@PathVariable int idProduit)
     {
         try {
@@ -287,6 +303,7 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/fournisseurs/{id}/produits")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getCatalogueFournisseur(@PathVariable int id)
     {
         try {
@@ -299,6 +316,7 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/commandes/{idCommande}/panier")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getProduitsCommande(@PathVariable int idCommande)
     {
         try {
@@ -310,6 +328,7 @@ public class ControlleurService {
     }
 
     @GetMapping(value = "/commandes")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getCommandes()
     {
         //String identifiant = authentication.getName();

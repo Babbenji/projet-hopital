@@ -28,15 +28,6 @@ public class RabbitMQConfig {
     @Value("${spring.rabbitmq.queue}")
     private String queue;
 
-//    @Value("${spring.rabbitmq.exchange}")
-//    private String exchange;
-
-//    @Value("${spring.rabbitmq.exchange}")
-//    private String exchangeFacture;
-
-//    @Value("${spring.rabbitmq.routingkey}")
-//    private String routingKey;
-
     @Value("${spring.rabbitmq.exchange-stock}")
     private String exchangeStock;
 
@@ -64,23 +55,6 @@ public class RabbitMQConfig {
         return new TopicExchange(exchangeStock);
     }
 
-//    @Bean
-//    public Exchange factureExchange()
-//    {
-//        return ExchangeBuilder.topicExchange(exchangeFacture).durable(true).build();
-//    }
-//
-
-
-//    @Bean
-//    public Binding factureBinding()
-//    {
-//        return BindingBuilder
-//                .bind(queue())
-//                .to(factureExchange())
-//                .with(routingKey)
-//                .noargs();
-//    }
     @Bean
     public Binding stockBinding()
     {

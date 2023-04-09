@@ -1,12 +1,34 @@
-### Ajout utilisateur###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs
+### Inscription d'un compte secretaire
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-    "nomUtilisateur": "Hackime",
-    "prenomUtilisateur": "BOUJDI",
-    "emailUtilisateur": "tktmonreuf"
+  "email": "fred1@hopital-secretaire.fr",
+  "password": "fred"
 }
+
+> {%
+    client.global.set("token_confirm_secretaire", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Connexion d'un compte secretaire
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-secretaire.fr",
+  "password": "fred"
+}
+
+> {%
+      client.global.set("secretaire_token", response.headers.valueOf("Authorization"));
+      client.test("Request executed successfully", function() {
+      client.assert(response.status === 200, "Response status is not 200");
+      });
+%}
 
 ### Ajout Produit####
 
