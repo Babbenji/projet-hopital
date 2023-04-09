@@ -50,6 +50,9 @@ public class Fournisseur {
         this.catalogueFournisseur = catalogueFournisseur;
     }
 
+    public void deleteProduit(int idProduit) {
+    	this.catalogueFournisseur.remove(idProduit);
+    }
 
 
     public String getAdresseFournisseur() {
