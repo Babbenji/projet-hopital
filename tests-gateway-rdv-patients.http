@@ -152,7 +152,7 @@ Content-Type: application/json
 {
   "antecedents": "Fragile"
 }
-### Cette requete permet d'assigner un medecin à un patient // MEDECIN
+### Cette requete permet d'assigner un medecin à un patient // SECRETAIRE
 PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
 Authorization: {{secretaire_token}}
 Content-Type: application/json

@@ -21,7 +21,7 @@ public interface FacadeApplication {
     void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
-    Map<String,Integer> voirProduitsConsultation(int idConsultation);
+    Map<String,Integer> voirProduitsConsultation(int idConsultation) throws ConsultationInexistanteException;
     Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
     Collection<Consultation> getAllConsultations();
     Collection<Consultation> getAllConsultationsParType(String type);
