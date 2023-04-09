@@ -3,5 +3,7 @@
     public class FactureNotFoundException : Exception
     {
         public FactureNotFoundException(string message):base(message){ }
+
+        public FactureNotFoundException() { }
     }
 }

@@ -30,7 +30,7 @@ public class RabbitMQProducer {
     public void envoieCommande(Commande commande)
     {
         LOGGER.info("Commande envoyée pour facture {}", commande);
-        rabbitTemplate.convertAndSend("facture.exchange", "facture.routingKey", commande);
+        rabbitTemplate.convertAndSend("facture.exchange", "factureCmd.routingKey", commande);
     }
 
 //    public void envoieNotificationStockBas(EmailDTO emailDTO)
