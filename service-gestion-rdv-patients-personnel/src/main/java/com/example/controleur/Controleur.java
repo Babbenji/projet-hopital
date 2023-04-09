@@ -4,9 +4,6 @@ import com.example.exceptions.*;
 import com.example.modele.*;
 import com.example.facade.FacadeApplication;
 import com.example.modele.DTO.ConsultationDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,10 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/api/v1/rdvpatients",produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -196,4 +190,10 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
         }
     }
+
+    //Afficher le médecin traitant d'un patient
+    //    Map<String,Integer> voirProduitsConsultation(int idConsultation);
+    //    Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
+    //    Collection<Consultation> getAllConsultations();
+    //    Collection<Consultation> getAllConsultationsParType(String type);
 }

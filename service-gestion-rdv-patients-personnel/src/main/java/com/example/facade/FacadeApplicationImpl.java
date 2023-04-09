@@ -126,28 +126,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public Map<String,Integer> voirProduitsConsultation(int idConsultation) {
-        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-        return consultation.getListeProduitsMedicaux();
-    }
-    @Override
-    public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) {
-        Medecin medecin = medecinRepository.findMedecinById(idMedecin);
-        Collection<Patient> res = new ArrayList<>();
-        medecin.getListePatients().forEach(idPatient->{
-            res.add(patientRepository.findPatientById(idPatient));
-        });
-        return res;
-    }
-    @Override
-    public Collection<Consultation> getAllConsultations() {
-        return consultationRepository.findAll();
-    }
-    @Override
-    public Collection<Consultation> getAllConsultationsParType(String type) {
-        return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
-    }
-    @Override
     public void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
@@ -186,7 +164,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
             Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
 
             FactureDTO facture = new FactureDTO();
-            facture.setIdPatient(consultation.getIdPatient());
+            facture.setPatient(patient);
             facture.setType(String.valueOf(consultation.getType()));
             facture.setListeProduits(consultation.getListeProduitsMedicaux());
 
@@ -207,6 +185,28 @@ public class FacadeApplicationImpl implements FacadeApplication{
             //----------------------
         }else{
             throw new ConsultationInexistanteException();
+        }
+    }
+    @Override
+    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException {
+        if(medecinRepository.existsById(idMedecin)){
+            Medecin medecin = medecinRepository.findMedecinById(idMedecin);
+            List<Consultation> reponse = new ArrayList<>();
+            if (medecin.getListeConsultations().size()!=0){
+                for (int idConsult: medecin.getListeConsultations()) {
+                    if (consultationRepository.existsById(idConsult)){
+                        reponse.add(consultationRepository.findConsultationById(idConsult));
+                    }
+                    else {
+                        throw new ConsultationInexistanteException();
+                    }
+                }
+            }else {
+                throw new PasDeConsultationAssigneAuMedecinException();
+            }
+            return reponse;
+        }else{
+            throw new MedecinInexistantException();
         }
     }
     @Override
@@ -237,26 +237,26 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException {
-        if(medecinRepository.existsById(idMedecin)){
-            Medecin medecin = medecinRepository.findMedecinById(idMedecin);
-            List<Consultation> reponse = new ArrayList<>();
-            if (medecin.getListeConsultations().size()!=0){
-                for (int idConsult: medecin.getListeConsultations()) {
-                    if (consultationRepository.existsById(idConsult)){
-                        reponse.add(consultationRepository.findConsultationById(idConsult));
-                    }
-                    else {
-                        throw new ConsultationInexistanteException();
-                    }
-                }
-            }else {
-                throw new PasDeConsultationAssigneAuMedecinException();
-            }
-            return reponse;
-        }else{
-            throw new MedecinInexistantException();
-        }
+    public Map<String,Integer> voirProduitsConsultation(int idConsultation) {
+        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+        return consultation.getListeProduitsMedicaux();
+    }
+    @Override
+    public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) {
+        Medecin medecin = medecinRepository.findMedecinById(idMedecin);
+        Collection<Patient> res = new ArrayList<>();
+        medecin.getListePatients().forEach(idPatient->{
+            res.add(patientRepository.findPatientById(idPatient));
+        });
+        return res;
+    }
+    @Override
+    public Collection<Consultation> getAllConsultations() {
+        return consultationRepository.findAll();
+    }
+    @Override
+    public Collection<Consultation> getAllConsultationsParType(String type) {
+        return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
     }
     @Override
     public Medecin getMedecinTraitant(String numSecu){
