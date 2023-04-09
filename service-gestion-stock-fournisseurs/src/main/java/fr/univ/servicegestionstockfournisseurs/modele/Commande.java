@@ -1,9 +1,8 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
-import org.springframework.cglib.core.Local;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import javax.annotation.processing.Generated;
 import java.util.*;
 
 @Document(collection = "commande")
@@ -12,6 +11,8 @@ public class Commande {
     @Id
     private int idCommande;
     private static int IDS = 1;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateCommande;
     private double prixCommande;
 

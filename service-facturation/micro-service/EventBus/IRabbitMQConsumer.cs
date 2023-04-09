@@ -2,7 +2,7 @@
 {
     public interface IRabbitMQConsumer
     {
-        void SubcribeQueue(string queueName);
+        void Subcribe();
 
         void ClosingChannelAndConnection();
     }

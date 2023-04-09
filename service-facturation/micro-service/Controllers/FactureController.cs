@@ -1,25 +1,26 @@
 ﻿using micro_service.Models;
 using micro_service.Service;
 using micro_service.Service.Exceptions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
 {
-    [Route("api/facture")]
+    [Route("api/v1/facture")]
     [ApiController]
     public class FactureController : ControllerBase
     {
         private readonly ILogger<FactureController> logger;
         private readonly IFactureService factureService;
+        private readonly ICommandeService commandeService;
 
-        public FactureController(ILogger<FactureController> logger, IFactureService factureService)
+        public FactureController(ILogger<FactureController> logger, IFactureService factureService, ICommandeService commandeService)
         {
             this.logger = logger;
             this.factureService = factureService;
+            this.commandeService = commandeService;
         }
 
-        [HttpPost("v1/new-bill")]
+        [HttpPost]
         public IActionResult CreationFacture([FromBody] Facture facture)
         {
             Facture entity = this.factureService.Create(facture);
@@ -27,7 +28,7 @@ namespace micro_service.Controllers
         }
 
 
-        [HttpGet("v1/bill")]
+        [HttpGet]
         public IActionResult GetFactures()
         {
             List<Facture> entities = this.factureService.GetAll();
@@ -35,24 +36,33 @@ namespace micro_service.Controllers
             return Ok(entities);
         }
 
-        [HttpGet("v1/bill/{id}")]
-        public IActionResult GetFactureWithVersion(string id)
+        [HttpGet("cmds")]
+        public IActionResult GetCmd()
         {
-            Facture entity = this.factureService.GetById(id);
+            List<Commande> entities = this.commandeService.GetAll();
 
-            return Ok(entity);
+            return Ok(entities);
         }
 
-        [HttpGet("bill/{id}")]
+
+
+        [HttpGet("{id}")]
         public IActionResult GetFacture(string id)
         {
-            Facture entity = this.factureService.GetById(id);
+            try
+            {
+                Facture entity = this.factureService.GetById(id);
 
-            return Ok(entity);
+                return Ok(entity);
+            }
+            catch (FactureNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         
-        [HttpGet("v1/patients/{id}")]
+        [HttpGet("patients/{id}")]
         public IActionResult GetFacturesPatient(string id)
         {
             List<Facture> entities = this.factureService.GetAllFacturePatient(id);
@@ -60,7 +70,7 @@ namespace micro_service.Controllers
         }
 
 
-        [HttpGet("v1/send/patients")]
+        [HttpGet("send/patients")]
        public IActionResult SendFactureToPatient([FromQuery] string idFacture, [FromQuery] string idPatients)
        {
             try
