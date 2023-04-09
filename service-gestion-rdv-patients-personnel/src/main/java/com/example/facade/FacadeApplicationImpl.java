@@ -237,9 +237,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public Map<String,Integer> voirProduitsConsultation(int idConsultation) {
-        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-        return consultation.getListeProduitsMedicaux();
+    public Map<String,Integer> voirProduitsConsultation(int idConsultation) throws ConsultationInexistanteException {
+        if (consultationRepository.existsById(idConsultation)){
+            Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            return consultation.getListeProduitsMedicaux();
+        }
+        else {
+            throw new ConsultationInexistanteException();
+        }
+
     }
     @Override
     public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) {
