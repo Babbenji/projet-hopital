@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "email": "fred1@hopital-secretaire.fr",
-  "password": "fred"
+  "password": "okoko"
 }
 
 > {%
