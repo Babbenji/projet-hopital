@@ -259,19 +259,5 @@ public class Controleur {
         Collection<Consultation> listeConsultations = facadeApplication.getAllConsultationsParType(type);
         return ResponseEntity.ok(listeConsultations);
     }
-    @GetMapping("/medecin/{idMedecin}/consultations")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-    public ResponseEntity<?> afficherConsultationsMedecin(@PathVariable("idMedecin") int idMedecin){
-        try {
-            Collection<Consultation> listeConsultations = facadeApplication.voirConsultationsMedecin(idMedecin);
-            return ResponseEntity.ok(listeConsultations);
-        } catch (MedecinInexistantException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
-        } catch (ConsultationInexistanteException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
-        } catch (PasDeConsultationAssigneAuMedecinException e) {
-            throw new RuntimeException(e);
-        }
-    }
     //Toutes les consultations d'un médecin par jour
 }
