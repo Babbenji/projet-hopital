@@ -1,6 +1,7 @@
 package fr.univ.servicegestionstockfournisseurs.service;
 
 import fr.univ.servicegestionstockfournisseurs.modele.Commande;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
 import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
@@ -33,7 +34,7 @@ public interface FacadeServiceGestionStock {
 
     void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
 
-    void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException;
+    void modifierQuantiteProduitMedical(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException;
 
     //void modifierProduitFromCatalogue(ProduitMedical produitMedical,int idProduit, int idFournisseur) throws ProduitInexistantException;
 

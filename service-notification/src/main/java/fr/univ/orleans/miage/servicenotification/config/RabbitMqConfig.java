@@ -31,6 +31,12 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.exchange-rdvpatients}")
     private String exchange_rdvpatients;
 
+    @Value("${spring.rabbitmq.exchange-notification-stock-bas}")
+    private String exchange_notification_stock_bas;
+
+    @Value("${spring.rabbitmq.routingkey-notification-stock-bas}")
+    private String routingKey_notification_stock_bas;
+
     @Value("${spring.rabbitmq.routingkey-rdvpatients}")
     private String routingKey_rdvpatients;
 
@@ -66,6 +72,11 @@ public class RabbitMqConfig {
     }
 
     @Bean
+    Exchange stockBasExchange() {
+        return ExchangeBuilder.directExchange(exchange_notification_stock_bas).durable(true).build();
+    }
+
+    @Bean
     Binding binding_auth() {
         return BindingBuilder
                 .bind(queue())
@@ -88,6 +99,15 @@ public class RabbitMqConfig {
                 .bind(queue())
                 .to(rdvpatientsExchange())
                 .with(routingKey_rdvpatients)
+                .noargs();
+    }
+
+    @Bean
+    Binding binding_stock_bas() {
+        return BindingBuilder
+                .bind(queue())
+                .to(stockBasExchange())
+                .with(routingKey_notification_stock_bas)
                 .noargs();
     }
 

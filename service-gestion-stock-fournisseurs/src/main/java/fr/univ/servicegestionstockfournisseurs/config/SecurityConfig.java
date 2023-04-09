@@ -28,8 +28,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
-                        .anyRequest().permitAll()  //temporaire
-//                        .anyRequest().authenticated()  // à remettre une fois le service prêt
+                        .anyRequest().authenticated()  // à remettre une fois le service prêt
                 )
                 .csrf().disable()
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
