@@ -63,15 +63,15 @@ Feature: Tests Integration gestion rdv patients et personnels
 
   Scenario: Test de creation de consultation
     Given path '/consultation'
-    And request {"dateRDV": "17-07-2022","heureRDV": "13H20","motif": "Mal de crâne","type": "SOINS_DIVERS","ordonnance": "Doliprane 2 fois par jour"}
+    And request {"dateRDV": "17-07-2022","heureRDV": "13H20","motif": "Mal de crâne","type": "SOINS_DIVERS"}
     When method post
     Then status 201
-    And match response == {"id":"#number","creneau": {"date": "17-07-2022","heure":"13H20"},"type":"SOINS_DIVERS","motif":"Mal de crâne","compteRendu": null,"ordonnance": "Doliprane 2 fois par jour","idMedecin": "#number","idPatient": "#number","dateCreation":"2023-03-19","dateModification": "2023-03-19"}
+    And match response == {"id":"#number","creneau": {"date": "17-07-2022","heure":"13H20"},"type":"SOINS_DIVERS","motif":"Mal de crâne","compteRendu": null,"idMedecin": "#number","idPatient": "#number","dateCreation":"2023-03-19","dateModification": "2023-03-19"}
     And print response
 
   Scenario: Test de creation de consultation déjà existante
     Given path '/consultation'
-    And request {"dateRDV": "17-07-2022","heureRDV": "13H20","motif": "Mal de crâne","type": "SOINS_DIVERS","ordonnance": "Doliprane 2 fois par jour"}
+    And request {"dateRDV": "17-07-2022","heureRDV": "13H20","motif": "Mal de crâne","type": "SOINS_DIVERS"
     When method post
     Then status 409
     And match response == 'Ce creneau est déjà pris par un autre patient !'

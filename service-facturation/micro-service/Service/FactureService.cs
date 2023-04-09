@@ -2,7 +2,6 @@
 using micro_service.Models;
 using micro_service.Repository;
 using micro_service.Service.Exceptions;
-using static micro_service.Models.Email;
 
 namespace micro_service.Service
 {
@@ -84,7 +83,8 @@ namespace micro_service.Service
 
         public Facture GetById(string id)
         {
-            return this.factureRepository.GetById(id);
+            return this.factureRepository.GetById(id) ?? throw new FactureNotFoundException("Facture n'existe pas !!!");
+
         }
 
         public void Update(string id, Facture entity)
