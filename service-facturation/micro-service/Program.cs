@@ -33,6 +33,9 @@ builder.Services.AddSingleton<IFactureRepository, FactureRepository>();
 
 builder.Services.AddSingleton<IFactureService, FactureService>();
 
+builder.Services.AddSingleton<ICommendRepository, CommendRepository>();
+
+builder.Services.AddSingleton<ICommandeService, CommandeService>();
 
 
 

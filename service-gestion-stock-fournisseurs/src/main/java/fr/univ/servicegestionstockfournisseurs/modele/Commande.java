@@ -1,26 +1,36 @@
 package fr.univ.servicegestionstockfournisseurs.modele;
 
-import org.springframework.cglib.core.Local;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import javax.annotation.processing.Generated;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Document(collection = "commande")
 public class Commande {
 
     @Id
-//    @Generated(value = "org.hibernate.id.IdentityGenerator")
     private int idCommande;
     private static int IDS = 1;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateCommande;
     private double prixCommande;
+
+    Map<String,Integer> produitsCommande;
 
     public Commande(Date dateCommande) {
         this.dateCommande = dateCommande;
         this.prixCommande = 0.0;
         this.idCommande = IDS++;
+        this.produitsCommande = new HashMap<>();
+    }
+
+    public Map<String,Integer> getProduitsCommande() {
+        return produitsCommande;
+    }
+
+    public void setProduitsCommande(Map<String,Integer> produitsCommande) {
+        this.produitsCommande = produitsCommande;
     }
 
     public int getIdCommande() {
@@ -48,11 +58,5 @@ public class Commande {
         this.prixCommande = prixCommande;
     }
 
-    @Override
-    public String toString() {
-        return "Commande{" +
-                ", dateCommande=" + dateCommande +
-                ", prixCommande=" + prixCommande +
-                '}';
-    }
+
 }

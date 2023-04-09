@@ -1,22 +1,21 @@
-package com.example.modele;
+package fr.univ.servicegestionstockfournisseurs.modele.DTO;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "patient")
-public class Patient extends Utilisateur{
+
+public class PatientDTO
+{
+    private String prenom;
+    private String nom;
+
+    private String email;
     private String numSecu;
     private String numTel;
     private String dateNaissance;
     private String genre;
     private int idMedecinTraitant;
     private String antecedents;
-    public Patient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) {
-        super(prenom, nom, email);
-        this.numSecu = numSecu;
-        this.numTel = numTel;
-        this.dateNaissance = dateNaissance;
-        this.genre = genre;
-    }
+
     public String getNumSecu() {
         return numSecu;
     }
@@ -54,12 +53,36 @@ public class Patient extends Utilisateur{
         this.antecedents = antecedents;
     }
 
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
-        return "Patient{" +
-                "nom='" + this.getNom() + '\'' +
-                ", prenom='" + this.getPrenom() + '\'' +
-                ", email='" + this.getEmail()+ '\'' +
+        return "PatientDTO{" +
+                "prenom='" + prenom + '\'' +
+                ", nom='" + nom + '\'' +
+                ", email='" + email + '\'' +
                 ", numSecu='" + numSecu + '\'' +
                 ", numTel='" + numTel + '\'' +
                 ", dateNaissance='" + dateNaissance + '\'' +

@@ -12,26 +12,24 @@ public class Consultation {
     private TypeCons type;
     private String motif;
     private String compteRendu;
-    private String ordonnance;
     private boolean confirmation;
     private int idMedecin;
     private int idPatient;
     private String dateCreation;
     private String dateModification;
-    private List<String> listeProduitsMedicaux;
-    public Consultation(Creneau creneau, String motif, TypeCons type, String ordonnance, int idMedecin, int idPatient) {
+    private Map<String,Integer> listeProduitsMedicaux;
+    public Consultation(Creneau creneau, String motif, TypeCons type, int idMedecin, int idPatient) {
         this.id=IDS++;
         this.creneau = creneau;
         this.type = type;
         this.motif = motif;
         this.compteRendu =null;
-        this.ordonnance = ordonnance;
         this.confirmation = false;
         this.idMedecin = idMedecin;
         this.idPatient = idPatient;
         this.dateCreation = LocalDate.now().toString();
         this.dateModification = LocalDate.now().toString();
-        this.listeProduitsMedicaux =new ArrayList<>();
+        this.listeProduitsMedicaux =new HashMap<>();
     }
     public int getId() {
         return id;
@@ -53,12 +51,6 @@ public class Consultation {
     }
     public void setCompteRendu(String compteRendu) {
         this.compteRendu = compteRendu;
-    }
-    public String getOrdonnance() {
-        return ordonnance;
-    }
-    public void setOrdonnance(String ordonnance) {
-        this.ordonnance = ordonnance;
     }
     public int getIdMedecin() {
         return idMedecin;
@@ -97,11 +89,11 @@ public class Consultation {
         this.dateModification = dateModification;
     }
 
-    public List<String> getListeProduitsMedicaux() {
+    public Map<String, Integer> getListeProduitsMedicaux() {
         return listeProduitsMedicaux;
     }
 
-    public void setListeProduitsMedicaux(List<String> listeProduitsMedicaux) {
+    public void setListeProduitsMedicaux(Map<String, Integer> listeProduitsMedicaux) {
         this.listeProduitsMedicaux = listeProduitsMedicaux;
     }
 
@@ -113,7 +105,6 @@ public class Consultation {
                 ", type=" + type +
                 ", motif='" + motif + '\'' +
                 ", compteRendu='" + compteRendu + '\'' +
-                ", ordonnance='" + ordonnance + '\'' +
                 ", confirmation=" + confirmation +
                 ", idMedecin=" + idMedecin +
                 ", idPatient=" + idPatient +

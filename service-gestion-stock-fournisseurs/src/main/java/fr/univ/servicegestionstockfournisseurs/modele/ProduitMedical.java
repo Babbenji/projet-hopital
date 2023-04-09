@@ -71,10 +71,9 @@ public class ProduitMedical {
 
     @Override
     public String toString() {
-        return "ProduitMedical{" +
-                "prixProduitMedical=" + prixProduitMedical +
-                ", nomProduitMedical='" + nomProduitMedical + '\'' +
-                ", descriptionProduitMedical='" + descriptionProduitMedical + '\'' +
-                '}';
+        return
+                "prixProduitMedical:" + prixProduitMedical +
+                ", nomProduitMedical:'" + nomProduitMedical + '\'' +
+                ", descriptionProduitMedical:'" + descriptionProduitMedical + '\'';
     }
 }

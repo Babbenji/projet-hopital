@@ -12,9 +12,11 @@ import java.util.List;
 public interface MedecinRepository extends MongoRepository<Medecin, Integer>, CrudRepository<Medecin,Integer> {
     Medecin findMedecinByPrenomAndNom(String prenom, String nom);
     Medecin findMedecinById(int id);
+    Medecin findMedecinByEmail(String email);
     List<Consultation> getById(int id);
     void removeById(int id);
 
 
     boolean existsByEmail(String email);
+
 }

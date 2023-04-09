@@ -38,6 +38,10 @@ spring:
     exchange-rdvpatients: rdvpatients.exchange
     routingkey-rdvpatients: rdvpatients.routingkey
 
+    # communication service-gestionStock
+    exchange-notification-stock-bas: notification.exchange
+    routingkey-notification-stock-bas: notification.routingkey
+
     # queue globale pour tous les exchanges (envoi d'émails)
     queue: email.queue
 

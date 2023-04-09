@@ -4,7 +4,6 @@ public class ConsultationDTO {
     private String dateRDV;
     private String heureRDV;
     private String motif;
-    private String ordonnance;
     private String type;
 
     public String getDateRDV() {
@@ -31,13 +30,6 @@ public class ConsultationDTO {
         this.motif = motif;
     }
 
-    public String getOrdonnance() {
-        return ordonnance;
-    }
-
-    public void setOrdonnance(String ordonnance) {
-        this.ordonnance = ordonnance;
-    }
 
     public String getType() {
         return type;

@@ -1,7 +1,9 @@
 package fr.univ.servicegestionstockfournisseurs.consumer;
 
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
 import fr.univ.servicegestionstockfournisseurs.service.FacadeServiceGestionStock;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.ProduitInexistantException;
+import fr.univ.servicegestionstockfournisseurs.service.exceptions.ProduitNonDisponibleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
@@ -20,23 +22,19 @@ public class RabbitMQConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQConsumer.class);
 
     /**
-     * Recois un objet de type Map<String,Integer> contenant la liste des médicaments utilisés pour un patients et permettera de mettre à jour le stock
-     * @param listeMedicaments
+     * consomme la facture et modifie la quantité des produits
+     * @param factureDTO
+     * @throws ProduitInexistantException
      */
     @RabbitListener(queues = {"${spring.rabbitmq.queue}"})
-    public void consume(List<String> listeMedicaments) throws ProduitInexistantException {
-        Map<String, Integer> map = new HashMap<>();
-        for (String couple:listeMedicaments) {
-            String[] keyValue = couple.split(":");
-            String key = keyValue[0];
-            Integer value = Integer.valueOf(keyValue[1]);
-            map.put(key, value);
-        }
+    public void consume(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException {
 
-        for (Map.Entry<String, Integer> entry : map.entrySet())
+        LOGGER.info(String.valueOf(factureDTO.getPatient().toString()));
+        for (Map.Entry<String, Integer> entry : factureDTO.getListeProduits().entrySet())
         {
-            facadeServiceGestionStock.modifierQuantiteProduitMedical(entry.getKey(),entry.getValue());
-            LOGGER.info(String.format("La quantite du produit" + entry.getKey() + "a été modifiée de " + entry.getValue()));
+            LOGGER.info(String.format("La quantite du produit " + entry.getKey() + " a été modifiée de " + entry.getValue()));
+            //facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
         }
     }
+
 }

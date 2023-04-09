@@ -1,22 +1,44 @@
-### Ajout utilisateur###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs
+### Inscription d'un compte secretaire
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "nomUtilisateur": "utilisateur",
-  "prenomUtilisateur": "prenom1",
-  "emailUtilisateur": "email10"
+  "email": "fred1@hopital-secretaire.fr",
+  "password": "fred"
 }
 
-#### Ajout Produit####
+> {%
+    client.global.set("token_confirm_secretaire", response.headers.valueOf("Token-Confirmation"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+});
+%}
+
+### Connexion d'un compte secretaire
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "fred@hopital-secretaire.fr",
+  "password": "fred"
+}
+
+> {%
+      client.global.set("secretaire_token", response.headers.valueOf("Authorization"));
+      client.test("Request executed successfully", function() {
+      client.assert(response.status === 200, "Response status is not 200");
+      });
+%}
+
+### Ajout Produit####
 
 POST http://localhost:8084/api/v1/gestionnaire/produitsMedical
 Content-Type: application/json
 
 {
-  "nomProduitMedical": "produit2",
-  "prixProduitMedical": 10.0,
-  "descriptionProduitMedical": "gagagagagaga"
+    "nomProduitMedical": "BABA",
+    "prixProduitMedical": 10,
+    "descriptionProduitMedical": "Maux genoux"
 }
 
 ### Ajout Fournisseur###
@@ -24,71 +46,82 @@ Content-Type: application/json
 POST http://localhost:8084/api/v1/gestionnaire/fournisseurs
 Content-Type: application/json
 
-{
-  "nomFournisseur": "fournisseur5",
-  "adresseFournisseur": "adresse1",
-  "telephoneFournisseur": "061516511"
-}
+    {
+    "nomFournisseur": "HindIndustry",
+    "adresseFournisseur": "Chez Hind ",
+    "telephoneFournisseur": "061516511"
+    }
 
 ### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/catalogue?idProduit=3
-Content-Type: application/json
-
-
+POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue?idProduit=4
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/panier?idProduit=29&quantite=5
-Content-Type: application/json
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier?idProduit=4&quantite=5
 
 
-#### passer commande###
-
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/passerCommande
+### passer commande###
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/passerCommande
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/20/panier/13
+DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier/6
 
 ### Annuler commande###
-DELETE http://localhost:8084/api/v1/gestionnaire/commandes/4
+
+DELETE http://localhost:8080/gestionnaire/commandes/2
 
 ### supprimer un fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/6
+DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
 
-### supprimer un produit d'un catalogue fournisseur
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/produits/3
+### supprimer un produit###
 
-### modifier un fournisseur
-PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/12
-##marche pas
+DELETE http://localhost:8084/api/v1/gestionnaire/produitsMedical/{idProduit}
 
-#### modifier un produit###
+### supprimer un produit d'un catalogue fournisseur###
 
-PATCH http://localhost:8084/api/v1/gestionnaire/produitMedical/{idProduit}
-#marche pas
+DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+
+### modifier un fournisseur###
+
+PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+Content-Type: application/json-patch+json
+
+{
+    "op": "replace",
+    "path": "/0",
+    "value": "0713261147"
+}
+
+
+### modifier un produit###
+//PATC
+
 
 ### get commande by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes/6
+GET http://localhost:8084/api/v1/gestionnaire/commandes/1
 
+### get panier utilisateur###
+GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier
 
 ### get fournisseur by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/12
+GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
 
 ### get stock produit###
 
-GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/13/stock
+GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/3/stock
 
 ### get catalogue fournisseur###
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/14/catalogue
 
+GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/4/catalogue
 
-#### Get produits d un panier ###
-GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/13/panier
+### Get panier d une commande ###
 
-### Get all commandes
-GET http://localhost:8084/api/v1/gestionnaire/commandes
+GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
 
+### Get all commandes ###
+
+GET http://localhost:8080/gestionnaire/commandes

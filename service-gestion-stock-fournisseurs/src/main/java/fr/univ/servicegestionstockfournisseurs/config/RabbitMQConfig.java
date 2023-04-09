@@ -28,15 +28,6 @@ public class RabbitMQConfig {
     @Value("${spring.rabbitmq.queue}")
     private String queue;
 
-//    @Value("${spring.rabbitmq.exchange}")
-//    private String exchange;
-
-//    @Value("${spring.rabbitmq.exchange}")
-//    private String exchangeFacture;
-
-//    @Value("${spring.rabbitmq.routingkey}")
-//    private String routingKey;
-
     @Value("${spring.rabbitmq.exchange-stock}")
     private String exchangeStock;
 
@@ -59,43 +50,11 @@ public class RabbitMQConfig {
         return cachingConnectionFactory;
     }
 
-    // spring bean for rabbitmq exchange
-//    @Bean
-//    public TopicExchange exchange(){
-//        return new TopicExchange(exchange);
-//    }
     @Bean
     public TopicExchange stockExchange(){
         return new TopicExchange(exchangeStock);
     }
 
-//    @Bean
-//    public Exchange factureExchange()
-//    {
-//        return ExchangeBuilder.topicExchange(exchangeFacture).durable(true).build();
-//    }
-//
-
-
-    // binding between queue and exchange using routing key
-//    @Bean
-//    public Binding binding()
-//    {
-//        return BindingBuilder
-//                .bind(queue())
-//                .to(exchange())
-//                .with(routingKey);
-//    }
-
-//    @Bean
-//    public Binding factureBinding()
-//    {
-//        return BindingBuilder
-//                .bind(queue())
-//                .to(factureExchange())
-//                .with(routingKey)
-//                .noargs();
-//    }
     @Bean
     public Binding stockBinding()
     {
@@ -117,8 +76,5 @@ public class RabbitMQConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-// Spring boot autoconfiguration provides following beans
-    // ConnectionFactory
-    // RabbitTemplate
-    // RabbitAdmin
+
 }

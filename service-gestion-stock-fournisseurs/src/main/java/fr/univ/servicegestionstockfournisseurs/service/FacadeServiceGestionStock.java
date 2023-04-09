@@ -1,6 +1,7 @@
 package fr.univ.servicegestionstockfournisseurs.service;
 
 import fr.univ.servicegestionstockfournisseurs.modele.Commande;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
 import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
@@ -9,6 +10,7 @@ import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public interface FacadeServiceGestionStock {
     void passerCommande(int idPanier) throws UtilisateurInexistantException;
@@ -31,17 +33,15 @@ public interface FacadeServiceGestionStock {
 
     void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException;
 
-    void modifierFournisseur(Fournisseur fournisseur) throws FournisseurInexistantException;
+    void modifierFournisseur(int idFournisseur,Map<String, Object> attributsModifies) throws FournisseurInexistantException;
 
-    void modifierQuantiteProduitMedical(String nomProduit, int quantite) throws ProduitInexistantException;
+    void modifierProduit(int idProduit,Map<String, Object> attributsModifies) throws ProduitInexistantException;
 
-    //void modifierProduitFromCatalogue(ProduitMedical produitMedical,int idProduit, int idFournisseur) throws ProduitInexistantException;
+    void modifierQuantiteProduitMedical(FactureDTO factureDTO) throws ProduitInexistantException, ProduitNonDisponibleException;
 
     Commande getCommande(int idCommande) throws CommandeInexistanteException;
 
     Fournisseur getFournisseur(int idFournisseur) throws FournisseurInexistantException;
-
-    //ProduitMedical getProduitFromCatalogueFournisseur(int idProduit,int idFournisseur) throws ProduitInexistantException, FournisseurInexistantException;
 
     int getStockProduit(int idProduit) throws ProduitInexistantException;
 

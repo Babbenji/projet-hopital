@@ -14,7 +14,7 @@ sudo docker exec -it service-gestionrdvpatientspersonnel_mongo_db_1 mongosh
 
 #A entrer a la main :
 use rdvpatients
-db.consultation.insert({id : Int32(), creneau : Object(), type : String(), motif : String(), compteRendu : String(), ordonnance : String(), confirmation : Boolean(), idMedecin : Int32(), idPatient : Int32(), dateCreation : String(), dateModification : String() })
+db.consultation.insert({id : Int32(), creneau : Object(), type : String(), motif : String(), compteRendu : String(), confirmation : Boolean(), idMedecin : Int32(), idPatient : Int32(), dateCreation : String(), dateModification : String() })
 
 db.creneau.insert({date : String(), heure : String(), disponibilite : Boolean()})
 
