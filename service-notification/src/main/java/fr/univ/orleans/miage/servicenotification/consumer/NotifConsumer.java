@@ -12,18 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import static fr.univ.orleans.miage.servicenotification.consumer.EmailConsumer.logger;
 
-@Component
-public class NotifConsumer
-{
-
-
-
-    @RabbitListener(queues = "${spring.rabbitmq.queue}")
-    public void listen() throws MessagingException {
-
-
-    }
-
-}
+//@Component
+//public class NotifConsumer
+//{
+//
+//    @RabbitListener(queues = "${spring.rabbitmq.queue}")
+//    public void listen() throws MessagingException {
+//
+//
+//    }
+//
+//}
