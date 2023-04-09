@@ -179,7 +179,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 email.setObjet("Modification du compte-rendu pour la consultation n°"+idConsultation);
                 email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
             }
-            this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
+//            this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
             this.rabbitMQProducer.sendFacture(facture);
             this.rabbitMQProducer.sendEmail(email);
             //----------------------
