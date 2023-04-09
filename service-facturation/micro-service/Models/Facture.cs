@@ -13,9 +13,12 @@ namespace micro_service.Models
         public DateTime? DateFature { get; set; }
 
         [BsonElement("patient")]
-        public string? NomPatient { get; set; }
+        public Patient? patient { get; set; }
 
         [BsonElement("produits")]
-        public ICollection<Produit>? Produits { get; set; }
+        public Dictionary<string, int>? listeProduits { get; set; }
+
+
+        
     }
 }
