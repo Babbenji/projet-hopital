@@ -57,6 +57,8 @@ public class Controleur {
             return ResponseEntity.created(location).body(nouveauPatient);
         } catch (NumeroSecuDejaAttribueException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce numéro de sécurité sociale est déjà attribué à un autre patient.");
+        } catch (AdresseMailDejaUtiliseeException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cette adresse mail est déjà utilisée pour un autre patient.");
         }
     }
     @GetMapping("/patient/{numSecu}")
@@ -245,6 +247,8 @@ public class Controleur {
             }
         } catch (MedecinInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
+        } catch (MedecinSansPatientException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce medecin n'a pas de patient assigné !");
         }
     }
     @GetMapping("/consultation/liste")
@@ -256,8 +260,12 @@ public class Controleur {
     @GetMapping("/consultation/liste/{type}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<?> afficherToutesLesConsultationsParType(@PathVariable("type") String type){
-        Collection<Consultation> listeConsultations = facadeApplication.getAllConsultationsParType(type);
-        return ResponseEntity.ok(listeConsultations);
+        try {
+            Collection<Consultation> listeConsultations = facadeApplication.getAllConsultationsParType(type);
+            return ResponseEntity.ok(listeConsultations);
+        } catch (TypeConsultationInexistantException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Ce type de consultation n'existe pas !");
+        }
     }
     //Toutes les consultations d'un médecin par jour
 }
