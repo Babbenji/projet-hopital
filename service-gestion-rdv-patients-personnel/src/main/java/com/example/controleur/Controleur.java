@@ -113,13 +113,13 @@ public class Controleur {
         }
     }
     @PostMapping("/consultation")
-    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
-    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO){
+//    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
+    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
         Patient patient;
         try {
-            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
-            //patient = facadeApplication.getPatientByEmail(principal.getName());
+//            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
+            patient = facadeApplication.getPatientByEmail(principal.getName());
         } catch (PatientInexistantException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
         }
