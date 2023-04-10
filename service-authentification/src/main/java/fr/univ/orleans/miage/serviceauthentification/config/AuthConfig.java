@@ -69,11 +69,11 @@ public class AuthConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers("/api/producer/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription/**").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
-                        //les autres endpoints nécessitent une authentification et une autorisation qui sont gérées dans les contrôleurs par les annotations @PreAuthorize
+                        //les endpoints nécessitant une authentification et une autorisation sont gérés dans les contrôleurs via annotation @PreAuthorize
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

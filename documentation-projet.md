@@ -2,9 +2,9 @@
 
 ### Reste à faire 
 
-- [ ] Tests http requests (service facturation)
-- [ ] Communication entre services ave RabbitMQ 
-- [ ] Sécurité des services (gestion des accès)
+- [x] Tests http requests (service facturation)
+- [x] Communication entre services ave RabbitMQ 
+- [x] Sécurité des services (gestion des accès)
 - [ ] Serveur de configuration centralisé ++
 - [ ] Tests d'intégration avec karate
 - [ ] Tests controleur avec REST Assured
@@ -15,7 +15,7 @@
 - [ ] Documentation API REST DOC
 - [ ] Open ID Connect
 - [ ] Swagger pour afficher l'api design
-- [ ] ENV. PROD et ENV. DEV à mettre en place +++   
+- [x] ENV. PROD et ENV. DEV à mettre en place +++   
 
 ### Problèmes à resoudre
 - [x] Location
@@ -133,3 +133,8 @@ https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
 
 Schéma de dépendances entre les services à venir
 
+
+
+### Annexes - Documentation
+
+https://springdoc.org/v2/

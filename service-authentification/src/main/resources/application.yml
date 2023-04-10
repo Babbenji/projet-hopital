@@ -21,7 +21,6 @@ spring:
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     exchange: user.exchange
-    queue: user.queue
     routingkey: user.routingkey
 
   datasource:
@@ -46,3 +45,9 @@ logging:
   level:
     org.hibernate.envers.boot: OFF
 
+# swagger-ui custom path
+#springdoc:
+#    api-docs:
+#        path: /api-docs
+#    swagger-ui:
+#        path: /swagger-ui.html

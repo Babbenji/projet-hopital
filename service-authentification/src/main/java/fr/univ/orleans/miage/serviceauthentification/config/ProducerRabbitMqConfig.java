@@ -20,7 +20,7 @@ public class ProducerRabbitMqConfig {
     String password;
 
 
-    @Bean
+    @Bean(name = "service-authentication")
     CachingConnectionFactory connectionFactory() {
         CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory(host);
         cachingConnectionFactory.setUsername(username);

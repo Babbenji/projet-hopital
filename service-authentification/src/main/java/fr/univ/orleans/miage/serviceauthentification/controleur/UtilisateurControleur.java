@@ -72,7 +72,7 @@ public class UtilisateurControleur {
     public ResponseEntity<String> inscription(@Valid @RequestBody UserDTO userDTO) {
         try {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-            Utilisateur u = utilisateurService.inscription(userDTO.getEmail(), encodedPassword);
+            Utilisateur u = utilisateurService.inscriptionSansConfirmation(userDTO.getEmail(), encodedPassword);
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{email}")

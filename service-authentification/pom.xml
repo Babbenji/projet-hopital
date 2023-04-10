@@ -18,11 +18,13 @@
         <spring-cloud.version>2022.0.1</spring-cloud.version>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
             <version>3.0.4</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -47,13 +49,6 @@
             <version>3.0.4</version>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.0.4</version>
-        </dependency>
-
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -61,10 +56,11 @@
             <scope>runtime</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.0.4</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -127,6 +123,41 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Documentation OPEN API 3 -->
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+
+        <!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi</artifactId>-->
+<!--            <version>1.7.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; pour bypasser spring security&ndash;&gt;-->
+
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-security</artifactId>-->
+<!--            <version>1.7.0</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; pour avoir l'UI Swagger en plus &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springdoc</groupId>-->
+<!--            <artifactId>springdoc-openapi-ui</artifactId>-->
+<!--            <version>1.7.0</version>-->
+<!--        </dependency>-->
 
     </dependencies>
 
