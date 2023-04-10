@@ -12,7 +12,7 @@ import java.util.Map;
 public interface FacadeApplication {
 
     Medecin ajouterMedecin(String prenom, String nom, String email) throws AdresseMailDejaUtiliseeException;
-    Patient ajouterPatient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) throws NumeroSecuDejaAttribueException;
+    Patient ajouterPatient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) throws NumeroSecuDejaAttribueException, AdresseMailDejaUtiliseeException;
     void modifierAntecedentsPatient(String numSecu, String antecedents) throws PatientInexistantException;
     void assignerMedecinTraitant(String numSecu, String nomMedecin, String prenomMedecin) throws PatientInexistantException, MedecinInexistantException, PatientDejaAttribueAuMedecinException;
     void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException;
@@ -22,9 +22,9 @@ public interface FacadeApplication {
     Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
 
     Map<String,Integer> voirProduitsConsultation(int idConsultation) throws ConsultationInexistanteException;
-    Collection<Patient> voirTousLesPatientsMedecin(int idMedecin);
+    Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) throws MedecinInexistantException, MedecinSansPatientException;
     Collection<Consultation> getAllConsultations();
-    Collection<Consultation> getAllConsultationsParType(String type);
+    Collection<Consultation> getAllConsultationsParType(String type) throws TypeConsultationInexistantException;
 
     //Afficher un medecin
     //Modifier un patient

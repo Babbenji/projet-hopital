@@ -11,7 +11,7 @@ POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "ee1@hopital-secretaire.fr",
+  "email": "fred@hopital-secretaire.fr",
   "password": "fred"
 }
 > {%
@@ -20,14 +20,12 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Confirmation
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_secretaire}}
 ### Connexion
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "ee1@hopital-secretaire.fr",
+  "email": "fred@hopital-secretaire.fr",
   "password": "fred"
 }
 
@@ -57,8 +55,6 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Confirmation
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_medecin}}
 ### Connexion
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
@@ -94,8 +90,6 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Confirmation
-GET http://localhost:8081/api/v1/auth/confirmation-compte?token={{token_confirm_patient}}
 ### Connexion d'un compte patient
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
@@ -167,10 +161,10 @@ Authorization: {{patient_token}}
 Content-Type: application/json
 
 {
-  "dateRDV": "28-08-2022",
-  "heureRDV": "18H10",
-  "motif": "Mal de crâne",
-  "type": "SOINS_DIVERS"
+  "dateRDV": "27-08-2022",
+  "heureRDV": "18H20",
+  "motif": "Retrait d'une carie",
+  "type": "DENTAIRE"
 }
 ### Cette requete permet à un médecin de confirmer la consultation // MEDECIN
 PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/confirmer
@@ -189,4 +183,16 @@ GET http://localhost:8083/api/v1/rdvpatients/medecin/12/consultations
 Authorization: {{secretaire_token}}
 ### Cette requete permet de demander d'annuler un RDV pour un patient // PATIENT
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
+Authorization: {{secretaire_token}}
+### Cette requete permet de voir le medecin traitant d'un patient // PATIENT OU MEDECIN OU SECRETAIRE
+GET http://localhost:8083/api/v1/rdvpatients/patient/15/medecintraitant
+Authorization: {{secretaire_token}}
+### Cette requete permet de voir les produits utilisés lors d'une consultation // MEDECIN OU SECRETAIRE
+GET http://localhost:8083/api/v1/rdvpatients/consultation/1/produits
+Authorization: {{secretaire_token}}
+### Cette requete permet de voir toutes les consultation // SECRETAIRE
+GET http://localhost:8083/api/v1/rdvpatients/consultation/liste
+Authorization: {{secretaire_token}}
+### Cette requete permet de voir toutes les consultation // SECRETAIRE
+GET http://localhost:8083/api/v1/rdvpatients/consultation/liste/DENTAIRE
 Authorization: {{secretaire_token}}
