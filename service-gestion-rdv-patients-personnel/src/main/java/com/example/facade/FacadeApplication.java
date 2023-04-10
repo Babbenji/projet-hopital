@@ -18,8 +18,8 @@ public interface FacadeApplication {
     void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException;
     List<Consultation> voirConsultationsMedecin(int idMedecin) throws MedecinInexistantException, ConsultationInexistanteException, PasDeConsultationAssigneAuMedecinException;
     void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException, ConsultationNonConfirmeeException;
-    void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException;
-    Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException;
+    void annulerConsultation(int idConsultation, int idPatient) throws ConsultationInexistanteException, PatientConnecteDifferentPatientConsultationException;
+    Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException, PatientInexistantException;
 
     Map<String,Integer> voirProduitsConsultation(int idConsultation) throws ConsultationInexistanteException;
     Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) throws MedecinInexistantException, MedecinSansPatientException;
@@ -33,10 +33,9 @@ public interface FacadeApplication {
     //Voir les consultations d'un patient
     //Voir son dossier avec la liste des consultations et les données du patient (Pour le patient et pour les médecins/personnel)
     //Modifier la date d'un RDV ?
-    //Confirmer une consultation avant de pouvoir faire son compte-rendu ?
 
     //REQUETES
-    Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, MedecinInexistantException;
+    Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, PasDeMedecinTraitantAssigneException;
 
     void deleteConsultationByID(int idConsultation) throws ConsultationInexistanteException;
     void deleteMedecinByID(int idMedecin) throws MedecinInexistantException;

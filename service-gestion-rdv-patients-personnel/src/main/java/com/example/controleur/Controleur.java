@@ -62,8 +62,7 @@ public class Controleur {
         }
     }
     @GetMapping("/patient/{numSecu}")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
+    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<?> afficherPatient(@PathVariable("numSecu") String numSecu, Principal principal){
         if (principal.getName().contains("@hopital")){
             try {
@@ -88,9 +87,8 @@ public class Controleur {
         }
     }
     @PatchMapping("/personnel/modif/patient/{numSecu}/antecedents")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
-    public ResponseEntity<String> modifierAntecedents(@PathVariable("numSecu") String numSecu, @RequestBody Patient patient) {
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    public ResponseEntity<?> modifierAntecedents(@PathVariable("numSecu") String numSecu, @RequestBody Patient patient) {
         try {
             facadeApplication.modifierAntecedentsPatient(numSecu,patient.getAntecedents());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Les antécédents pour le patient n°"+numSecu+" : \n"+patient.getAntecedents());
@@ -100,7 +98,7 @@ public class Controleur {
     }
     @PatchMapping("/personnel/modif/patient/{numSecu}/medecintraitant")
     @PreAuthorize("hasAnyAuthority('SCOPE_SECRETAIRE')")
-    public ResponseEntity<String> assignerMedecinTraitant(@PathVariable("numSecu") String numSecu, @RequestBody Medecin medecin) {
+    public ResponseEntity<?> assignerMedecinTraitant(@PathVariable("numSecu") String numSecu, @RequestBody Medecin medecin) {
         try {
             facadeApplication.assignerMedecinTraitant(numSecu,medecin.getPrenom(),medecin.getNom());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Le médecin assigné au patient n°"+numSecu+" est "+medecin.getPrenom()+" "+medecin.getNom());
@@ -113,32 +111,26 @@ public class Controleur {
         }
     }
     @PostMapping("/consultation")
-    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
-    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO){
-        Patient patient;
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
+    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
         try {
-            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
-            //patient = facadeApplication.getPatientByEmail(principal.getName());
-        } catch (PatientInexistantException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
-        }
-        try {
-            Consultation nouvelleConsultation = facadeApplication.prendreRDV(patient,consultationDTO.getDateRDV(),consultationDTO.getHeureRDV(),consultationDTO.getMotif(),consultationDTO.getType());
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idConsultation}").buildAndExpand(nouvelleConsultation.getId()).toUri();
-            return ResponseEntity.created(location).body(nouvelleConsultation);
+            Patient patient = facadeApplication.getPatientByEmail(principal.getName());
+            Consultation consultation = facadeApplication.prendreRDV(patient,consultationDTO.getDateRDV(),consultationDTO.getHeureRDV(),consultationDTO.getMotif(),consultationDTO.getType());
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idConsultation}").buildAndExpand(consultation.getId()).toUri();
+            return ResponseEntity.created(location).body(consultation);
         } catch (TypeConsultationInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Ce type de consultation n'existe pas !");
         } catch (CreneauIndisponibleException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce creneau est déjà pris par un autre patient !");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Ce creneau n'est pas disponible !");
         } catch (PasDeMedecinTraitantAssigneException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veuillez définir votre médecin traitant avant de prendre RDV !");
+        } catch (PatientInexistantException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vous n'êtes pas enregistré dans notre base de données, veuillez contacter la secrétaire de l'hopital !");
         }
     }
     @PatchMapping("/consultation/{idConsultation}/confirmer")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
-    public ResponseEntity<String> confirmerRDV( @PathVariable("idConsultation") int idConsultation) {
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    public ResponseEntity<?> confirmerRDV( @PathVariable("idConsultation") int idConsultation) {
         try {
             facadeApplication.confirmerRDV(idConsultation);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("La consultation n°"+idConsultation+" a bien été confirmée.");
@@ -149,9 +141,8 @@ public class Controleur {
         }
     }
     @PatchMapping("/consultation/{idConsultation}/compterendu")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
-    public ResponseEntity<String> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
+    @PreAuthorize("hasAuthority('SCOPE_MEDECIN')")
+    public ResponseEntity<?> modifierCR( @PathVariable("idConsultation") int idConsultation, @RequestBody Consultation consultation) {
         try {
             facadeApplication.modifierCRConsultation(idConsultation,consultation.getCompteRendu(), consultation.getListeProduitsMedicaux());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Le compte rendu pour la consultation n°"+idConsultation+" :\n est : "+consultation.getCompteRendu());
@@ -187,46 +178,40 @@ public class Controleur {
         }
     }
     @DeleteMapping("/consultation/{idConsultation}/annulation")
-    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
-    public ResponseEntity<String> annulationRDV(@PathVariable("idConsultation") int idConsultation) {
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
+    public ResponseEntity<?> annulationRDV(@PathVariable("idConsultation") int idConsultation, Principal principal) {
         try {
-            facadeApplication.annulerConsultation(idConsultation);
+            Patient patientConnecte = facadeApplication.getPatientByEmail(principal.getName());
+            facadeApplication.annulerConsultation(idConsultation, patientConnecte.getId());
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Annulation de la consultation n°"+idConsultation);
-        } catch (MedecinInexistantException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
         } catch (ConsultationInexistanteException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
+        } catch (PatientInexistantException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vous n'êtes pas enregistré dans notre base de données, veuillez contacter la secrétaire de l'hopital !");
+        } catch (PatientConnecteDifferentPatientConsultationException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous n'êtes pas autorisé à annuler le RDV d'un autre patient !");
         }
     }
     @GetMapping("/patient/{numSecu}/medecintraitant")
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<?> afficherMedecinTraitantPatient(@PathVariable("numSecu") String numSecu, Principal principal){
-        if (principal.getName().contains("@hopital")){
-            try {
+        try {
+            if (principal.getName().contains("@hopital")) {
                 Medecin medecinTraitant = facadeApplication.getMedecinTraitant(numSecu);
                 return ResponseEntity.ok(medecinTraitant);
-            } catch (PatientInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
-            } catch (MedecinInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de médecin traitant assigné à ce patient");
-            }
-        }
-        else {
-            try {
+            }else{
                 Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
                 if (patient.getEmail().equals(principal.getName())){
                     Medecin medecinTraitant = facadeApplication.getMedecinTraitant(patient.getNumSecu());
                     return ResponseEntity.ok(medecinTraitant);
-                }
-                else{
+                }else{
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir le médecin traitant de ce patient");
                 }
-            } catch (PatientInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
-            } catch (MedecinInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de médecin traitant assigné à ce patient");
             }
+        } catch (PatientInexistantException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
+        } catch (PasDeMedecinTraitantAssigneException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pas de médecin traitant assigné à ce patient");
         }
     }
     @GetMapping("/consultation/{idConsultation}/produits")
@@ -241,14 +226,20 @@ public class Controleur {
     }
     @GetMapping("/medecin/{idMedecin}/patients")
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-    public ResponseEntity<?> afficherPatientsMedecin(@PathVariable("idMedecin") int idMedecin, Principal principal){
+    public ResponseEntity<?> voirPatientsMedecin(@PathVariable("idMedecin") int idMedecin, Principal principal){
         try {
-            Medecin medecinConnecte = facadeApplication.getMedecinByEmail(principal.getName());
-            if (medecinConnecte.getId()==idMedecin){
-                Collection<Patient> listePatients = facadeApplication.voirTousLesPatientsMedecin(idMedecin);
-                return ResponseEntity.ok(listePatients);
+            if (principal.getName().contains("@hopital-medecin.fr")) {
+                Medecin medecinConnecte = facadeApplication.getMedecinByEmail(principal.getName());
+                Medecin medecinConsulte = facadeApplication.getMedecinByID(idMedecin);
+                if (medecinConsulte.getId() == medecinConnecte.getId()) {
+                    Collection<Patient> listePatients = facadeApplication.voirTousLesPatientsMedecin(idMedecin);
+                    return ResponseEntity.ok().body(listePatients);
+                }else{
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir les patients de ce médecin");
+                }
             }else{
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir les patients de ce médecin");
+                Collection<Patient> listePatients = facadeApplication.voirTousLesPatientsMedecin(idMedecin);
+                return ResponseEntity.ok().body(listePatients);
             }
         } catch (MedecinInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
@@ -272,5 +263,4 @@ public class Controleur {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Ce type de consultation n'existe pas !");
         }
     }
-    //Toutes les consultations d'un médecin par jour
 }

@@ -87,13 +87,13 @@ public class FacadeApplicationImpl implements FacadeApplication{
         medecinRepository.save(m);
     }
     @Override
-    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
+    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException, PatientInexistantException {
         Medecin medecin = getMedecinTraitant(patient.getNumSecu());
-        if(medecin==null){
-            throw new PasDeMedecinTraitantAssigneException();
+        List<String> typePossible = new ArrayList<>();
+        for (TypeCons typec:Arrays.asList(TypeCons.values())){
+            typePossible.add(typec.toString());
         }
-        List<TypeCons> typePossible = Arrays.asList(TypeCons.values());
-        if(typePossible.contains(TypeCons.valueOf(type))){
+        if(typePossible.contains(type)){
             Creneau creneau;
             if (!(creneauRepository.existsByDateAndHeure(dateRDV, heureRDV))){
                 creneau = new Creneau(dateRDV, heureRDV);
@@ -205,27 +205,30 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException {
+    public void annulerConsultation(int idConsultation, int idPatient) throws ConsultationInexistanteException, PatientConnecteDifferentPatientConsultationException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-            Creneau creneau = consultation.getCreneau();
-            if (medecinRepository.existsById(consultation.getIdMedecin())){
-                Medecin medecin = medecinRepository.findMedecinById(consultation.getIdMedecin());
+            Medecin medecin = medecinRepository.findMedecinById(consultation.getIdMedecin());
+            Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+            if (idPatient != patient.getId()){
+                throw new PatientConnecteDifferentPatientConsultationException();
+            }else{
+                Creneau creneau = consultation.getCreneau();
+
                 medecin.retirerConsultation(idConsultation);
-                medecinRepository.save(medecin);
                 creneau.setDisponibilite(true);
+
+                medecinRepository.save(medecin);
                 creneauRepository.save(creneau);
                 consultationRepository.removeConsultationById(idConsultation);
+
                 //-------RabbitMQ-------
-                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
                 EmailDTO email = new EmailDTO();
                 email.setDestinataire(medecin.getEmail());
                 email.setObjet("Annulation du RDV n°"+idConsultation);
                 email.setContenu("La consultation n°"+idConsultation+" du patient "+ patient.getPrenom()+" "+patient.getNom()+" prévue le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+" a été annulée.");
                 this.rabbitMQProducer.sendEmail(email);
                 //----------------------
-            }else{
-                throw new MedecinInexistantException();
             }
         }else{
             throw new ConsultationInexistanteException();
@@ -271,8 +274,16 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public Medecin getMedecinTraitant(String numSecu){
-        return medecinRepository.findMedecinById(patientRepository.findPatientByNumSecu(numSecu).getIdMedecinTraitant());
+    public Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, PasDeMedecinTraitantAssigneException {
+        Patient patient =  patientRepository.findPatientByNumSecu(numSecu);
+        if (patient==null){
+            throw new PatientInexistantException();
+        }
+        Medecin medecin = medecinRepository.findMedecinById(patient.getIdMedecinTraitant());
+        if (medecin==null) {
+            throw new PasDeMedecinTraitantAssigneException();
+        }
+        return medecin;
     }
     @Override
     public void deleteConsultationByID(int idConsultation) throws ConsultationInexistanteException {
