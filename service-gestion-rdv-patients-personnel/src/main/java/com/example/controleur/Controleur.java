@@ -165,13 +165,18 @@ public class Controleur {
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN','SCOPE_SECRETAIRE')")
     public ResponseEntity<?> voirConsultationsMedecin(@PathVariable("idMedecin") int idMedecin, Principal principal) {
         try {
-            Medecin medecinConnecte = facadeApplication.getMedecinByEmail(principal.getName());
-            Medecin medecinConsulte = facadeApplication.getMedecinByID(idMedecin);
-            if (medecinConsulte.getId()==medecinConnecte.getId()){
+            if (principal.getName().contains("@hopital-medecin.fr")) {
+                Medecin medecinConnecte = facadeApplication.getMedecinByEmail(principal.getName());
+                Medecin medecinConsulte = facadeApplication.getMedecinByID(idMedecin);
+                if (medecinConsulte.getId() == medecinConnecte.getId()) {
+                    List<Consultation> consultations = facadeApplication.voirConsultationsMedecin(idMedecin);
+                    return ResponseEntity.ok().body(consultations);
+                }else{
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir les consultations d'un autre médecin");
+                }
+            }else{
                 List<Consultation> consultations = facadeApplication.voirConsultationsMedecin(idMedecin);
                 return ResponseEntity.ok().body(consultations);
-            } else {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir les consultations d'un autre médecin");
             }
         } catch (MedecinInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
