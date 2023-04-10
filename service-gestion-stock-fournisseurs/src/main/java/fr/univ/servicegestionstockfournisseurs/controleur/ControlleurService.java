@@ -1,13 +1,12 @@
 package fr.univ.servicegestionstockfournisseurs.controleur;
 
 
-
 import fr.univ.servicegestionstockfournisseurs.modele.Commande;
 import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
 import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
-import fr.univ.servicegestionstockfournisseurs.service.FacadeServiceGestionStock;
+import fr.univ.servicegestionstockfournisseurs.service.ServiceGestionStock;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
@@ -24,13 +24,10 @@ import java.util.Map;
 public class ControlleurService {
 
     @Autowired
-    FacadeServiceGestionStock facadeServiceGestionStock;
+    ServiceGestionStock serviceGestionStock;
 
     @Autowired
     RabbitMQProducer rabbitMQProducer;
-
-
-
 
     @PostMapping(value = "/utilisateurs/{idUtilisateur}/passerCommande")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
@@ -38,7 +35,7 @@ public class ControlleurService {
 
 
         try {
-            facadeServiceGestionStock.passerCommande(idUtilisateur);
+            serviceGestionStock.passerCommande(idUtilisateur);
             return ResponseEntity.ok("Commande passée");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.badRequest().body("Utilisateur inexistant");
@@ -54,7 +51,7 @@ public class ControlleurService {
         Utilisateur utilisateur1 = null;
         try {
             utilisateur1 = new Utilisateur(utilisateur.getNomUtilisateur(), utilisateur.getPrenomUtilisateur(), utilisateur.getEmailUtilisateur());
-            facadeServiceGestionStock.ajouterUtilisateur(utilisateur1);
+            serviceGestionStock.ajouterUtilisateur(utilisateur1);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idUtilisateur}").buildAndExpand(utilisateur1.getIdUtilisateur()).toUri();
             return ResponseEntity.created(location).body(utilisateur1);
         } catch (UtilisateurDejaExistantException e) {
@@ -68,7 +65,7 @@ public class ControlleurService {
     {
         ProduitMedical produitMedical1 = new ProduitMedical(produitMedical.getNomProduitMedical(), produitMedical.getPrixProduitMedical(),produitMedical.getDescriptionProduitMedical());
         try {
-            facadeServiceGestionStock.ajouterProduit(produitMedical1.getNomProduitMedical(), produitMedical1.getPrixProduitMedical(),produitMedical1.getDescriptionProduitMedical());
+            serviceGestionStock.ajouterProduit(produitMedical1.getNomProduitMedical(), produitMedical1.getPrixProduitMedical(),produitMedical1.getDescriptionProduitMedical());
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idProduit}").buildAndExpand(produitMedical1.getIdProduitMedical()).toUri();
             return ResponseEntity.created(location).body(produitMedical1);
         } catch (ProduitDejaExistantException e) {
@@ -82,7 +79,7 @@ public class ControlleurService {
     {
         try {
             Fournisseur fournisseur1 = new Fournisseur(fournisseur.getNomFournisseur(), fournisseur.getAdresseFournisseur(), fournisseur.getTelephoneFournisseur());
-            facadeServiceGestionStock.ajouterFournisseur(fournisseur1);
+            serviceGestionStock.ajouterFournisseur(fournisseur1);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idFournisseur}").buildAndExpand(fournisseur1.getIdFournisseur()).toUri();
             return ResponseEntity.created(location).body(fournisseur1);
         } catch (FournisseurDejaExistantException e) {
@@ -96,13 +93,13 @@ public class ControlleurService {
     {
         try {
 
-            facadeServiceGestionStock.ajouterProduitFournisseur(id, idProduit);
+            serviceGestionStock.ajouterProduitFournisseur(id, idProduit);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idProduit}").buildAndExpand(idProduit).toUri();
 
             return ResponseEntity.created(location).body("Produit ajouté au catalogue fournisseur");
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
-        } catch (ProduitDejaDansCatalogueException e) {
+        } catch (ProduitDejaDansCatalogueException | ProduitInexistantException e) {
             return ResponseEntity.badRequest().body("Produit déjà dans le catalogue");
         }
     }
@@ -113,7 +110,7 @@ public class ControlleurService {
     {
         try {
 
-            facadeServiceGestionStock.ajouterProduitPanier(idUtilisateur, idProduit, quantite);
+            serviceGestionStock.ajouterProduitPanier(idUtilisateur, idProduit, quantite);
             return ResponseEntity.ok("Produit ajouté au panier");
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.notFound().build();
@@ -127,7 +124,7 @@ public class ControlleurService {
     public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idProduit") int idProduit,@PathVariable ("idUtilisateur") int idUtilisateur)
     {
         try {
-            facadeServiceGestionStock.supprimerProduitPanier(idUtilisateur, idProduit);
+            serviceGestionStock.supprimerProduitPanier(idUtilisateur, idProduit);
             return ResponseEntity.ok("Produit supprimé du panier");
         } catch (ProduitInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant dans panier");
@@ -139,7 +136,7 @@ public class ControlleurService {
     public ResponseEntity<String> deleteCommande(@PathVariable int id)
     {
         try {
-            facadeServiceGestionStock.annulerCommande(id);
+            serviceGestionStock.annulerCommande(id);
             return ResponseEntity.accepted().body("Commande supprimée");
         } catch (CommandeInexistanteException e) {
             return ResponseEntity.badRequest().body("Commande inexistante pour qu'elle soit supprimée");
@@ -151,7 +148,7 @@ public class ControlleurService {
     public ResponseEntity<String> deleteFournisseur(@PathVariable int id)
     {
         try {
-            facadeServiceGestionStock.supprimerFournisseur(id);
+            serviceGestionStock.supprimerFournisseur(id);
             return ResponseEntity.accepted().body("Fournisseur supprimé");
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.badRequest().body("Fournisseur inexistant pour qu'il soit supprimé");
@@ -163,9 +160,9 @@ public class ControlleurService {
     public ResponseEntity<String> deleteProduitFournisseur(@PathVariable int idFournisseur, @PathVariable int idProduit)
     {
         try {
-            facadeServiceGestionStock.supprimerProduitFromCatalogue(idFournisseur, idProduit);
+            serviceGestionStock.supprimerProduitFromCatalogue(idFournisseur, idProduit);
             return ResponseEntity.accepted().body("Produit supprimé du catalogue fournisseur");
-        } catch (ProduitInexistantException e) {
+        } catch (FournisseurInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant pour qu'il soit supprimé");
         }
     }
@@ -175,7 +172,7 @@ public class ControlleurService {
     public ResponseEntity<String> updateFournisseur(@PathVariable int id, @RequestBody Map<String,Object> attributsAModifier ) {
         try {
 
-            facadeServiceGestionStock.modifierFournisseur(id,attributsAModifier);
+            serviceGestionStock.modifierFournisseur(id,attributsAModifier);
             return ResponseEntity.accepted().body("Fournisseur modifié");
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -186,7 +183,7 @@ public class ControlleurService {
     public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody Map<String,Object> attributsAModifier) {
         try {
 
-            facadeServiceGestionStock.modifierProduit( idProduit, attributsAModifier);
+            serviceGestionStock.modifierProduit( idProduit, attributsAModifier);
             return ResponseEntity.ok("Produit modifié avec succès");
         }  catch (ProduitInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -199,7 +196,7 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            Commande commande = facadeServiceGestionStock.getCommande(id);
+            Commande commande = serviceGestionStock.getCommande(id);
             return ResponseEntity.ok(commande);
         } catch (CommandeInexistanteException e) {
             return ResponseEntity.notFound().build();
@@ -211,7 +208,7 @@ public class ControlleurService {
     public ResponseEntity<String> getFournisseur(@PathVariable int id)
     {
         try {
-            Fournisseur fournisseur = facadeServiceGestionStock.getFournisseur(id);
+            Fournisseur fournisseur = serviceGestionStock.getFournisseur(id);
             return ResponseEntity.ok(fournisseur.toString());
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
@@ -223,7 +220,7 @@ public class ControlleurService {
     public ResponseEntity<String> getPanierUtilisateur(@PathVariable int id)
     {
         try {
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(id));
+            return ResponseEntity.ok(serviceGestionStock.getAllProduitsFromPanier(id));
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.notFound().build();
         }
@@ -236,7 +233,7 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            int nbProduitStock = facadeServiceGestionStock.getStockProduit(idProduit);
+            int nbProduitStock = serviceGestionStock.getStockProduit(idProduit);
             return ResponseEntity.ok(nbProduitStock);
         } catch (ProduitInexistantException e) {
             return ResponseEntity.notFound().build();
@@ -249,7 +246,7 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            Map<Integer,String> produits = facadeServiceGestionStock.getCatalogueFournisseur(id);
+            Map<Integer,String> produits = serviceGestionStock.getCatalogueFournisseur(id);
             return ResponseEntity.ok(produits.toString());
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
@@ -262,7 +259,7 @@ public class ControlleurService {
     {
         try {
             //String identifiant = authentication.getName();
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idCommande));
+            return ResponseEntity.ok(serviceGestionStock.getAllProduitsFromPanier(idCommande));
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.notFound().build();
         }
@@ -272,7 +269,7 @@ public class ControlleurService {
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getCommandes()
     {
-        Collection<Commande> commandes = facadeServiceGestionStock.getCommandesDejaPassees();
+        Collection<Commande> commandes = serviceGestionStock.getCommandesDejaPassees();
         return ResponseEntity.ok(commandes.toString());
     }
 

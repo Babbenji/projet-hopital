@@ -11,7 +11,7 @@ POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
+  "email": "ee1@hopital-secretaire.fr",
   "password": "fred"
 }
 > {%
@@ -27,7 +27,7 @@ POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
+  "email": "ee1@hopital-secretaire.fr",
   "password": "fred"
 }
 
@@ -84,8 +84,8 @@ POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@univ-orleans.fr",
-  "password": "fred"
+  "email": "nomprenom@gmail.com",
+  "password": "mdp123"
 }
 
 > {%
@@ -101,8 +101,8 @@ POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "fred@univ-orleans.fr",
-  "password": "fred"
+  "email": "nomprenom@gmail.com",
+  "password": "mdp123"
 }
 
 > {%
@@ -133,10 +133,10 @@ Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "Aaron",
-  "nom": "BROSSEAU",
-  "email": "brosseau.aaron@gmail.com",
-  "numSecu": "15",
+  "prenom": "prenom1",
+  "nom": "nom1",
+  "email": "nomprenom@gmail.com",
+  "numSecu": "84845",
   "numTel": "0123456789",
   "dateNaissance": "14-02-2000",
   "genre": "Homme"
@@ -153,17 +153,17 @@ Content-Type: application/json
   "antecedents": "Fragile"
 }
 ### Cette requete permet d'assigner un medecin à un patient // SECRETAIRE
-PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/84845/medecintraitant
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "Hind",
-  "nom": "HACHEMI"
+  "prenom": "med",
+  "nom": "ecin"
 }
-### Cette requete permet de prendre un rendez vous pour un patient // PATIENT OU SECRETAIRE
+### Cette requete permet de prendre un rendez vous pour un patient // PATIENT
 POST http://localhost:8083/api/v1/rdvpatients/consultation
-Authorization: {{secretaire_token}}
+Authorization: {{patient_token}}
 Content-Type: application/json
 
 {
@@ -185,7 +185,7 @@ Content-Type: application/json
   "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}
 }
 ### Cette requete permet de voir les consultations d'un medecin // MEDECIN OU SECRETAIRE
-GET http://localhost:8083/api/v1/rdvpatients/medecin/9/consultations
+GET http://localhost:8083/api/v1/rdvpatients/medecin/12/consultations
 Authorization: {{secretaire_token}}
 ### Cette requete permet de demander d'annuler un RDV pour un patient // PATIENT
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation

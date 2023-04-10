@@ -145,7 +145,7 @@ public class UtilisateurControleur {
         }
         if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
             String token = genereToken.apply(u);
-            String string = "{\"token\": \""+ token+"\"}";
+            String string = "{\"token\": \"Bearer "+token+"\"}";
             JSONObject json = null;
             try {
                 json = new JSONObject(string);;

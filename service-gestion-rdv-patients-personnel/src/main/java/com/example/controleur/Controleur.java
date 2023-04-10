@@ -111,13 +111,13 @@ public class Controleur {
         }
     }
     @PostMapping("/consultation")
-    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
-//    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
-    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO){
+//    @PreAuthorize("hasAnyAuthority('SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
+    @PreAuthorize("hasAuthority('SCOPE_PATIENT')")
+    public ResponseEntity<?> prendreRDV(@RequestBody ConsultationDTO consultationDTO, Principal principal){
         Patient patient;
         try {
-            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
-            //patient = facadeApplication.getPatientByEmail(principal.getName());
+//            patient = facadeApplication.getPatientByEmail("brosseau.aaron@gmail.com");
+            patient = facadeApplication.getPatientByEmail(principal.getName());
         } catch (PatientInexistantException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Vous n'êtes pas connecté !");
         }
@@ -259,19 +259,19 @@ public class Controleur {
         Collection<Consultation> listeConsultations = facadeApplication.getAllConsultationsParType(type);
         return ResponseEntity.ok(listeConsultations);
     }
-    @GetMapping("/medecin/{idMedecin}/consultations")
-    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
-    public ResponseEntity<?> afficherConsultationsMedecin(@PathVariable("idMedecin") int idMedecin){
-        try {
-            Collection<Consultation> listeConsultations = facadeApplication.voirConsultationsMedecin(idMedecin);
-            return ResponseEntity.ok(listeConsultations);
-        } catch (MedecinInexistantException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
-        } catch (ConsultationInexistanteException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
-        } catch (PasDeConsultationAssigneAuMedecinException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @GetMapping("/medecin/{idMedecin}/consultations")
+//    @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_SECRETAIRE')")
+//    public ResponseEntity<?> afficherConsultationsMedecin(@PathVariable("idMedecin") int idMedecin){
+//        try {
+//            Collection<Consultation> listeConsultations = facadeApplication.voirConsultationsMedecin(idMedecin);
+//            return ResponseEntity.ok(listeConsultations);
+//        } catch (MedecinInexistantException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce médecin n'existe pas !");
+//        } catch (ConsultationInexistanteException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cette consultation n'existe pas !");
+//        } catch (PasDeConsultationAssigneAuMedecinException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     //Toutes les consultations d'un médecin par jour
 }
