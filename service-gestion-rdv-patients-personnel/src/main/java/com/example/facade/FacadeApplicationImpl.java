@@ -267,7 +267,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
     }
     @Override
     public Collection<Consultation> getAllConsultationsParType(String type) throws TypeConsultationInexistantException {
-        if (Arrays.stream(TypeCons.values()).toList().contains(TypeCons.valueOf(type))){
+        List<String> typePossible = new ArrayList<>();
+        for (TypeCons typec:Arrays.asList(TypeCons.values())){
+            typePossible.add(typec.toString());
+        }
+        if(typePossible.contains(type)){
             return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
         }else{
          throw new TypeConsultationInexistantException();
