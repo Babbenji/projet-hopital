@@ -1,4 +1,8 @@
-### Inscription d'un compte secretaire
+
+############################################
+#             Utilisateurs                 #
+############################################
+
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
@@ -19,7 +23,7 @@ POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
+  "email": "fred1@hopital-secretaire.fr",
   "password": "fred"
 }
 
@@ -30,20 +34,76 @@ Content-Type: application/json
       });
 %}
 
-### Ajout Produit####
+### get panier utilisateur###
+GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier
+Authorization: {{secretaire_token}}
 
-POST http://localhost:8084/api/v1/gestionnaire/produitsMedical
+
+############################################
+#                  Produit                 #
+############################################
+
+
+POST http://localhost:8084/api/v1/gestionnaire/produits
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-    "nomProduitMedical": "BABA",
-    "prixProduitMedical": 10,
-    "descriptionProduitMedical": "Maux genoux"
+    "nomProduitMedical": "Spasfon",
+    "prixProduitMedical": 3.35,
+    "descriptionProduitMedical": "Maux de ventre"
 }
+
+
+### Ajouter un produit dans un panier###
+
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier?idProduit=5&quantite=5
+Authorization: {{secretaire_token}}
+
+
+### Ajout produit dans le catalogue fournisseur ###
+POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue?idProduit=5
+Authorization: {{secretaire_token}}
+
+### Supprimer un produit dans un panier###
+
+DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier/6
+Authorization: {{secretaire_token}}
+
+### supprimer un produit ###
+
+DELETE http://localhost:8084/api/v1/gestionnaire/produits/{idProduit}
+Authorization: {{secretaire_token}}
+
+### supprimer un produit d'un catalogue fournisseur###
+
+DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+Authorization: {{secretaire_token}}
+
+### get stock produit ###
+
+GET http://localhost:8084/api/v1/gestionnaire/produits/4/stock
+Authorization: {{secretaire_token}}
+
+### modifier un produit son prix , son nom ou sa descritpion ou les trois en memes temps ###
+PATCH http://localhost:8084/api/v1/gestionnaire/produits/5
+Authorization: {{secretaire_token}}
+Content-Type: application/json
+
+{
+  "nomProduitMedical": "Spasfona"
+}
+
+
+
+############################################
+#                  Fournisseurs            #
+############################################
 
 ### Ajout Fournisseur###
 
 POST http://localhost:8084/api/v1/gestionnaire/fournisseurs
+Authorization: {{secretaire_token}}
 Content-Type: application/json
 
     {
@@ -52,76 +112,59 @@ Content-Type: application/json
     "telephoneFournisseur": "061516511"
     }
 
-### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue?idProduit=4
+### modifier un fournisseur###
 
-### Ajouter un produit dans un panier###
+PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+Authorization: {{secretaire_token}}
+Content-Type: application/json
 
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier?idProduit=4&quantite=5
-
-
-### passer commande###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/passerCommande
-
-### Supprimer un produit dans un panier###
-
-DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier/6
-
-### Annuler commande###
-
-DELETE http://localhost:8080/gestionnaire/commandes/2
+{
+  "nomFournisseur": "AzizIndustry",
+  "telephoneFournisseur": "0613261147"
+}
 
 ### supprimer un fournisseur###
 
 DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
-
-### supprimer un produit###
-
-DELETE http://localhost:8084/api/v1/gestionnaire/produitsMedical/{idProduit}
-
-### supprimer un produit d'un catalogue fournisseur###
-
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
-
-### modifier un fournisseur###
-
-PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
-Content-Type: application/json-patch+json
-
-{
-    "op": "replace",
-    "path": "/0",
-    "value": "0713261147"
-}
-
-
-### modifier un produit###
-//PATC
-
-
-### get commande by id###
-
-GET http://localhost:8084/api/v1/gestionnaire/commandes/1
-
-### get panier utilisateur###
-GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier
+Authorization: {{secretaire_token}}
 
 ### get fournisseur by id###
 
 GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
-
-### get stock produit###
-
-GET http://localhost:8084/api/v1/gestionnaire/produitsMedical/3/stock
+Authorization: {{secretaire_token}}
 
 ### get catalogue fournisseur###
 
 GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/4/catalogue
+Authorization: {{secretaire_token}}
+
+
+############################################
+#                  Commandes               #
+############################################
+
+
+### passer commande###
+POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/passerCommande
+Authorization: {{secretaire_token}}
+
+### Annuler commande###
+
+DELETE http://localhost:8080/gestionnaire/commandes/2
+Authorization: {{secretaire_token}}
+
+### get commande by id###
+
+GET http://localhost:8084/api/v1/gestionnaire/commandes/1
+Authorization: {{secretaire_token}}
+
 
 ### Get panier d une commande ###
 
 GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
+Authorization: {{secretaire_token}}
 
 ### Get all commandes ###
 
 GET http://localhost:8080/gestionnaire/commandes
+Authorization: {{secretaire_token}}

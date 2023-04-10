@@ -173,7 +173,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
 
         @Override
-        public void modifierFournisseur(int idFournisseur , Map<String,Object> attributsAModifier) throws FournisseurInexistantException
+        public void modifierFournisseur(int idFournisseur , Map<String,Object> attributsAModifier) throws FournisseurInexistantException,IllegalArgumentException
         {
                 if (!fournisseurRepository.existsByIdFournisseur(idFournisseur))
                 {
@@ -183,7 +183,9 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 for (Map.Entry<String,Object> attributs : attributsAModifier.entrySet())
                 {
                         switch (attributs.getKey()) {
-                                case "nomFournisseur" -> fournisseur.setNomFournisseur((String) attributs.getValue());
+                                case "nomFournisseur" ->
+                                        fournisseur.setNomFournisseur((String) attributs.getValue());
+
                                 case "adresseFournisseur" ->
                                         fournisseur.setAdresseFournisseur((String) attributs.getValue());
                                 case "telephoneFournisseur" ->
@@ -191,6 +193,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                                 default -> throw new IllegalArgumentException("Attribut inconnu");
                         }
                 }
+                fournisseurRepository.save(fournisseur);
         }
         @Override
         public void modifierProduit(int idFournisseur , Map<String,Object> attributsAModifier) throws ProduitInexistantException {
@@ -211,6 +214,7 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                                 default -> throw new IllegalArgumentException("Attribut inconnu");
                         }
                 }
+                produitMedicalRepository.save(produitMedical);
         }
 
         @Override

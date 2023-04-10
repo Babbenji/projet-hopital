@@ -62,7 +62,7 @@ public class ControlleurService {
         }
     }
 
-    @PostMapping(value = "/produitsMedical")
+    @PostMapping(value = "/produits")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewProduit(@RequestBody ProduitMedical produitMedical) throws ProduitDejaExistantException
     {
@@ -128,7 +128,7 @@ public class ControlleurService {
     {
         try {
             facadeServiceGestionStock.supprimerProduitPanier(idUtilisateur, idProduit);
-            return ResponseEntity.ok("Produit supprimé du panier");
+            return ResponseEntity.accepted().body("Produit supprimé du panier");
         } catch (ProduitInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant dans panier");
         }
@@ -158,7 +158,7 @@ public class ControlleurService {
         }
     }
 
-    @DeleteMapping(value = "/fournisseurs/{idFournisseur}/produits/{idProduit}")
+    @DeleteMapping(value = "/fournisseurs/{idFournisseur}/catalogue/{idProduit}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteProduitFournisseur(@PathVariable int idFournisseur, @PathVariable int idProduit)
     {
@@ -170,7 +170,7 @@ public class ControlleurService {
         }
     }
 
-    @PatchMapping(path = "/fournisseurs/{id}", consumes = "application/json-patch+json")
+    @PatchMapping(path = "/fournisseurs/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> updateFournisseur(@PathVariable int id, @RequestBody Map<String,Object> attributsAModifier ) {
         try {
@@ -182,7 +182,7 @@ public class ControlleurService {
         }
     }
 
-    @PatchMapping(path = "/fournisseurs/{idFournisseur}/produits/{idProduit}", consumes = "application/json-patch+json")
+    @PatchMapping(path = "/produits/{idProduit}")
     public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody Map<String,Object> attributsAModifier) {
         try {
 
