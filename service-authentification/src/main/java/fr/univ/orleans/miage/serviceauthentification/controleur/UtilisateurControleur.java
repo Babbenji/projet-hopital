@@ -33,6 +33,7 @@ import java.util.function.Function;
 @RequestMapping(value = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 @EnableWebSecurity
 @EnableMethodSecurity
+//@CrossOrigin(origins = "*")
 public class UtilisateurControleur {
 
     /**

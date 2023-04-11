@@ -6,6 +6,7 @@ jwt:
 
 server:
   port: 8082
+  forward-headers-strategy: framework
 
 spring:
   application:

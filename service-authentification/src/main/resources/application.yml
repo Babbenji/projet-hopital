@@ -6,6 +6,7 @@ jwt:
 
 server:
   port: 8081
+#  forward-headers-strategy: framework
 
 spring:
   application:
@@ -39,11 +40,11 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    open-in-view: false
 
 logging:
   level:
     org.hibernate.envers.boot: OFF
+
 
 # swagger-ui custom path
 #springdoc:
@@ -51,3 +52,5 @@ logging:
 #        path: /api-docs
 #    swagger-ui:
 #        path: /swagger-ui.html
+
+
