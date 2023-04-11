@@ -64,26 +64,19 @@ public class Controleur {
     @GetMapping("/patient/{numSecu}")
     @PreAuthorize("hasAnyAuthority('SCOPE_MEDECIN', 'SCOPE_PATIENT', 'SCOPE_SECRETAIRE')")
     public ResponseEntity<?> afficherPatient(@PathVariable("numSecu") String numSecu, Principal principal){
-        if (principal.getName().contains("@hopital")){
-            try {
-                Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
+        try {
+            Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
+            if (principal.getName().contains("@hopital")) {
                 return ResponseEntity.ok(patient);
-            } catch (PatientInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
-            }
-        }
-        else {
-            try {
-                Patient patient = facadeApplication.getPatientByNumSecu(numSecu);
-                if (patient.getEmail().equals(principal.getName())){
+            }else{
+                if (patient.getEmail().equals(principal.getName())) {
                     return ResponseEntity.ok(patient);
-                }
-                else{
+                }else{
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Vous ne pouvez pas voir les données de ce patient");
                 }
-            } catch (PatientInexistantException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
             }
+        } catch (PatientInexistantException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ce patient n'existe pas !");
         }
     }
     @PatchMapping("/personnel/modif/patient/{numSecu}/antecedents")

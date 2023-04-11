@@ -16,21 +16,15 @@ public class RabbitMQProducer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RabbitMQProducer.class);
 
-    @Value("${spring.rabbitmq.exchange-rdvpatients}")
+    @Value("${spring.rabbitmq.exchange-email}")
     private String exchangeNotif;
-    @Value("${spring.rabbitmq.routingkey-rdvpatients}")
+    @Value("${spring.rabbitmq.routingkey-email}")
     private String routingkeyNotif;
 
     @Value("${spring.rabbitmq.exchange-stock}")
     private String exchangeStock;
     @Value("${spring.rabbitmq.routingkey-stock}")
     private String routingkeyStock;
-
-//
-//    @Value("${spring.rabbitmq.exchange-facturation}")
-//    private String exchangeFacture;
-//    @Value("${spring.rabbitmq.routingkey-facturation}")
-//    private String routingkeyFacture;
     private RabbitTemplate rabbitTemplate;
     @Autowired
     public RabbitMQProducer(RabbitTemplate rabbitTemplate){
@@ -40,12 +34,6 @@ public class RabbitMQProducer {
         LOGGER.info(String.format("Email envoyé -> %s", emailDTO.toString()));
         rabbitTemplate.convertAndSend(exchangeNotif,routingkeyNotif,emailDTO);
     }
-//    public void sendProduits(Map<String,Integer> listeProduits){
-//        for (Map.Entry entry : listeProduits.entrySet()){
-//            LOGGER.info("-------------------- {} --> {} --------------------",entry.getKey(), entry.getValue());
-//        }
-//        rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,listeProduits);
-//    }
     public void sendFacture(FactureDTO factureDTO){
         LOGGER.info(String.format("Facture envoyée -> %s", factureDTO));
         rabbitTemplate.convertAndSend(exchangeStock,routingkeyStock,factureDTO);
