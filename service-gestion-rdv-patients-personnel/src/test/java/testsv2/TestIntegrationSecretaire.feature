@@ -1,4 +1,4 @@
-Feature: Tests Integration du service gestion rdv patients et personnels
+Feature: Tests Integration des services du Secretaire
   Background:
     * url 'http://localhost:8083/api/v1/rdvpatients'
     * header Accept = 'application/json'
@@ -39,12 +39,6 @@ Feature: Tests Integration du service gestion rdv patients et personnels
     Then status 200
     And print response
 
-  Scenario: Test d'ajout des antécédents d'un patient à son profil
-    Given path 'personnel/modif/patient/154/antecedents'
-    And request {"antecedents": "Allergique"}
-    When method patch
-    Then status 202
-    And print response
 
   Scenario: Test d'assigner un medecin à un patient
     Given path 'personnel/modif/patient/154/medecintraitant'

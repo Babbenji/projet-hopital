@@ -1,18 +1,11 @@
-##################################################
-#################AUTHENTIFICATION#################
-##################################################
 
-###----------------------------------------------
-###------------------SECRETAIRE------------------
-###----------------------------------------------
-
-### Inscription
+### Inscription Secretaire
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-secretaire.fr",
-  "password": "fred"
+  "email": "secretaire@hopital-secretaire.fr",
+  "password": "secretaire"
 }
 > {%
     client.global.set("token_confirm_secretaire", response.headers.valueOf("Token-Confirmation"));
@@ -20,85 +13,71 @@ Content-Type: application/json
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Connexion
-POST http://localhost:8081/api/v1/auth/connexion
-Content-Type: application/json
-
-{
-  "email": "fred@hopital-secretaire.fr",
-  "password": "fred"
-}
-
-> {%
-    client.global.set("secretaire_token", response.headers.valueOf("Authorization"));
-    client.test("Request executed successfully", function() {
-        client.assert(response.status === 200, "Response status is not 200");
-    });
-%}
-
-###-------------------------------------------
-###------------------MEDECIN------------------
-###-------------------------------------------
-
-### Inscription
+### Inscription Medecin
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "fred@hopital-medecin.fr",
-  "password": "fred"
+  "email": "medecin@hopital-medecin.fr",
+  "password": "medecin"
 }
-
 > {%
     client.global.set("token_confirm_medecin", response.headers.valueOf("Token-Confirmation"));
     client.test("Request executed successfully", function() {
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Connexion
-POST http://localhost:8081/api/v1/auth/connexion
-Content-Type: application/json
-
-{
-  "email": "fred@hopital-medecin.fr",
-  "password": "fred"
-}
-
-> {%
-    client.global.set("medecin_token", response.headers.valueOf("Authorization"));
-    client.test("Request executed successfully", function() {
-        client.assert(response.status === 200, "Response status is not 200");
-    });
-%}
-
-###-------------------------------------------
-###------------------PATIENT------------------
-###-------------------------------------------
-
-### Inscription
+### Inscription Patient
 POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
-  "email": "nomprenom@gmail.com",
-  "password": "mdp123"
+  "email": "patient@univ-orleans.fr",
+  "password": "patient"
 }
-
 > {%
     client.global.set("token_confirm_patient", response.headers.valueOf("Token-Confirmation"));
     client.test("Request executed successfully", function() {
         client.assert(response.status === 201, "Response status is not 201");
     });
 %}
-### Connexion d'un compte patient
+
+### Connexion Secretaire
 POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
-  "email": "nomprenom@gmail.com",
-  "password": "mdp123"
+  "email": "secretaire@hopital-secretaire.fr",
+  "password": "secretaire"
 }
+> {%
+    client.global.set("secretaire_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+### Connexion Medecin
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
 
+{
+  "email": "medecin@hopital-medecin.fr",
+  "password": "medecin"
+}
+> {%
+    client.global.set("medecin_token", response.headers.valueOf("Authorization"));
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+### Connexion Patient
+POST http://localhost:8081/api/v1/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "patient@univ-orleans.fr",
+  "password": "patient"
+}
 > {%
     client.global.set("patient_token", response.headers.valueOf("Authorization"));
     client.test("Request executed successfully", function() {
@@ -106,54 +85,52 @@ Content-Type: application/json
     });
 %}
 
-###################################################
-################SERVICE RDVPATIENTS################
-###################################################
-
 ### Cette requete permet de créer un medecin // SECRETAIRE
 POST http://localhost:8083/api/v1/rdvpatients/medecin
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "Aziz",
-  "nom": "BEN JAZIA",
-  "email": "aziz.benjazia@hopital-medecin.fr"
+  "prenom": "Hind",
+  "nom": "HACHEMI",
+  "email": "hind.hachemi@hopital-medecin.fr"
 }
-
 ### Cette requete permet de créer un patient // SECRETAIRE
 POST http://localhost:8083/api/v1/rdvpatients/patient
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "prenom1",
-  "nom": "nom1",
-  "email": "nomprenom@gmail.com",
-  "numSecu": "84845",
+  "prenom": "Noraa",
+  "nom": "UAESSORB",
+  "email": "noraa.uaessorb@univ-orleans.fr",
+  "numSecu": "10",
   "numTel": "0123456789",
   "dateNaissance": "14-02-2000",
   "genre": "Homme"
 }
 ### Cette requete permet de voir les données d'un patient // MEDECIN OU PATIENT OU SECRETAIRE
-GET http://localhost:8083/api/v1/rdvpatients/patient/15
+GET http://localhost:8083/api/v1/rdvpatients/patient/10
+#Authorization: {{patient_token}}
+#Authorization: {{medecin_token}}
 Authorization: {{secretaire_token}}
+
 ### Cette requete permet d'ajouter les antécédents d'un patient à son profil // MEDECIN
 PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/antecedents
-Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
 Content-Type: application/json
 
 {
   "antecedents": "Fragile"
 }
 ### Cette requete permet d'assigner un medecin à un patient // SECRETAIRE
-PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/84845/medecintraitant
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
 {
-  "prenom": "med",
-  "nom": "ecin"
+  "prenom": "Aziz",
+  "nom": "BEN JAZIA"
 }
 ### Cette requete permet de prendre un rendez vous pour un patient // PATIENT
 POST http://localhost:8083/api/v1/rdvpatients/consultation
@@ -161,17 +138,17 @@ Authorization: {{patient_token}}
 Content-Type: application/json
 
 {
-  "dateRDV": "27-08-2022",
+  "dateRDV": "28-08-2022",
   "heureRDV": "18H20",
-  "motif": "Retrait d'une carie",
-  "type": "DENTAIRE"
+  "motif": "Opération de l'oeil",
+  "type": "OPTIQUE"
 }
 ### Cette requete permet à un médecin de confirmer la consultation // MEDECIN
 PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/confirmer
-Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
 ### Cette requete permet d'ajouter un compte rendu a une consultation // MEDECIN
 PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/compterendu
-Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
 Content-Type: application/json
 
 {
@@ -179,20 +156,28 @@ Content-Type: application/json
   "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}
 }
 ### Cette requete permet de voir les consultations d'un medecin // MEDECIN OU SECRETAIRE
-GET http://localhost:8083/api/v1/rdvpatients/medecin/12/consultations
-Authorization: {{secretaire_token}}
+GET http://localhost:8083/api/v1/rdvpatients/medecin/19/consultations
+#Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
 ### Cette requete permet de demander d'annuler un RDV pour un patient // PATIENT
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
-Authorization: {{secretaire_token}}
+Authorization: {{patient_token}}
 ### Cette requete permet de voir le medecin traitant d'un patient // PATIENT OU MEDECIN OU SECRETAIRE
-GET http://localhost:8083/api/v1/rdvpatients/patient/15/medecintraitant
-Authorization: {{secretaire_token}}
+GET http://localhost:8083/api/v1/rdvpatients/patient/9/medecintraitant
+#Authorization: {{secretaire_token}}
+#Authorization: {{medecin_token}}
+Authorization: {{patient_token}}
 ### Cette requete permet de voir les produits utilisés lors d'une consultation // MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/1/produits
-Authorization: {{secretaire_token}}
+#Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
+### Cette requete permet de voir les patients assignés à un médecin // MEDECIN OU SECRETAIRE
+GET http://localhost:8083/api/v1/rdvpatients/medecin/19/patients
+#Authorization: {{secretaire_token}}
+Authorization: {{medecin_token}}
 ### Cette requete permet de voir toutes les consultation // SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/liste
 Authorization: {{secretaire_token}}
-### Cette requete permet de voir toutes les consultation // SECRETAIRE
+### Cette requete permet de voir toutes les consultation de type dentaire// SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/liste/DENTAIRE
 Authorization: {{secretaire_token}}

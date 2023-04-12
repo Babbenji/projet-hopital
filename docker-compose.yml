@@ -12,6 +12,7 @@ services:
     networks:
       - consul
 
+
   # Service de messagerie
   rabbitmq:
     image: rabbitmq:3-management
