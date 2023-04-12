@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: service-auth
+    name: service-authentification
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}

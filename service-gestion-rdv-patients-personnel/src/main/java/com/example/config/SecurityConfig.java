@@ -23,12 +23,21 @@ public class SecurityConfig {
     @Value("${jwt.public.key}")
     RSAPublicKey key;
 
+    private static final String[] LISTE_URI_PERMIT_ALL = {
+            "/actuator/**",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui.html/**",
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/actuator/**").permitAll()
-//                        .requestMatchers(HttpMethod.POST,"/api/v*/notif/**").permitAll()
+                        .requestMatchers(LISTE_URI_PERMIT_ALL).permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

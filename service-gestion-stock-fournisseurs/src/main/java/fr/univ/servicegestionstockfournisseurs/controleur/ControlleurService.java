@@ -9,6 +9,7 @@ import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
 import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
 import fr.univ.servicegestionstockfournisseurs.service.FacadeServiceGestionStock;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +32,10 @@ public class ControlleurService {
 
 
 
-
+    @Operation(summary = "Permet de passer une commande")
     @PostMapping(value = "/utilisateurs/{idUtilisateur}/passerCommande")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> passerCommande(@PathVariable int idUtilisateur) throws UtilisateurInexistantException {
-
 
         try {
             facadeServiceGestionStock.passerCommande(idUtilisateur);
@@ -44,9 +44,9 @@ public class ControlleurService {
             return ResponseEntity.badRequest().body("Utilisateur inexistant");
         }
 
-
     }
 
+    @Operation(summary = "Permet d'ajouter un secrétaire gestionnaire de stock")
     @PostMapping(value = "/utilisateurs")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewUtilisateur(@RequestBody Utilisateur utilisateur )
@@ -62,6 +62,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet d'ajouter un produit")
     @PostMapping(value = "/produits")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewProduit(@RequestBody ProduitMedical produitMedical) throws ProduitDejaExistantException
@@ -76,6 +77,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet d'ajouter un fournisseur")
     @PostMapping(value = "/fournisseurs")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewFournisseur(@RequestBody Fournisseur fournisseur) throws FournisseurDejaExistantException
@@ -90,6 +92,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet d'ajouter un produit au catalogue d'un fournisseur")
     @PostMapping(value = "/fournisseurs/{id}/catalogue")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> addProduitFournisseur(@PathVariable int id, @RequestParam int idProduit) throws ProduitDejaExistantException
@@ -107,6 +110,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet d'ajouter un produit au panier")
     @PostMapping(value = "/utilisateurs/{idUtilisateur}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> addProduitPanier(@PathVariable ("idUtilisateur") int idUtilisateur, @RequestParam int idProduit, @RequestParam int quantite)
@@ -122,6 +126,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de supprimer un produit du panier")
     @DeleteMapping(value = "/utilisateurs/{idUtilisateur}/panier/{idProduit}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idProduit") int idProduit,@PathVariable ("idUtilisateur") int idUtilisateur)
@@ -134,6 +139,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet d'annuler une commande)")
     @DeleteMapping(value = "/commandes/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteCommande(@PathVariable int id)
@@ -146,6 +152,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de supprimer un fournisseur")
     @DeleteMapping(value = "/fournisseurs/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteFournisseur(@PathVariable int id)
@@ -158,6 +165,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de supprimer un produit du catalogue d'un fournisseur")
     @DeleteMapping(value = "/fournisseurs/{idFournisseur}/catalogue/{idProduit}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> deleteProduitFournisseur(@PathVariable int idFournisseur, @PathVariable int idProduit)
@@ -170,6 +178,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de mettre à jour les informations d'un fournisseur")
     @PatchMapping(path = "/fournisseurs/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> updateFournisseur(@PathVariable int id, @RequestBody Map<String,Object> attributsAModifier ) {
@@ -182,6 +191,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de mettre à jour les informations d'un produit")
     @PatchMapping(path = "/produits/{idProduit}")
     public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody Map<String,Object> attributsAModifier) {
         try {
@@ -193,6 +203,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de récupérer une commande")
     @GetMapping(value = "/commandes/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Commande> getCommande(@PathVariable int id)
@@ -206,6 +217,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de récupérer un fournisseur")
     @GetMapping(value = "/fournisseurs/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getFournisseur(@PathVariable int id)
@@ -218,6 +230,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de récupérer le panier d'un utilisateur")
     @GetMapping(value = "/utilisateurs/{id}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getPanierUtilisateur(@PathVariable int id)
@@ -229,7 +242,7 @@ public class ControlleurService {
         }
     }
 
-
+    @Operation(summary = "Permet de récupérer le stock d'un produit")
     @GetMapping(value = "/produitsMedical/{idProduit}/stock")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Integer> getStockProduit(@PathVariable int idProduit)
@@ -243,6 +256,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Permet de récupérer le catalogue d'un fournisseur")
     @GetMapping(value = "/fournisseurs/{id}/produits")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getCatalogueFournisseur(@PathVariable int id)
@@ -256,6 +270,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Récupère les produits d'une commande")
     @GetMapping(value = "/commandes/{idCommande}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getProduitsCommande(@PathVariable int idCommande)
@@ -268,6 +283,7 @@ public class ControlleurService {
         }
     }
 
+    @Operation(summary = "Récupère toutes les commandes passées")
     @GetMapping(value = "/commandes")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getCommandes()
