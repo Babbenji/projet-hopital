@@ -107,6 +107,8 @@ public class ControlleurService {
             return ResponseEntity.notFound().build();
         } catch (ProduitDejaDansCatalogueException e) {
             return ResponseEntity.badRequest().body("Produit déjà dans le catalogue");
+        } catch (ProduitInexistantException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -173,7 +175,7 @@ public class ControlleurService {
         try {
             facadeServiceGestionStock.supprimerProduitFromCatalogue(idFournisseur, idProduit);
             return ResponseEntity.accepted().body("Produit supprimé du catalogue fournisseur");
-        } catch (ProduitInexistantException e) {
+        } catch (FournisseurInexistantException e) {
             return ResponseEntity.badRequest().body("Produit inexistant pour qu'il soit supprimé");
         }
     }
