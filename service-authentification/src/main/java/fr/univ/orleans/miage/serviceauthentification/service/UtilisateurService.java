@@ -8,18 +8,31 @@ import java.util.Collection;
 
 public interface UtilisateurService {
 
-    String inscriptionConfirmation(String email, String mdp) throws UtilisateurDejaExistantException;
-
-    void confirmationCompte(String tokenConfirmation) throws TokenExpirationException, CompteDejaActiveException;
-
     /**
      * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email
+     * AVEC ETAPE DE CONFIRMATION DE COMPTE
      * @param email
      * @param mdp
      * @return Utilisateur
      * @thorws UtilisateurDejaExistantException
      */
-    Utilisateur inscription(String email, String mdp) throws UtilisateurDejaExistantException;
+    String inscriptionConfirmation(String email, String mdp) throws UtilisateurDejaExistantException;
+
+    /** Permet de déterminer le rôle de l'utilisateur en fonction du domaine de l'email
+     * @param tokenConfirmation le token de confirmation reçu par mail
+     * @return le rôle de l'utilisateur associé à l'email
+     */
+    void confirmationCompte(String tokenConfirmation) throws TokenExpirationException, CompteDejaActiveException;
+
+    /**
+     * Permet de créer un compte utilisateur avec le rôle associé déterminé par le domaine de l'email
+     * SANS ETAPE DE CONFIRMATION DE COMPTE
+     * @param email
+     * @param mdp
+     * @return Utilisateur
+     * @thorws UtilisateurDejaExistantException
+     */
+    Utilisateur inscriptionSansConfirmation(String email, String mdp) throws UtilisateurDejaExistantException;
 
     /**
      * Permet de récupérer un utilisateur par son email

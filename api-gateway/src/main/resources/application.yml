@@ -5,27 +5,91 @@ spring:
   application:
     name: api-gateway
   cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
     consul:
       discovery:
         register: true
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
-    loadbalancer:
-      ribbon:
-        enabled: false
 
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: service-authentification
+          uri: ${uri.service-auth:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth/(?<remains>.*), /api/v1/auth/${remains}
+            - PreserveHostHeader
+            - RewriteResponseHeader=Location, /api/v1/auth/, /api/auth/
 
-# ENV. PROD (docker)
-prod:
-  uri:
-    service-auth: lb://service-auth
-    service-notif: lb://service-notif
-    service-rdv-patients: lb://service-rdv-patients
-    service-stock: lb://service-stockfournisseurs
-    service-facture: lb://service-facturation
+        - id: service-notification
+          uri: ${uri.service-notif:http://localhost:8082}
+          predicates:
+            - Path=/api/notification/**
+          filters:
+            - RewritePath=/api/notification/(?<remains>.*), /api/v1/notif/${remains}
+            - PreserveHostHeader
+            - RewriteResponseHeader=Location, /api/v1/notif/, /api/notification/
 
-# ENV. DEV (localhost) => gérer dans la classe main de la gateway
+        - id: service-gestion-rdv-patients-personnel
+          uri: ${uri.service-rdv-patients:http://localhost:8083}
+          predicates:
+            - Path=/rdvpatients/**
+          filters:
+            - RewritePath=/rdvpatients/(?<remains>.*), /api/v1/rdvpatients/${remains}
+            - PreserveHostHeader
+            - RewriteResponseHeader=Location, /api/v1/rdvpatients/, /rdvpatients/
+
+        - id: service-gestion-stock-fournisseurs
+          uri: ${uri.service-stock:http://localhost:8084}
+          predicates:
+            - Path=/gestionnaire/**
+          filters:
+            - RewritePath=/gestionnaire/(?<remains>.*), /api/v1/gestionnaire/${remains}
+            - PreserveHostHeader
+            - RewriteResponseHeader=Location, /api/v1/gestionnaire/, /gestionnaire/
+
+        - id: service-facturation
+          uri: ${uri.service-facture:http://localhost:8085}
+          predicates:
+            - Path=/api/facture/**
+          filters:
+            - RewritePath=/api/facture/(?<remains>.*), /api/facture/v1/${remains}
+            - PreserveHostHeader
+            - RewriteResponseHeader=Location, /api/facture/v1/, /api/facture/
+
+         # Routes de la documentation openapi
+        - id: openapi
+          uri: ${uri.api-gateway:http://localhost:8080}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    use-root-path: true
+    urls:
+      - name: documentation service-authentification
+        url: /v3/api-docs/service-authentification
+      - name: documentation service-notification
+        url: /v3/api-docs/service-notification
+      - name: documentation service-gestion-stock-fournisseurs
+        url: /v3/api-docs/service-gestion-stock-fournisseurs
+      - name: documentation service-gestion-rdv-patients
+        url: /v3/api-docs/service-gestion-rdv-patients-personnel
+      - name: documentation service-facturation
+        url: /v3/api-docs/service-facturation
+
+uri:
+  service-auth: lb://service-auth
+  service-notif: lb://service-notification
+  service-rdv-patients: lb://service-rdv-patients
+  service-stock: lb://service-stockfournisseurs
+  service-facture: lb://service-facturation
+  api-gateway: lb://api-gateway

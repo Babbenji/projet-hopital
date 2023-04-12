@@ -10,7 +10,6 @@ spring:
     name: service-gestion-stock-fournisseurs
   data:
     mongodb:
-#      uri: mongodb://${DB_HOST:db-mongo-stockfournisseurs}:${DB_PORT:27017}/${DB_NAME:gestionStock}
       database: ${DB_NAME:gestionStock}
       host: ${DB_HOST:localhost}
       port: ${DB_PORT:27017}

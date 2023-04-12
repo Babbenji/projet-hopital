@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RabbitMqSender {
+
     @Value("${spring.rabbitmq.exchange}")
     private String exchange;
     @Value("${spring.rabbitmq.routingkey}")

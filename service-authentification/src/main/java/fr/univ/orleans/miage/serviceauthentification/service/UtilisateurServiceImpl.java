@@ -48,7 +48,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         String lienValidation = "http://localhost:8081/api/v1/auth/confirmation-compte?token=" + token;
 
-
         String contenu = "<html><body>";
         contenu += "<p>Bonjour,</p>";
         contenu += "<p>Merci de cliquer sur le bouton ci-dessous pour valider votre compte :</p>";
@@ -56,19 +55,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         contenu += "<p>Attention, ce lien sera valide pendant 5 minutes.</p>";
         contenu += "</body></html>";
 
-//        EmailDto emailDto = new EmailDto();
-//        emailDto.setDestinataire(user.getEmail());
-//        emailDto.setObjet("Confirmation de compte");
-//        emailDto.setContenu(contenu);
-//        emailDto.setType("html");
-
         EmailDto emailDto = EmailDto.builder()
                 .destinataire(user.getEmail())
                 .objet("Confirmation de compte")
                 .contenu(contenu)
                 .type("html")
                 .build();
-//        emailDto.setContenu("Bonjour, merci de cliquer sur le lien suivant pour valider votre compte : " + lienValidation);
 
         this.rabbitMqSender.send(emailDto);
 
@@ -91,7 +83,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         }
         utilisateur.setCompteActive(true);
         utilisateurRepository.save(utilisateur);
-//        utilisateurRepository.activerCompteUtilisateur(utilisateur.getEmail());
+
     }
 
     @Override
@@ -112,7 +104,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public Utilisateur inscription(String email, String mdp) throws UtilisateurDejaExistantException {
+    public Utilisateur inscriptionSansConfirmation(String email, String mdp) throws UtilisateurDejaExistantException {
 
         if(utilisateurRepository.existsByEmail(email)) {
             throw new UtilisateurDejaExistantException();

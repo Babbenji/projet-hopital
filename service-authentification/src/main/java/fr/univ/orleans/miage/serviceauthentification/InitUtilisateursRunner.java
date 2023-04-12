@@ -42,7 +42,7 @@ public class InitUtilisateursRunner implements CommandLineRunner {
 
             // Créer des comptes patients
             for (int i = 1; i <= 3; i++) {
-                Utilisateur patient = utilisateurService.inscription("patient" + i + "@example.com", passwordEncoder.encode("mdp"));
+                Utilisateur patient = utilisateurService.inscriptionSansConfirmation("patient" + i + "@example.com", passwordEncoder.encode("mdp"));
             }
 
             System.out.println("Comptes créés avec succès !");

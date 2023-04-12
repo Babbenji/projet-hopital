@@ -80,8 +80,6 @@ services:
       - db-postgres-auth
       - rabbitmq
 
-
-
 ####################################################################################
 #                            SERVICE DE NOTIFICATION
 ####################################################################################
@@ -120,7 +118,6 @@ services:
       - rabbitmq
     #      - service-auth
 
-
 ####################################################################################
 #                  SERVICE DE GESTION DES PATIENTS ET PERSONNEL
 ####################################################################################
@@ -152,12 +149,11 @@ services:
     depends_on:
       - discovery
       - db-mongo-rdv-patients
-#      - rabbitmq
-      - service-auth
+      - rabbitmq
 
-####################################################################################
+###################################################################################
 #                  SERVICE DE GESTION DES STOCKS ET FOURNISSEURS
-####################################################################################
+###################################################################################
 
   # Base de données Mongo
   db-mongo-stockfournisseurs:
@@ -185,12 +181,12 @@ services:
     depends_on:
       - discovery
       - db-mongo-stockfournisseurs
-  #     - rabbitmq
+      - rabbitmq
 
 
-####################################################################################
+###################################################################################
 #                            SERVICE DE FACTURATION
-####################################################################################
+###################################################################################
 
   # Base de données Mongo
   db-mongo-facturation:
@@ -201,7 +197,7 @@ services:
     networks:
         - consul
 
-
+  # Application .NET
   service-facturation:
     container_name: service-facturation
     image: service-facturation:1.0
@@ -226,10 +222,6 @@ services:
       - rabbitmq
 
 
-
 networks:
   consul:
     driver: bridge
-
-
-

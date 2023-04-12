@@ -90,7 +90,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <!-- RabbitMq -->
 
         <dependency>
@@ -109,6 +108,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Documentation OPEN API 3 -->
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
 
 
     </dependencies>

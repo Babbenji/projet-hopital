@@ -2,6 +2,7 @@ package fr.univ.orleans.miage.servicenotification.controleur;
 
 import fr.univ.orleans.miage.servicenotification.modele.Notif;
 import fr.univ.orleans.miage.servicenotification.service.NotifService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +21,11 @@ public class NotifControleur {
 
 
     /**
-     * Envoie un notif et l'enregistre dans la base de données Postgres
+     * Envoie une notif et l'enregistre dans la base de données Postgres
      * @param notif à envoyer
      * @return ResponseEntity contenant le notif http
      */
+    @Operation(summary = "Envoie une notification")
     @PostMapping("/send-notif")
     public ResponseEntity<String> sendNotifPush(@RequestBody Notif notif) {
         try {
@@ -41,6 +43,7 @@ public class NotifControleur {
      * Récupère toutes les notifications push envoyées de la base de données Postgres
      * @return Collection des notifications push envoyées
      */
+    @Operation(summary = "Récupère toutes les notifications envoyées")
     @GetMapping("/notifs")
     public ResponseEntity<List<Notif>> getAllNotifPush() {
         List<Notif> notifs = this.notifService.getAllNotifPush();

@@ -2,9 +2,9 @@
 
 ### Reste à faire 
 
-- [ ] Tests http requests (service facturation)
-- [ ] Communication entre services ave RabbitMQ 
-- [ ] Sécurité des services (gestion des accès)
+- [x] Tests http requests (service facturation)
+- [x] Communication entre services ave RabbitMQ 
+- [x] Sécurité des services (gestion des accès)
 - [ ] Serveur de configuration centralisé ++
 - [ ] Tests d'intégration avec karate
 - [ ] Tests controleur avec REST Assured
@@ -132,4 +132,30 @@ https://docs.spring.io/spring-cloud-config/docs/current/reference/html/
 ### Dépendances entre les services
 
 Schéma de dépendances entre les services à venir
+
+
+
+### Annexes - Documentation
+
+https://springdoc.org/v2/
+
+
+
+https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints
+
+
+
+
+
+
+### URL Swagger OPEN API
+
+
+http://localhost:8080/service-notif/swagger-ui/index.html
+
+http://localhost:8080/v3/api-docs/swagger-config
+
+
+
+
 

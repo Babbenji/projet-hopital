@@ -9,16 +9,12 @@ server:
 
 spring:
   application:
-    name: service-notif
-
-##################   CONSUL   ###################
+    name: service-notification
 
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
-
-#################   RABBIT MQ   ##################
 
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -82,8 +78,6 @@ spring:
           auth: true
           starttls:
             enable: true
-            #starttls:
-            #required: true
           smtp:
             ssl:
               trust: smtp.gmail.com

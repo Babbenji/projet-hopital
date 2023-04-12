@@ -3,6 +3,7 @@ package fr.univ.orleans.miage.servicenotification.controleur;
 import fr.univ.orleans.miage.servicenotification.dto.EmailDto;
 import fr.univ.orleans.miage.servicenotification.modele.Email;
 import fr.univ.orleans.miage.servicenotification.service.EmailService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -23,10 +24,11 @@ public class EmailControleur {
     }
 
     /**
-     * Récupère un email envoyé de la base de données Postgres
+     * Permet d'envoyer un email et le stock en base de données PostGres
      * @param emailDto objet contenant les informations sur l'email à envoyer
      * @return ResponseEntity contenant le message http
      */
+    @Operation(summary = "Permet d'envoyer email")
     @PostMapping("/send-email")
     public ResponseEntity<String> sendEmail(@RequestBody @Valid EmailDto emailDto) {
         try {
@@ -44,6 +46,7 @@ public class EmailControleur {
      * Récupère tous les emails envoyés de la base de données Postgres
      * @return Collection d'emails envoyés
      */
+    @Operation(summary = "Récupère tous les emails envoyés")
     @GetMapping("/emails")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<List<Email>> getAllEmails() {

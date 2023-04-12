@@ -9,7 +9,7 @@ server:
 
 spring:
   application:
-    name: service-auth
+    name: service-authentification
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
@@ -21,7 +21,6 @@ spring:
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
     exchange: user.exchange
-    queue: user.queue
     routingkey: user.routingkey
 
   datasource:
@@ -40,9 +39,7 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    open-in-view: false
 
 logging:
   level:
     org.hibernate.envers.boot: OFF
-

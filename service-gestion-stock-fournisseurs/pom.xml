@@ -87,18 +87,17 @@
             <artifactId>spring-rabbit-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intuit.karate</groupId>
-            <artifactId>karate-junit4</artifactId>
-        </dependency>
 
+        <!-- Documentation OPEN API 3 -->
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.0.4</version>
+        </dependency>
 
     </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
