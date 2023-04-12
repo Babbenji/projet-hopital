@@ -7,10 +7,11 @@ import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Component("serviceGestionStock")
+@Service("serviceGestionStock")
 public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         @Autowired

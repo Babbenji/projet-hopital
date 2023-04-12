@@ -2,7 +2,7 @@
 
 docker compose down --rmi all --volumes --remove-orphans
 
-#docker system prune -a -f
+docker system prune -a -f
 #
 #docker volume rm $(docker volume ls -q)
 

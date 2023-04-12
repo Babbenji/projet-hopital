@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,8 +30,14 @@ public class RabbitMQConsumer {
         for (Map.Entry<String, Integer> entry : factureDTO.getListeProduits().entrySet())
         {
             LOGGER.info(String.format("La quantite du produit " + entry.getKey() + " a été modifiée de " + entry.getValue()));
-            //facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
+            facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
         }
+    }
+
+    @RabbitListener(queues = {"${spring.rabbitmq.queue}"})
+    public void consume(String token) throws ProduitInexistantException, ProduitNonDisponibleException {
+
+        LOGGER.info(String.valueOf(token));
     }
 
 }

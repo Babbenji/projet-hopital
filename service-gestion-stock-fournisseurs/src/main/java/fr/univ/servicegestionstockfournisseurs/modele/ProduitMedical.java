@@ -19,7 +19,8 @@ public class ProduitMedical {
 
     private int stockProduitMedical;
 
-
+    public ProduitMedical() {
+    }
     public ProduitMedical(String nomProduitMedical,double prixProduitMedical, String descriptionProduitMedical) {
         this.idProduitMedical = IDS++;
         this.prixProduitMedical = prixProduitMedical;
