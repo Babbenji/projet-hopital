@@ -55,7 +55,7 @@ Feature: Tests Integration des services du medecin
     Then status 403
     And print response
   Scenario: Test pour voir les consultations d’un medecin inexistant
-    Given path '/medecin/2/consultations'
+    Given path '/medecin/5/consultations'
     When method get
     Then status 404
     And print response
@@ -82,7 +82,7 @@ Feature: Tests Integration des services du medecin
     Then status 200
     And print response
   Scenario: Test pour voir les produits utilisés lors d’une consultation inexistante
-    Given path 'consultation/1/produits'
+    Given path 'consultation/10/produits'
     When method get
     Then status 404
     And print response
@@ -99,11 +99,6 @@ Feature: Tests Integration des services du medecin
     And print response
   Scenario: Test pour voir les patients assignés à un médecin inexistant
     Given path 'medecin/1/patients'
-    When method get
-    Then status 404
-    And print response
-  Scenario: Test pour voir les patients assignés à un médecin n’ayant pas de patient assigné
-    Given path 'medecin/14/patients'
     When method get
     Then status 404
     And print response

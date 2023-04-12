@@ -114,7 +114,7 @@ Feature: Tests Integration des services du Secretaire
     Then status 200
     And print response
   Scenario: Test pour voir les produits utilisés lors d’une consultation inexistante
-    Given path 'consultation/1/produits'
+    Given path 'consultation/10/produits'
     When method get
     Then status 404
     And print response
