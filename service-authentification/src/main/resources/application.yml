@@ -6,7 +6,6 @@ jwt:
 
 server:
   port: 8081
-#  forward-headers-strategy: framework
 
 spring:
   application:
@@ -44,13 +43,3 @@ spring:
 logging:
   level:
     org.hibernate.envers.boot: OFF
-
-
-# swagger-ui custom path
-#springdoc:
-#    api-docs:
-#        path: /api-docs
-#    swagger-ui:
-#        path: /swagger-ui.html
-
-

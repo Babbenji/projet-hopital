@@ -14,7 +14,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
         title = "API Service Authentification",
         version = "1.0",
         description = "Documentation OpenAPI du service d'authentification du Micro-service Hôpital <br> Projet Master 2 MIAGE Université d'Orléans"))
-
 public class ServiceAuthentificationApplication {
 
     public static void main(String[] args) {SpringApplication.run(ServiceAuthentificationApplication.class, args);}

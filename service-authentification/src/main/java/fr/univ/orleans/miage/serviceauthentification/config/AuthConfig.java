@@ -55,20 +55,14 @@ public class AuthConfig {
     @Value("${jwt.private.key}")
     RSAPrivateKey priv;
 
-    private static final String[] SWAGGER_LIST = {
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/swagger-ui.html/**",
+    private static final String[] LISTE_URI_PERMIT_ALL = {
+            "/actuator/**",
             "/webjars/**",
             "/v3/api-docs/**",
-            "api-docs/**",
-            "/api/public/**",
-            "/api/public/authenticate",
-            "/actuator/*",
-            "/swagger-ui/**"
+            "/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui.html/**",
     };
 
     /**
@@ -82,23 +76,20 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(SWAGGER_LIST).permitAll()
-//                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
-                        .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
-                        //les endpoints nécessitant une authentification et une autorisation sont gérés dans les contrôleurs via annotation @PreAuthorize
-//                        .anyRequest().authenticated()
-                                .anyRequest().permitAll()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
-                        .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
+            .csrf().disable()
+            .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(LISTE_URI_PERMIT_ALL).permitAll()
+                    .requestMatchers(HttpMethod.POST,"/api/v*/auth/inscription/**").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/api/v*/auth/connexion").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/api/v*/auth/confirmation-compte").permitAll()
+                    //les endpoints nécessitant une authentification et autorisation sont gérés dans les contrôleurs via annotation @PreAuthorize
+                    .anyRequest().authenticated()
+            )
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
+            .exceptionHandling((exceptions) -> exceptions
+                    .authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                    .accessDeniedHandler(new BearerTokenAccessDeniedHandler()));
 
         return http.build();
     }
@@ -179,7 +170,6 @@ public class AuthConfig {
                     .issuedAt(now)
                     .expiresAt(now.plusSeconds(expiry))
                     .subject(user.getEmail())
-//                    .claim("scope", user.getRole().name())
                     .claim("scope", user.getRole())
                     .build();
 

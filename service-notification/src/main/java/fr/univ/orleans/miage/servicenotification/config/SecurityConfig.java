@@ -23,29 +23,21 @@ public class SecurityConfig {
     @Value("${jwt.public.key}")
     RSAPublicKey key;
 
-    private static final String[] SWAGGER_LIST = {
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/swagger-ui.html/**",
+    private static final String[] LISTE_URI_PERMIT_ALL = {
+            "/actuator/**",
             "/webjars/**",
             "/v3/api-docs/**",
-            "api-docs/**",
-            "/api/public/**",
-            "/api/public/authenticate",
-            "/actuator/*",
-            "/swagger-ui/**"
+            "/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/swagger-ui.html/**",
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/actuator/**").permitAll()
-                        .requestMatchers(SWAGGER_LIST).permitAll()
-//                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html","/webjars/**").permitAll()
+                        .requestMatchers(LISTE_URI_PERMIT_ALL).permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/v*/notif/**").permitAll()
                         .anyRequest().authenticated()
                 )

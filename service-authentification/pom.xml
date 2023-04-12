@@ -13,10 +13,13 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>service-authentification</name>
     <description>service-authentification</description>
+
     <properties>
         <java.version>17</java.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
     </properties>
+
+
     <dependencies>
 
         <dependency>
@@ -95,7 +98,8 @@
             <scope>test</scope>
         </dependency>
 
-<!-- Pour résoudre le warning : Spring Cloud LoadBalancer is currently working with the default cache...it's recommended to use Caffeine cache in production.-->
+        <!-- Pour résoudre le warning : Spring Cloud LoadBalancer is currently working with the default cache...
+            it's recommended to use Caffeine cache in production.-->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
@@ -130,46 +134,6 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.0.4</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>-->
-<!--            <version>2.1.0</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>-->
-<!--            <version>2.1.0</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-webmvc-core</artifactId>-->
-<!--            <version>1.6.14</version>-->
-<!--        </dependency>-->
-
-
-        <!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi</artifactId>-->
-<!--            <version>1.7.0</version>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; pour bypasser spring security&ndash;&gt;-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-security</artifactId>-->
-<!--            <version>1.7.0</version>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; pour avoir l'UI Swagger en plus &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.springdoc</groupId>-->
-<!--            <artifactId>springdoc-openapi-ui</artifactId>-->
-<!--            <version>1.7.0</version>-->
-<!--        </dependency>-->
 
     </dependencies>
 

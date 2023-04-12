@@ -15,7 +15,7 @@
 - [ ] Documentation API REST DOC
 - [ ] Open ID Connect
 - [ ] Swagger pour afficher l'api design
-- [x] ENV. PROD et ENV. DEV à mettre en place +++   
+- [ ] ENV. PROD et ENV. DEV à mettre en place +++   
 
 ### Problèmes à resoudre
 - [x] Location
@@ -139,10 +139,23 @@ Schéma de dépendances entre les services à venir
 
 https://springdoc.org/v2/
 
+
+
+https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/#section-builtin-constraints
+
+
+
+
+
+
+### URL Swagger OPEN API
+
+
 http://localhost:8080/service-notif/swagger-ui/index.html
-
-
 
 http://localhost:8080/v3/api-docs/swagger-config
 
-https://stackoverflow.com/questions/70791231/centralized-swagger-openapi-ui-for-all-the-different-microservices-on-a-single-s
+
+
+
+

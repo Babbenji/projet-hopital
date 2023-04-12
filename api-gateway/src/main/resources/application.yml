@@ -1,6 +1,5 @@
 server:
   port: 8080
-#  forward-headers-strategy: framework
 
 spring:
   application:
@@ -11,69 +10,64 @@ spring:
         register: true
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
-#    loadbalancer:
-#      ribbon:
-#        enabled: false
+
     gateway:
       discovery:
         locator:
           enabled: true
-      routes:
-        - id: auth-service
-          uri: ${uri.service-auth:http://localhost:8081}
-          predicates:
-            - Path=/api/auth/**, /auth-docs/**
-          filters:
-            - RewritePath=/api/auth/(?<remains>.*), /api/v1/auth/${remains}
-            - RewritePath=/auth-docs/(?<remains>.*), /${remains}
-            - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/v1/auth/, /api/auth/
-
-        - id: notification-service
-          uri: ${uri.service-notif:http://localhost:8082}
-          predicates:
-            - Path=/api/notification/**, /notification-docs/**
-          filters:
-            - RewritePath=/api/notification/(?<remains>.*), /api/v1/notif/${remains}
-            - RewritePath=/notification-docs/(?<remains>.*), /${remains}
-            - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/v1/notif/, /api/notification/
-
-        - id: rdv-patients-service
-          uri: ${uri.service-rdv-patients:http://localhost:8083}
-          predicates:
-            - Path=/rdvpatients/**, /rdvpatients-docs/**
-          filters:
-            - RewritePath=/rdvpatients/(?<remains>.*), /api/v1/rdvpatients/${remains}
-            - RewritePath=/rdvpatients-docs/(?<remains>.*), /${remains}
-            - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/v1/rdvpatients/, /rdvpatients/
-
-        - id: stock-service
-          uri: ${uri.service-stock:http://localhost:8084}
-          predicates:
-            - Path=/gestionnaire/**
-          filters:
-            - RewritePath=/gestionnaire/(?<remains>.*), /api/v1/gestionnaire/${remains}
-            - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/v1/gestionnaire/, /gestionnaire/
-
-        - id: facture-service
-          uri: ${uri.service-facture:http://localhost:8085}
-          predicates:
-            - Path=/api/facture/**
-          filters:
-            - RewritePath=/api/facture/(?<remains>.*), /api/facture/v1/${remains}
-            - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/facture/v1/, /api/facture/
-
-         # Routes de la documentation openapi
-        - id: openapi
-          uri: ${uri.api-gateway:http://localhost:8080}
-          predicates:
-            - Path=/v3/api-docs/**
-          filters:
-            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+#      routes:
+#        - id: service-auth
+#          uri: ${uri.service-auth:http://localhost:8081}
+#          predicates:
+#            - Path=/api/auth/**
+#          filters:
+#            - RewritePath=/api/auth/(?<remains>.*), /api/v1/auth/${remains}
+#            - PreserveHostHeader
+#            - RewriteResponseHeader=Location, /api/v1/auth/, /api/auth/
+#
+#        - id: service-notification
+#          uri: ${uri.service-notif:http://localhost:8082}
+#          predicates:
+#            - Path=/api/notification/**
+#          filters:
+#            - RewritePath=/api/notification/(?<remains>.*), /api/v1/notif/${remains}
+#            - PreserveHostHeader
+#            - RewriteResponseHeader=Location, /api/v1/notif/, /api/notification/
+#
+#        - id: rdv-patients-service
+#          uri: ${uri.service-rdv-patients:http://localhost:8083}
+#          predicates:
+#            - Path=/rdvpatients/**
+#          filters:
+#            - RewritePath=/rdvpatients/(?<remains>.*), /api/v1/rdvpatients/${remains}
+#            - PreserveHostHeader
+#            - RewriteResponseHeader=Location, /api/v1/rdvpatients/, /rdvpatients/
+#
+#        - id: stock-service
+#          uri: ${uri.service-stock:http://localhost:8084}
+#          predicates:
+#            - Path=/gestionnaire/**
+#          filters:
+#            - RewritePath=/gestionnaire/(?<remains>.*), /api/v1/gestionnaire/${remains}
+#            - PreserveHostHeader
+#            - RewriteResponseHeader=Location, /api/v1/gestionnaire/, /gestionnaire/
+#
+#        - id: facture-service
+#          uri: ${uri.service-facture:http://localhost:8085}
+#          predicates:
+#            - Path=/api/facture/**
+#          filters:
+#            - RewritePath=/api/facture/(?<remains>.*), /api/facture/v1/${remains}
+#            - PreserveHostHeader
+#            - RewriteResponseHeader=Location, /api/facture/v1/, /api/facture/
+#
+#         # Routes de la documentation openapi
+#        - id: openapi
+#          uri: ${uri.api-gateway:http://localhost:8080}
+#          predicates:
+#            - Path=/v3/api-docs/**
+#          filters:
+#            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 
 springdoc:
   api-docs:
@@ -81,14 +75,14 @@ springdoc:
   swagger-ui:
     use-root-path: true
     urls:
-      - name: service-auth
-        url: /v3/api-docs/auth-docs
-      - name: service-notification
-        url: /v3/api-docs/notification-docs
+      - name: documentation service-auth
+        url: /v3/api-docs/service-auth
+      - name: documentation service-notification
+        url: /v3/api-docs/service-notification
 
 uri:
   service-auth: lb://service-auth
-  service-notif: lb://service-notif
+  service-notif: lb://service-notification
   service-rdv-patients: lb://service-rdv-patients
   service-stock: lb://service-stockfournisseurs
   service-facture: lb://service-facturation

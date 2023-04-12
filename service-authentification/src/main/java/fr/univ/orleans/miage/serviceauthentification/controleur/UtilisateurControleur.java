@@ -6,6 +6,7 @@ import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
 import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
 import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +34,6 @@ import java.util.function.Function;
 @RequestMapping(value = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 @EnableWebSecurity
 @EnableMethodSecurity
-//@CrossOrigin(origins = "*")
 public class UtilisateurControleur {
 
     /**
@@ -66,9 +66,10 @@ public class UtilisateurControleur {
     Function<Utilisateur, String> genereToken;
 
     /**
-     * Permet à un utilisateur de créer un compte
-     * @param userDTO
+     * Permet à un utilisateur de créer un compte sans confirmation
+     * @param userDTO informations de l'utilisateur
      */
+    @Operation(summary= "Permet à un utilisateur de créer un compte sans confirmation")
     @PostMapping(value = "/inscription/sans-confirmation")
     public ResponseEntity<String> inscription(@Valid @RequestBody UserDTO userDTO) {
         try {
@@ -87,6 +88,11 @@ public class UtilisateurControleur {
         }
     }
 
+    /**
+     * Permet à un utilisateur de créer un compte en lui envoyant un token de confirmation par email pour activer son compte
+     * @param userDTO informations de l'utilisateur
+     */
+    @Operation(summary= "Permet à un utilisateur de créer un compte en lui envoyant un token de confirmation par email pour activer son compte")
     @PostMapping(value = "/inscription")
     public ResponseEntity<String> inscriptionConfirmation(@Valid @RequestBody UserDTO userDTO) {
         try {
@@ -108,6 +114,11 @@ public class UtilisateurControleur {
         }
     }
 
+    /**
+     * Permet à un utilisateur de confirmer son compte après inscription via un token de confirmation
+     * @param token token de confirmation du compte
+     */
+    @Operation(summary = "Permet à un utilisateur de confirmer son compte via un token de confirmation")
     @GetMapping("/confirmation-compte")
     public ResponseEntity<String> confirmationCompte(@RequestParam("token") String token) {
         try {
@@ -124,6 +135,7 @@ public class UtilisateurControleur {
      * Permet à un utilisateur de se connecter
      * @param userDTO informations de connexion
      */
+    @Operation(summary= "Permet à un utilisateur de se connecter")
     @PostMapping("/connexion")
     public ResponseEntity login(@Valid @RequestBody UserDTO userDTO) {
         Utilisateur u = null;
@@ -145,6 +157,7 @@ public class UtilisateurControleur {
     /**
      * Permet à un utilisateur de récupérer ses informations
      */
+    @Operation(summary = "Permet à un utilisateur de récupérer ses informations")
     @GetMapping( "/utilisateurs/{email}")
     @PreAuthorize("#email == authentication.name")
     public ResponseEntity<Utilisateur> getCompteUtilisateur(Authentication authentication, @PathVariable String email) {
@@ -164,6 +177,7 @@ public class UtilisateurControleur {
     /**
      * Permet à un utilisateur de se désinscrire
      */
+    @Operation(summary = "Permet à un utilisateur de se désinscrire")
     @DeleteMapping(value = "/utilisateurs/{email}")
     @PreAuthorize("#email == authentication.name")
     public ResponseEntity<String> desinscription(@PathVariable String email, Authentication authentication) {
@@ -184,6 +198,7 @@ public class UtilisateurControleur {
     /**
      * Consultation de tous les comptes utilisateurs
      */
+    @Operation(summary= "Consultation de tous les comptes utilisateurs")
     @GetMapping("/utilisateurs")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN') or hasAuthority('SCOPE_PATIENT')")
     public ResponseEntity<Collection<Utilisateur>> getUtilisateurs() {
@@ -194,6 +209,10 @@ public class UtilisateurControleur {
         }
     }
 
+    /**
+     * Consultation de tous les comptes utilisateurs par rôle
+     */
+    @Operation(summary = "Consultation de tous les comptes utilisateurs par rôle")
     @GetMapping ("/utilisateurs/type")
     @PreAuthorize("hasAuthority('SCOPE_MEDECIN') or hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Collection<Utilisateur>> getUtilisateursByRole(@RequestParam String role) {
@@ -206,8 +225,12 @@ public class UtilisateurControleur {
         }
     }
 
+    /*
+     * Permet à un utilisateur de modifier son mot de passe
+     */
+    @Operation(summary = "Permet à un utilisateur de modifier son mot de passe")
     @PatchMapping ("/utilisateurs/mot-de-passe")
-    @PreAuthorize("isAuthenticated() and #userDTO.email == authentication.name")
+    @PreAuthorize("#userDTO.email == authentication.name")
     public ResponseEntity<String> modifierPassword(Authentication authentication, @RequestBody UserDTO userDTO) {
 
         String email = authentication.getName();
