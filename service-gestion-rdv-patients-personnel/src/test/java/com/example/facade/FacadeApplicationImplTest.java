@@ -64,7 +64,7 @@ public class FacadeApplicationImplTest{
     }
 
     @Test
-    public void enregistrementPatientOK() throws NumeroSecuDejaAttribueException {
+    public void enregistrementPatientOK() throws NumeroSecuDejaAttribueException, AdresseMailDejaUtiliseeException {
         String prenom = "Rachida";
         String nom = "ELOUARIACHI";
         String email = "rachida45@gmail.com";

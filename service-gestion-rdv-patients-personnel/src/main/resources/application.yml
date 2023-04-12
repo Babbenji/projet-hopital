@@ -24,13 +24,9 @@ spring:
     password: ${RABBITMQ_PASSWORD:guest}
 
   #  Communication Service Notification
-    exchange-rdvpatients: rdvpatients.exchange
-    routingkey-rdvpatients: rdvpatients.routingkey
+    exchange-email: email.exchange
+    routingkey-email: email.routingKey
 
     #  Communication Service Stock
     exchange-stock: stock.exchange
     routingkey-stock: stock.routingkey
-
-    #  Communication Service Facturation
-    exchange-facturation: facturation.exchange
-    routingkey-facturation: facturation.routingkey

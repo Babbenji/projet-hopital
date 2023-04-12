@@ -1,25 +1,39 @@
-package com.example.modele.DTO;
+package fr.univ.servicegestionstockfournisseurs.modele.DTO;
 
-import com.example.modele.Patient;
-
+import java.util.List;
 import java.util.Map;
 
 public class FactureDTO {
-    private Patient patient;
+
+    private PatientDTO patient;
+
     private String type;
+
     private Map<String,Integer> listeProduits;
 
-    public Patient getPatient() {
+    private double coutDuPatient;
+
+
+    public double getCoutDuPatient() {
+        return coutDuPatient;
+    }
+
+    public void setCoutDuPatient(double coutDuPatient) {
+        this.coutDuPatient = coutDuPatient;
+    }
+
+    public PatientDTO getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(PatientDTO patient) {
         this.patient = patient;
     }
 
     public String getType() {
         return type;
     }
+
 
     public void setType(String type) {
         this.type = type;
@@ -36,7 +50,7 @@ public class FactureDTO {
     @Override
     public String toString() {
         return "FactureDTO{" +
-                "Patient=" + patient.toString() +
+                "patient=" + patient +
                 ", type='" + type + '\'' +
                 ", listeProduits=" + listeProduits +
                 '}';

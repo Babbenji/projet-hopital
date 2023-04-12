@@ -53,9 +53,6 @@ public class Fournisseur {
     public void deleteProduit(int idProduit) {
     	this.catalogueFournisseur.remove(idProduit);
     }
-//    public void updateProduit(int idProduit, ProduitMedical produit) {
-//    	this.catalogueFournisseur.replace(idProduit, produit);
-//    }
 
 
     public String getAdresseFournisseur() {

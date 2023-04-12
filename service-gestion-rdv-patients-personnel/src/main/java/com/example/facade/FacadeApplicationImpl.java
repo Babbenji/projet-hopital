@@ -27,8 +27,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
     @Autowired
     private final RabbitMQProducer rabbitMQProducer;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FacadeApplicationImpl.class);
-
 
     public FacadeApplicationImpl(PatientRepository patientRepository, MedecinRepository medecinRepository, ConsultationRepository consultationRepository, CreneauRepository creneauRepository, RabbitMQProducer rabbitMQProducer) {
         this.patientRepository = patientRepository;
@@ -49,9 +47,11 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public Patient ajouterPatient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) throws NumeroSecuDejaAttribueException {
+    public Patient ajouterPatient(String prenom, String nom, String email, String numSecu, String numTel, String dateNaissance, String genre) throws NumeroSecuDejaAttribueException, AdresseMailDejaUtiliseeException {
         if(patientRepository.existsByNumSecu(numSecu)){
             throw new NumeroSecuDejaAttribueException();
+        }else if (patientRepository.existsByEmail(email)){
+            throw new AdresseMailDejaUtiliseeException();
         }else{
             Patient patient =  new Patient(prenom, nom, email, numSecu, numTel, dateNaissance, genre);
             patientRepository.save(patient);
@@ -64,7 +64,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
         if (pa != null){
             pa.setAntecedents(antecedents);
             patientRepository.save(pa);
-        }else {
+        }else{
             throw new PatientInexistantException();
         }
     }
@@ -87,28 +87,28 @@ public class FacadeApplicationImpl implements FacadeApplication{
         medecinRepository.save(m);
     }
     @Override
-    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String ordonnance, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException {
+    public Consultation prendreRDV(Patient patient, String dateRDV, String heureRDV, String motif, String type) throws TypeConsultationInexistantException, CreneauIndisponibleException, PasDeMedecinTraitantAssigneException, PatientInexistantException {
         Medecin medecin = getMedecinTraitant(patient.getNumSecu());
-        if(medecin==null){
-            throw new PasDeMedecinTraitantAssigneException();
+        List<String> typePossible = new ArrayList<>();
+        for (TypeCons typec:Arrays.asList(TypeCons.values())){
+            typePossible.add(typec.toString());
         }
-        List<TypeCons> typePossible = Arrays.asList(TypeCons.values());
-        if(typePossible.contains(TypeCons.valueOf(type))){
+        if(typePossible.contains(type)){
             Creneau creneau;
-            if (!(creneauRepository.existsByDateAndHeure(dateRDV, heureRDV))){//Creneau inexistant
+            if (!(creneauRepository.existsByDateAndHeure(dateRDV, heureRDV))){
                 creneau = new Creneau(dateRDV, heureRDV);
                 creneau.setDisponibilite(false);
                 creneauRepository.save(creneau);
-            }else{//Creneau existant
-                if ((creneauRepository.findByDateAndHeure(dateRDV, heureRDV).estDispo())){//Existant et dispo
+            }else{
+                if ((creneauRepository.findByDateAndHeure(dateRDV, heureRDV).estDispo())){
                     creneau = creneauRepository.findByDateAndHeure(dateRDV, heureRDV);
                     creneau.setDisponibilite(false);
                     creneauRepository.save(creneau);
-                }else{//Existant mais indispo
+                }else{
                     throw new CreneauIndisponibleException();
                 }
             }
-            Consultation consultation = new Consultation(creneau, motif, TypeCons.valueOf(type), ordonnance, medecin.getId(), patient.getId());
+            Consultation consultation = new Consultation(creneau, motif, TypeCons.valueOf(type), medecin.getId(), patient.getId());
             medecin.ajouterConsultation(consultation);
             consultationRepository.save(consultation);
             medecinRepository.save(medecin);
@@ -117,35 +117,12 @@ public class FacadeApplicationImpl implements FacadeApplication{
             email.setDestinataire(patient.getEmail());
             email.setObjet("Prise de RDV");
             email.setContenu("Vous avez pris RDV avec le médecin "+medecin.getPrenom()+" "+medecin.getNom()+" le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+". Vous recevrez un nouveau mail une fois que cette consultation sera confirmée par le médecin.");
-            //Type ?
             this.rabbitMQProducer.sendEmail(email);
             //----------------------
             return consultation;
         }else{
             throw new TypeConsultationInexistantException();
         }
-    }
-    @Override
-    public Map<String,Integer> voirProduitsConsultation(int idConsultation) {
-        Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-        return consultation.getListeProduitsMedicaux();
-    }
-    @Override
-    public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) {
-        Medecin medecin = medecinRepository.findMedecinById(idMedecin);
-        Collection<Patient> res = new ArrayList<>();
-        medecin.getListePatients().forEach(idPatient->{
-            res.add(patientRepository.findPatientById(idPatient));
-        });
-        return res;
-    }
-    @Override
-    public Collection<Consultation> getAllConsultations() {
-        return consultationRepository.findAll();
-    }
-    @Override
-    public Collection<Consultation> getAllConsultationsParType(String type) {
-        return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
     }
     @Override
     public void confirmerRDV(int idConsultation) throws ConsultationInexistanteException, ConsultationDejaConfirmeeException {
@@ -160,7 +137,6 @@ public class FacadeApplicationImpl implements FacadeApplication{
                 email.setDestinataire(patient.getEmail());
                 email.setObjet("Confirmation de RDV");
                 email.setContenu("Votre consultation n°"+idConsultation+" a bien été confirmée !");
-                //Type ?
                 this.rabbitMQProducer.sendEmail(email);
                 //----------------------
             }else{
@@ -171,9 +147,12 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException {
+    public void modifierCRConsultation(int idConsultation, String compteRendu, Map<String,Integer> listeProduitsMedicaux) throws ConsultationInexistanteException, ConsultationNonConfirmeeException {
         if(consultationRepository.existsById(idConsultation)){
             Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            if (!consultation.estConfirme()){
+                throw new ConsultationNonConfirmeeException();
+            }
             String ancienCompteRendu = consultation.getCompteRendu();
             consultation.setCompteRendu(compteRendu);
             consultation.setListeProduitsMedicaux(listeProduitsMedicaux);
@@ -183,7 +162,7 @@ public class FacadeApplicationImpl implements FacadeApplication{
             Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
 
             FactureDTO facture = new FactureDTO();
-            facture.setIdPatient(consultation.getIdPatient());
+            facture.setPatient(patient);
             facture.setType(String.valueOf(consultation.getType()));
             facture.setListeProduits(consultation.getListeProduitsMedicaux());
 
@@ -193,43 +172,14 @@ public class FacadeApplicationImpl implements FacadeApplication{
             if (consultation.getCompteRendu().equals("")){
                 email.setObjet("Ajout d'un compte-rendu pour la consultation n°"+idConsultation);
                 email.setContenu("Nouveau compte-rendu pour votre consultation : "+nouveauCompteRendu);
-            }
-            else{
+            }else{
                 email.setObjet("Modification du compte-rendu pour la consultation n°"+idConsultation);
                 email.setContenu("Des modifications ont été apportées au compte-rendu de votre consultation : \nAncien compte rendu : "+ ancienCompteRendu+"\n Nouveau compte-rendu : "+nouveauCompteRendu);
             }
-            this.rabbitMQProducer.sendProduits(consultation.getListeProduitsMedicaux());
-            this.rabbitMQProducer.sendTypeConsultation(facture);
+            this.rabbitMQProducer.sendFacture(facture);
             this.rabbitMQProducer.sendEmail(email);
             //----------------------
         }else{
-            throw new ConsultationInexistanteException();
-        }
-    }
-    @Override
-    public void annulerConsultation(int idConsultation) throws MedecinInexistantException, ConsultationInexistanteException {
-        if(consultationRepository.existsById(idConsultation)){
-            Consultation consultation = consultationRepository.findConsultationById(idConsultation);
-            Creneau creneau = consultation.getCreneau();
-            if (medecinRepository.existsById(consultation.getIdMedecin())){
-                Medecin medecin = medecinRepository.findMedecinById(consultation.getIdMedecin());
-                medecin.retirerConsultation(idConsultation);
-                medecinRepository.save(medecin);
-                creneau.setDisponibilite(true);
-                creneauRepository.save(creneau);
-                consultationRepository.removeConsultationById(idConsultation);
-                //-------RabbitMQ-------
-                Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
-                EmailDTO email = new EmailDTO();
-                email.setDestinataire(medecin.getEmail());
-                email.setObjet("Annulation du RDV n°"+idConsultation);
-                email.setContenu("La consultation n°"+idConsultation+" du patient "+ patient.getPrenom()+" "+patient.getNom()+" prévue le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+" a été annulée.");
-                this.rabbitMQProducer.sendEmail(email);
-                //----------------------
-            }else{
-                throw new MedecinInexistantException();
-            }
-        }else {
             throw new ConsultationInexistanteException();
         }
     }
@@ -238,16 +188,15 @@ public class FacadeApplicationImpl implements FacadeApplication{
         if(medecinRepository.existsById(idMedecin)){
             Medecin medecin = medecinRepository.findMedecinById(idMedecin);
             List<Consultation> reponse = new ArrayList<>();
-            if (medecin.getListeConsultations().size()!=0){
+            if (!medecin.getListeConsultations().isEmpty()){
                 for (int idConsult: medecin.getListeConsultations()) {
                     if (consultationRepository.existsById(idConsult)){
                         reponse.add(consultationRepository.findConsultationById(idConsult));
-                    }
-                    else {
+                    }else{
                         throw new ConsultationInexistanteException();
                     }
                 }
-            }else {
+            }else{
                 throw new PasDeConsultationAssigneAuMedecinException();
             }
             return reponse;
@@ -256,8 +205,89 @@ public class FacadeApplicationImpl implements FacadeApplication{
         }
     }
     @Override
-    public Medecin getMedecinTraitant(String numSecu){
-        return medecinRepository.findMedecinById(patientRepository.findPatientByNumSecu(numSecu).getIdMedecinTraitant());
+    public void annulerConsultation(int idConsultation, int idPatient) throws ConsultationInexistanteException, PatientConnecteDifferentPatientConsultationException {
+        if(consultationRepository.existsById(idConsultation)){
+            Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            Medecin medecin = medecinRepository.findMedecinById(consultation.getIdMedecin());
+            Patient patient = patientRepository.findPatientById(consultation.getIdPatient());
+            if (idPatient != patient.getId()){
+                throw new PatientConnecteDifferentPatientConsultationException();
+            }else{
+                Creneau creneau = consultation.getCreneau();
+
+                medecin.retirerConsultation(idConsultation);
+                creneau.setDisponibilite(true);
+
+                medecinRepository.save(medecin);
+                creneauRepository.save(creneau);
+                consultationRepository.removeConsultationById(idConsultation);
+
+                //-------RabbitMQ-------
+                EmailDTO email = new EmailDTO();
+                email.setDestinataire(medecin.getEmail());
+                email.setObjet("Annulation du RDV n°"+idConsultation);
+                email.setContenu("La consultation n°"+idConsultation+" du patient "+ patient.getPrenom()+" "+patient.getNom()+" prévue le "+consultation.getCreneau().getDate()+" à "+consultation.getCreneau().getHeure()+" a été annulée.");
+                this.rabbitMQProducer.sendEmail(email);
+                //----------------------
+            }
+        }else{
+            throw new ConsultationInexistanteException();
+        }
+    }
+    @Override
+    public Map<String,Integer> voirProduitsConsultation(int idConsultation) throws ConsultationInexistanteException {
+        if (consultationRepository.existsById(idConsultation)){
+            Consultation consultation = consultationRepository.findConsultationById(idConsultation);
+            return consultation.getListeProduitsMedicaux();
+        }else{
+            throw new ConsultationInexistanteException();
+        }
+
+    }
+    @Override
+    public Collection<Patient> voirTousLesPatientsMedecin(int idMedecin) throws MedecinInexistantException, MedecinSansPatientException {
+        if (medecinRepository.existsById(idMedecin)){
+            Medecin medecin = medecinRepository.findMedecinById(idMedecin);
+            Collection<Patient> res = new ArrayList<>();
+            if (!medecin.getListePatients().isEmpty()){
+                medecin.getListePatients().forEach(idPatient->
+                        res.add(patientRepository.findPatientById(idPatient))
+                );
+                return res;
+            }else{
+                throw new MedecinSansPatientException();
+            }
+        }else{
+            throw new MedecinInexistantException();
+        }
+    }
+    @Override
+    public Collection<Consultation> getAllConsultations() {
+        return consultationRepository.findAll();
+    }
+    @Override
+    public Collection<Consultation> getAllConsultationsParType(String type) throws TypeConsultationInexistantException {
+        List<String> typePossible = new ArrayList<>();
+        for (TypeCons typec:Arrays.asList(TypeCons.values())){
+            typePossible.add(typec.toString());
+        }
+        if(typePossible.contains(type)){
+            return consultationRepository.findAllConsultationsByType(TypeCons.valueOf(type));
+        }else{
+         throw new TypeConsultationInexistantException();
+        }
+    }
+    @Override
+    public Medecin getMedecinTraitant(String numSecu) throws PatientInexistantException, PasDeMedecinTraitantAssigneException {
+        Patient patient =  patientRepository.findPatientByNumSecu(numSecu);
+        if (patient==null){
+            throw new PatientInexistantException();
+        }
+        Medecin medecin = medecinRepository.findMedecinById(patient.getIdMedecinTraitant());
+        if (medecin==null) {
+            throw new PasDeMedecinTraitantAssigneException();
+        }
+        return medecin;
     }
     @Override
     public void deleteConsultationByID(int idConsultation) throws ConsultationInexistanteException {

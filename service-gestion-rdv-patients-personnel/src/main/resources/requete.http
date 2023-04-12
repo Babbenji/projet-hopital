@@ -50,8 +50,7 @@ Content-Type: application/json
   "dateRDV": "15-07-2022",
   "heureRDV": "14H20",
   "motif": "Mal de crâne",
-  "type": "SOINS_DIVERS",
-  "ordonnance": "Doliprane 2 fois par jour"
+  "type": "SOINS_DIVERS"
 }
 
 ### Cette requete permet à un médecin de confirmer la consultation
