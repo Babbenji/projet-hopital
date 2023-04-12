@@ -17,7 +17,8 @@ public class Fournisseur {
     private String telephoneFournisseur;
     private Map<Integer,String> catalogueFournisseur;
 
-
+    public Fournisseur() {
+    }
     public Fournisseur(String nomFournisseur, String adresseFournisseur, String telephoneFournisseur) {
         this.nomFournisseur = nomFournisseur;
         this.adresseFournisseur = adresseFournisseur;

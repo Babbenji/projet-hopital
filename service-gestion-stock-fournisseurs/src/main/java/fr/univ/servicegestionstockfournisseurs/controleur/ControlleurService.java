@@ -51,9 +51,9 @@ public class ControlleurService {
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<Object> addNewUtilisateur(@RequestBody Utilisateur utilisateur )
     {
-        Utilisateur utilisateur1 = null;
+
         try {
-            utilisateur1 = new Utilisateur(utilisateur.getNomUtilisateur(), utilisateur.getPrenomUtilisateur(), utilisateur.getEmailUtilisateur());
+            Utilisateur utilisateur1 = new Utilisateur(utilisateur.getNomUtilisateur(), utilisateur.getPrenomUtilisateur(), utilisateur.getEmailUtilisateur());
             facadeServiceGestionStock.ajouterUtilisateur(utilisateur1);
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{idUtilisateur}").buildAndExpand(utilisateur1.getIdUtilisateur()).toUri();
             return ResponseEntity.created(location).body(utilisateur1);
