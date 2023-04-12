@@ -26,17 +26,30 @@ Feature: Tests Integration des services du Secretaire
     Then status 201
     And print response
 
-  Scenario: Test de creation de patient déjà existant
+  Scenario: Test de creation de patient avec un numéro de sécurité sociale déjà attribué
     Given path '/patient'
-    And request {"prenom": "pat", "nom": "ien", "email": "pat.ien@etu.univ-orleans.fr","numSecu": "154","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
+    And request {"prenom": "pat", "nom": "ien", "email": "patient2@etu.univ-orleans.fr","numSecu": "154","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
+    When method post
+    Then status 409
+    And print response
+
+  Scenario: Test de creation de patient avec un mail déjà utilisée
+    Given path '/patient'
+    And request {"prenom": "pat", "nom": "ien", "email": "pat.ien@etu.univ-orleans.fr","numSecu": "124","numTel": "0123456789","dateNaissance": "14-02-2000","genre": "Homme"}
     When method post
     Then status 409
     And print response
 
   Scenario: Test pour voir les données d'un patient
-    Given path '/patient/154'
+    Given path '/patient/208'
     When method get
     Then status 200
+    And print response
+
+  Scenario: Test pour voir les données d un patient inexistant
+    Given path '/patient/245'
+    When method get
+    Then status 404
     And print response
 
 
@@ -45,6 +58,27 @@ Feature: Tests Integration des services du Secretaire
     And request {"prenom": "med", "nom": "ecin"}
     When method patch
     Then status 202
+    And print response
+
+  Scenario: Test d assigner un medecin inexistant à un patient
+    Given path 'personnel/modif/patient/154/medecintraitant'
+    And request {"prenom": "ufhuirh", "nom": "zudhuh"}
+    When method patch
+    Then status 404
+    And print response
+
+  Scenario: Test d assigner un medecin à un patient inexistant
+    Given path 'personnel/modif/patient/5487/medecintraitant'
+    And request {"prenom": "med", "nom": "ecin"}
+    When method patch
+    Then status 404
+    And print response
+
+  Scenario: Test d assigner un medecin à un patient étant déjà assigné au medecin
+    Given path 'personnel/modif/patient/154/medecintraitant'
+    And request {"prenom": "med", "nom": "ecin"}
+    When method patch
+    Then status 409
     And print response
 
   Scenario: Test pour voir les consultations d'un medecin
@@ -58,3 +92,4 @@ Feature: Tests Integration des services du Secretaire
     When method get
     Then status 404
     And print response
+

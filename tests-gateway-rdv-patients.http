@@ -155,29 +155,37 @@ Content-Type: application/json
   "compteRendu" : "Patient fievreux",
   "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}
 }
+
+
 ### Cette requete permet de voir les consultations d'un medecin // MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/medecin/19/consultations
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
+
 ### Cette requete permet de demander d'annuler un RDV pour un patient // PATIENT
 DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
 Authorization: {{patient_token}}
+
 ### Cette requete permet de voir le medecin traitant d'un patient // PATIENT OU MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/patient/9/medecintraitant
 #Authorization: {{secretaire_token}}
 #Authorization: {{medecin_token}}
 Authorization: {{patient_token}}
+
 ### Cette requete permet de voir les produits utilisés lors d'une consultation // MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/1/produits
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
+
 ### Cette requete permet de voir les patients assignés à un médecin // MEDECIN OU SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/medecin/19/patients
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
+
 ### Cette requete permet de voir toutes les consultation // SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/liste
 Authorization: {{secretaire_token}}
+
 ### Cette requete permet de voir toutes les consultation de type dentaire// SECRETAIRE
 GET http://localhost:8083/api/v1/rdvpatients/consultation/liste/DENTAIRE
 Authorization: {{secretaire_token}}
