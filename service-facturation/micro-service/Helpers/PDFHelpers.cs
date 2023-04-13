@@ -86,7 +86,8 @@ namespace micro_service.Helpers
             string filePath = Path.Combine(chemain, fileName);
 
             pdfDocument.Save(filePath);
-            return "http://" + hyperLink.Host + ":" + hyperLink.Port + "/api/v1/facture/pdf?facture=" + idfacture;
+            pdfDocument.Close();
+            return "http://" + hyperLink.Host + ":" + hyperLink.Port + "/api/v1/facture/pdf?idfacture=" + idfacture;
         }
     }
 }

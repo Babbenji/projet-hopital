@@ -105,9 +105,16 @@ namespace micro_service.Controllers
         [HttpGet("pdf")]
         public IActionResult GetPdf([FromQuery] string idfacture)
         {
-
-            FileStream fileStream = new FileStream(Path.Combine(env.ContentRootPath, "pdfFile-bill", "Facture-"+ idfacture + ".pdf"), FileMode.Open, FileAccess.Read);
-            return File(fileStream, "application/pdf");
+            try
+            {
+                FileStream fileStream = new FileStream(Path.Combine(env.ContentRootPath, "pdfFile-bill", "Facture-" + idfacture + ".pdf"), FileMode.Open, FileAccess.Read);
+                return File(fileStream, "application/pdf");
+            }
+            catch(FileNotFoundException ex) 
+            {
+                return BadRequest("la facture n'existe plus");
+            }
+            
         }
 
 
