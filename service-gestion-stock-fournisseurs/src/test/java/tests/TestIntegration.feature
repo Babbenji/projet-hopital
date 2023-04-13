@@ -83,17 +83,18 @@ Feature: Tests Integration gestion stock fournisseur
     Then status 200
     And print response
 
+  Scenario: Test de suppression d'un produit dans un panier
+    Given path 'utilisateurs/13/panier/1'
+    When method delete
+    Then status 202
+    And print response
+
   Scenario: Test passer commande
     Given path '/utilisateurs/13/passerCommande'
     When method post
     Then status 200
     And print response
 
-  Scenario: Test de suppression d'un produit dans un panier
-    Given path 'utilisateurs/13/panier/1'
-    When method delete
-    Then status 202
-    And print response
 
   Scenario: Test d'annulation d'une commande
     Given path 'commandes/8'
