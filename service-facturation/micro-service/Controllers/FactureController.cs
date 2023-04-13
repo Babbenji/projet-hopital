@@ -1,32 +1,25 @@
 ﻿using micro_service.Models;
+using micro_service.Models.DTO;
 using micro_service.Service;
 using micro_service.Service.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
 {
     [Route("api/v1/facture")]
     [ApiController]
+    [Authorize(Roles = "COMPTABLE")]
     public class FactureController : ControllerBase
-    {
-        private readonly ILogger<FactureController> logger;
+    { 
         private readonly IFactureService factureService;
-        private readonly ICommandeService commandeService;
+        private readonly IWebHostEnvironment env;
 
-        public FactureController(ILogger<FactureController> logger, IFactureService factureService, ICommandeService commandeService)
+        public FactureController(IFactureService factureService, IWebHostEnvironment env)
         {
-            this.logger = logger;
             this.factureService = factureService;
-            this.commandeService = commandeService;
+            this.env = env;
         }
-
-        [HttpPost]
-        public IActionResult CreationFacture([FromBody] Facture facture)
-        {
-            Facture entity = this.factureService.Create(facture);
-            return CreatedAtAction(nameof(GetFacture), new { id = entity.Id }, entity);
-        }
-
 
         [HttpGet]
         public IActionResult GetFactures()
@@ -35,15 +28,6 @@ namespace micro_service.Controllers
 
             return Ok(entities);
         }
-
-        [HttpGet("cmds")]
-        public IActionResult GetCmd()
-        {
-            List<Commande> entities = this.commandeService.GetAll();
-
-            return Ok(entities);
-        }
-
 
 
         [HttpGet("{id}")]
@@ -57,34 +41,83 @@ namespace micro_service.Controllers
             }
             catch (FactureNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
         }
 
-        
+        [HttpGet("chiffre-affaire-annuel")]
+        public IActionResult GetChiffreAffaireModel()
+        {
+            try
+            {
+                List<ChiffreAffaireAnnuelleModel> chiffreAffaires = this.factureService.GetChiffreAffaireModel();
+                return Ok(chiffreAffaires);
+            }
+            catch (FactureNotFoundException)
+            {
+                return NoContent();
+            }
+        }
+
+        [HttpGet("chiffre-affaire-mensuel")]
+        public IActionResult GetAllChiffireAffaireByMonthOfYear([FromQuery] int annee)
+        {
+            try
+            {
+                ChiffreAffaireDetailsModel chiffreAffaires = this.factureService.GetAllChiffireAffaireByMonthOfYear(annee);
+                return Ok(chiffreAffaires);
+            }
+            catch (FactureNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+
         [HttpGet("patients/{id}")]
         public IActionResult GetFacturesPatient(string id)
         {
             List<Facture> entities = this.factureService.GetAllFacturePatient(id);
-            return Ok(entities);
+            if(entities.Count > 0)
+                return Ok(entities);
+            else
+                return BadRequest("mauvais id patient");
         }
 
 
         [HttpGet("send/patients")]
-       public IActionResult SendFactureToPatient([FromQuery] string idFacture, [FromQuery] string idPatients)
-       {
+        public IActionResult SendFactureToPatient([FromQuery] string idFacture, [FromQuery] string idPatients)
+        {
             try
             {
-                this.factureService.SendFactureEmail(idFacture, idPatients);
-                return Ok("Facture envoyé");
+                this.factureService.SendFactureEmailToPatient(idFacture, idPatients, Path.Combine(env.ContentRootPath, "pdfFile-bill"));
+                return Ok("Facure envoyé");
             }
             catch(FactureNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
+   
+        }
 
-           
-                
-       }
+        [AllowAnonymous]
+        [HttpGet("pdf")]
+        public IActionResult GetPdf([FromQuery] string idfacture)
+        {
+            try
+            {
+                FileStream fileStream = new FileStream(Path.Combine(env.ContentRootPath, "pdfFile-bill", "Facture-" + idfacture + ".pdf"), FileMode.Open, FileAccess.Read);
+                return File(fileStream, "application/pdf");
+            }
+            catch(FileNotFoundException) 
+            {
+                return BadRequest("la facture n'existe plus");
+            }
+            
+        }
+
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using micro_service.Models;
+using micro_service.Models.DTO;
 using micro_service.Service;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -10,12 +11,14 @@ namespace micro_service.EventBus
     public class RabbitMQConsumer : IRabbitMQConsumer
     {
         private readonly ICommandeService commandeService;
+        private readonly IFactureService factureService;
         private readonly ILogger<RabbitMQConsumer> logger;
         private readonly RabbitMQProvider rabbitMQProvider;
         private readonly IModel channelFacture;
         private readonly IModel channelFactureCmd;
+        private readonly IWebHostEnvironment env;
 
-        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, RabbitMQProvider rabbitMQProvider, ICommandeService commandeService)
+        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, RabbitMQProvider rabbitMQProvider, ICommandeService commandeService, IFactureService factureService, IWebHostEnvironment env)
         {
             this.commandeService = commandeService;
             this.logger = logger;
@@ -23,6 +26,8 @@ namespace micro_service.EventBus
             this.DeclarationExchangeQueue();
             this.channelFacture = this.rabbitMQProvider.Connection.CreateModel();
             this.channelFactureCmd = this.rabbitMQProvider.Connection.CreateModel();
+            this.factureService = factureService;
+            this.env = env;
         }
 
         public void DeclarationExchangeQueue()
@@ -72,7 +77,27 @@ namespace micro_service.EventBus
 
             this.channelFacture.BasicAck(e.DeliveryTag, false);
 
-            logger.LogInformation($" message reçu le : {message}");
+            FactureModel? factureModel = JsonConvert.DeserializeObject<FactureModel>(message);
+
+            if (factureModel != null)
+            {
+                Patient patientModel = new() { 
+                    prenom = factureModel.patient.prenom, 
+                    nom = factureModel.patient.nom, 
+                    email = factureModel.patient.email,
+                    numSecu = factureModel.patient.numSecu,
+                    numTel = factureModel.patient.numTel,
+                    dateNaissance = factureModel.patient.dateNaissance,
+                    genre = factureModel.patient.genre, 
+                    idMedecinTraitant = factureModel.patient.idMedecinTraitant, 
+                    antecedents = factureModel.patient.antecedents
+                };
+                Facture facture = new() { DateFature = DateTime.Now, type = factureModel.type, listeProduits = factureModel.listeProduits, patient = patientModel, coutDuPatient = factureModel.coutDuPatient };
+                Facture entity = this.factureService.Create(facture);
+                this.factureService.ConfirmationFactureGenere(entity, "sololourde@outlook.fr", Path.Combine(env.ContentRootPath, "pdfFile-bill"));
+                logger.LogInformation($" message reçu le : {JsonConvert.SerializeObject(entity)}");
+            }
+
         }
 
         private void ListennigCmd(object? sender, BasicDeliverEventArgs e)
@@ -83,19 +108,14 @@ namespace micro_service.EventBus
 
             this.channelFactureCmd.BasicAck(e.DeliveryTag, false);
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                DateFormatString = "dd-MM-yyyy"
-            };
+            JsonSerializerSettings settings = new JsonSerializerSettings{DateFormatString = "dd-MM-yyyy"};
 
             Commande? commande =  JsonConvert.DeserializeObject<Commande>(message, settings);
             if (commande != null)
             {
                 Commande cmd = this.commandeService.Create(commande);
-                logger.LogInformation($" message reçu le : {cmd}");
+                logger.LogInformation($" message reçu le : {JsonConvert.SerializeObject(cmd)}");
             }
-               
-            
         }
 
         public void ClosingChannelAndConnection()

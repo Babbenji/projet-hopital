@@ -1,10 +1,12 @@
 using Consul;
 using micro_service.ConsulConfig;
 using micro_service.EventBus;
+using micro_service.Helpers;
 using micro_service.Repository;
 using micro_service.Security;
 using micro_service.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using System.Security.Claims;
 
@@ -15,7 +17,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API Service comptable",
+        Version = "1.0",
+        Description = "Documentation OpenAPI du service comptable",
+        License = new OpenApiLicense() { Name= "Université d'Orléans", Url= new Uri("https://www.univ-orleans.fr/fr") }
+    });
+});
 
 builder.Services.AddSingleton<IMongoClient>(p => new MongoClient(builder.Configuration.GetConnectionString("Default")));
 
@@ -23,7 +34,11 @@ builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("Rab
 
 builder.Services.Configure<ServerHostConfiguration>(builder.Configuration.GetSection("ServeurDetails"));
 
+builder.Services.Configure<HyperLinKHelpers>(builder.Configuration.GetSection("ServeurPDFLink"));
+
 builder.Services.AddSingleton<RabbitMQProvider>();
+
+builder.Services.AddSingleton<PDFHelpers>();
 
 builder.Services.AddSingleton<IRabbitMQConsumer, RabbitMQConsumer>();
 
@@ -36,6 +51,8 @@ builder.Services.AddSingleton<IFactureService, FactureService>();
 builder.Services.AddSingleton<ICommendRepository, CommendRepository>();
 
 builder.Services.AddSingleton<ICommandeService, CommandeService>();
+
+builder.Services.AddSingleton<IBilanService, BilanService>();
 
 
 
@@ -68,11 +85,11 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 
 app.Use(async (context, next) =>

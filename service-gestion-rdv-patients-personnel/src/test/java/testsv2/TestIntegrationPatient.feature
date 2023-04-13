@@ -36,6 +36,35 @@ Feature: Tests Integration des services du Patient
     When method post
     Then status 409
     And print response
+  Scenario: Test d'annulation d'un RDV
+    Given path 'consultation/1/annulation'
+    When method delete
+    Then status 202
+    And print response
+
+  Scenario: Test d'annulation d'un RDV inexistant
+    Given path 'consultation/1/annulation'
+    When method delete
+    Then status 404
+    And print response
+
+  Scenario: Test d'annulation d'un RDV d’un autre patient
+    Given path 'consultation/5/annulation'
+    When method delete
+    Then status 403
+    And print response
+
+  Scenario: Test pour voir le medecin traitant d’un patient
+    Given path 'patient/208/medecintraitant'
+    When method get
+    Then status 200
+    And print response
+
+  Scenario: Test pour voir le medecin traitant d’un patient autre que le patient connecté
+    Given path 'patient/888/medecintraitant'
+    When method get
+    Then status 403
+    And print response
 
   Scenario: Test de creation de consultation avec un type de consultation inexistant
     Given path '/consultation'
