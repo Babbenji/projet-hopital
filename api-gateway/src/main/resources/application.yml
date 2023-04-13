@@ -57,7 +57,7 @@ spring:
           predicates:
             - Path=/api/facture/**
           filters:
-            - RewritePath=/api/facture/(?<remains>.*), /api/facture/v1/${remains}
+            - RewritePath=/api/facture/(?<remains>.*), /api/v1/facture/${remains}
             - PreserveHostHeader
             - RewriteResponseHeader=Location, /api/facture/v1/, /api/facture/
 
@@ -68,6 +68,13 @@ spring:
             - Path=/v3/api-docs/**
           filters:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+
+        - id: openapi-dotnet
+          uri: ${uri.api-gateway:http://localhost:8080}
+          predicates:
+            - Path=/v1/api-docs/**
+          filters:
+            - RewritePath=/v1/api-docs/(?<path>.*), /swagger/v1/$\{path}
 
 springdoc:
   api-docs:
@@ -84,7 +91,7 @@ springdoc:
       - name: documentation service-gestion-rdv-patients
         url: /v3/api-docs/service-gestion-rdv-patients-personnel
       - name: documentation service-facturation
-        url: /v3/api-docs/service-facturation
+        url: http://localhost:8085/swagger/v1/swagger.json
 
 uri:
   service-auth: lb://service-auth
