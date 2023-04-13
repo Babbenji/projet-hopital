@@ -22,8 +22,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "API Service comptable",
-        Version = "v1",
-        Description = "Documentation OpenAPI du service comptable"
+        Version = "1.0",
+        Description = "Documentation OpenAPI du service comptable",
+        License = new OpenApiLicense() { Name= "Université d'Orléans", Url= new Uri("https://www.univ-orleans.fr/fr") }
     });
 });
 
