@@ -110,7 +110,7 @@ namespace micro_service.Controllers
                 FileStream fileStream = new FileStream(Path.Combine(env.ContentRootPath, "pdfFile-bill", "Facture-" + idfacture + ".pdf"), FileMode.Open, FileAccess.Read);
                 return File(fileStream, "application/pdf");
             }
-            catch(FileNotFoundException ex) 
+            catch(FileNotFoundException) 
             {
                 return BadRequest("la facture n'existe plus");
             }
