@@ -1,6 +1,7 @@
 using Consul;
 using micro_service.ConsulConfig;
 using micro_service.EventBus;
+using micro_service.Helpers;
 using micro_service.Repository;
 using micro_service.Security;
 using micro_service.Service;
@@ -23,7 +24,11 @@ builder.Services.Configure<RabbitMQConfig>(builder.Configuration.GetSection("Rab
 
 builder.Services.Configure<ServerHostConfiguration>(builder.Configuration.GetSection("ServeurDetails"));
 
+builder.Services.Configure<HyperLinKHelpers>(builder.Configuration.GetSection("ServeurPDFLink"));
+
 builder.Services.AddSingleton<RabbitMQProvider>();
+
+builder.Services.AddSingleton<PDFHelpers>();
 
 builder.Services.AddSingleton<IRabbitMQConsumer, RabbitMQConsumer>();
 
@@ -36,6 +41,8 @@ builder.Services.AddSingleton<IFactureService, FactureService>();
 builder.Services.AddSingleton<ICommendRepository, CommendRepository>();
 
 builder.Services.AddSingleton<ICommandeService, CommandeService>();
+
+builder.Services.AddSingleton<IBilanService, BilanService>();
 
 
 

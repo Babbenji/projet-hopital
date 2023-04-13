@@ -19,8 +19,5 @@ namespace micro_service.Security
                 Exponent = publicKey.Exponent.ToByteArrayUnsigned()
             });
         }
-
-
-
     }
 }

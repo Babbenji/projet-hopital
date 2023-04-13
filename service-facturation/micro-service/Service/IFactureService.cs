@@ -1,4 +1,5 @@
 ﻿using micro_service.Models;
+using micro_service.Models.DTO;
 
 namespace micro_service.Service
 {
@@ -10,7 +11,13 @@ namespace micro_service.Service
 
         Facture? GetFacturePatient(string idfacture, string username);
 
-        void SendFactureEmail(string idfacture, string username);
+        void SendFactureEmailToPatient(string idfacture, string username, string chemain);
+
+        void ConfirmationFactureGenere(Facture facture, string secretionLogin, string chemain);
+
+        List<ChiffreAffaireAnnuelleModel> GetChiffreAffaireModel();
+
+        ChiffreAffaireDetailsModel GetAllChiffireAffaireByMonthOfYear(int year);
 
         Facture GetById(string id);
 
