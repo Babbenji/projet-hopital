@@ -131,7 +131,7 @@ public class ControlleurService {
     @Operation(summary = "Permet de supprimer un produit du panier")
     @DeleteMapping(value = "/utilisateurs/{idUtilisateur}/panier/{idProduit}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
-    public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idProduit") int idProduit,@PathVariable ("idUtilisateur") int idUtilisateur)
+    public ResponseEntity<String> deleteProduitPanier(@PathVariable ("idUtilisateur") int idUtilisateur, @PathVariable ("idProduit") int idProduit)
     {
         try {
             facadeServiceGestionStock.supprimerProduitPanier(idUtilisateur, idProduit);

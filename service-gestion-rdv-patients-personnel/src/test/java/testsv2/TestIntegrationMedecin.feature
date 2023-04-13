@@ -53,21 +53,21 @@ Feature: Tests Integration des services du medecin
 
   Scenario: Test d ajout du compte rendu dans la consultation
     Given path 'consultation/1/compterendu'
-    And request {"compteRendu":"Patient enrhumé"}
+    And request {"compteRendu":"Patient enrhumé", "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}}
     When method patch
     Then status 202
     And print response
 
   Scenario: Test d ajout du compte rendu dans une consultation inexistante
     Given path 'consultation/898/compterendu'
-    And request {"compteRendu":"Patient enrhumé"}
+    And request {"compteRendu":"Patient enrhumé", "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}}
     When method patch
     Then status 404
     And print response
 
   Scenario: Test d ajout du compte rendu dans une consultation non confirmé par un medecin
     Given path 'consultation/4/compterendu'
-    And request {"compteRendu":"Patient enrhumé"}
+    And request {"compteRendu":"Patient enrhumé", "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}}
     When method patch
     Then status 409
     And print response

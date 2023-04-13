@@ -1,7 +1,9 @@
 Feature: Tests Integration gestion stock fournisseur
   Background:
-  * url 'http://localhost:8084/api/v1/gestionnaire'
-  * header Accept = 'application/json'
+    * url 'http://localhost:8084/api/v1/gestionnaire'
+    * header Accept = 'application/json'
+    * def signIn = call read('TestConnexionSecretaire.feature')
+    * configure headers = { Authorization: '#(signIn.token)' },
 
   Scenario: Test d'ajout d'un utilisateur
     Given path '/utilisateurs'
@@ -18,7 +20,7 @@ Feature: Tests Integration gestion stock fournisseur
     And print response
 
   Scenario: Test d'ajout d'un produit
-    Given path '/produitsMedical'
+    Given path '/produits'
     And request {"nomProduitMedical": "produit1", "prixProduitMedical": 3.0, "descriptionProduitMedical": "Réduit la fièvre et les douleurs" }
     When method post
     Then status 201
@@ -44,12 +46,6 @@ Feature: Tests Integration gestion stock fournisseur
     And print response
 
 
-  Scenario: Test passer commande
-    Given path '/utilisateurs/13/passerCommande'
-    When method post
-    Then status 200
-    And print response
-
 
   Scenario: Test de récupération des informations d'un fournisseur
     Given path 'fournisseurs/10'
@@ -64,7 +60,7 @@ Feature: Tests Integration gestion stock fournisseur
     And print response
 
   Scenario: Test de récupération d'un catalogue d'un fournisseur
-    Given path '/fournisseurs/10/catalogue'
+    Given path '/fournisseurs/10/produits'
     When method get
     Then status 200
     And print response
@@ -87,27 +83,33 @@ Feature: Tests Integration gestion stock fournisseur
     Then status 200
     And print response
 
+  Scenario: Test passer commande
+    Given path '/utilisateurs/13/passerCommande'
+    When method post
+    Then status 200
+    And print response
+
   Scenario: Test de suppression d'un produit dans un panier
-    Given path 'utilisateurs/18/panier/1'
+    Given path 'utilisateurs/13/panier/1'
     When method delete
-    Then status 200'
+    Then status 202
     And print response
 
   Scenario: Test d'annulation d'une commande
     Given path 'commandes/8'
     When method delete
-    Then status 200
+    Then status 202
     And print response
 
   Scenario: Test de suppression d'un produit d'un catalogue fournisseur
-    Given path 'fournisseurs/10/produits/0'
+    Given path 'fournisseurs/10/catalogue/7'
     When method delete
-    Then status 200
+    Then status 202
     And print response
 
   Scenario: Test de suppression d'un fournisseur
     Given path 'fournisseurs/10'
     When method delete
-    Then status 200
+    Then status 202
     And print response
 

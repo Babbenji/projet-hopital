@@ -63,4 +63,15 @@ public class Utilisateur {
     public void setPanierUtilisateur(Map<Integer, Integer> panierUtilisateur) {
         this.panierUtilisateur = panierUtilisateur;
     }
+
+    @Override
+    public String toString() {
+        return "Utilisateur{" +
+                "idUtilisateur=" + idUtilisateur +
+                ", nomUtilisateur='" + nomUtilisateur + '\'' +
+                ", prenomUtilisateur='" + prenomUtilisateur + '\'' +
+                ", emailUtilisateur='" + emailUtilisateur + '\'' +
+                ", panierUtilisateur=" + panierUtilisateur +
+                '}';
+    }
 }
