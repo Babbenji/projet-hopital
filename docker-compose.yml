@@ -179,9 +179,8 @@ services:
     networks:
       - consul
     depends_on:
-      - discovery
+      - service-auth
       - db-mongo-stockfournisseurs
-      - rabbitmq
 
 
 ###################################################################################

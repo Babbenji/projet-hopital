@@ -17,8 +17,8 @@ namespace micro_service.ConsulConfig
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-
            
+
             Uri uri = new Uri("http://"+ this.serverHostConfiguration.Host + ":"+ this.serverHostConfiguration.Port+"");
             AgentServiceRegistration agentServiceRegistration = new AgentServiceRegistration()
             {
@@ -30,6 +30,7 @@ namespace micro_service.ConsulConfig
 
            await this.consulClient.Agent.ServiceDeregister("service-facturation", cancellationToken);
            await this.consulClient.Agent.ServiceRegister(agentServiceRegistration, cancellationToken);
+            
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)

@@ -62,8 +62,16 @@ builder.Services.AddHostedService<ConsulRegisterService>();
 
 builder.Services.AddHostedService<RabbitMQListener>();
 
+builder.Services.AddHostedService<PublicKeyFetching>();
+
+
+
 
 builder.Services.AddHealthChecks();
+
+
+
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
 {
@@ -106,7 +114,7 @@ app.Use(async (context, next) =>
                 if (expiresUtc <= DateTime.UtcNow)
                 {
                     context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Token expired");
+                    await context.Response.WriteAsync("Token expiré");
                     return;
                 }
             }

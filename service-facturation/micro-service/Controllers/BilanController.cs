@@ -10,7 +10,8 @@ namespace micro_service.Controllers
     [Authorize(Roles = "COMPTABLE")]
     public class BilanController : ControllerBase
     {
-        private readonly IBilanService bilanService; 
+        private readonly IBilanService bilanService;
+
         public BilanController(IBilanService bilanService) 
         {
             this.bilanService = bilanService;
@@ -25,5 +26,6 @@ namespace micro_service.Controllers
             else
                 return NoContent();
         }
+
     }
 }
