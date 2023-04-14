@@ -6,11 +6,9 @@ import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
-
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+
 
 public interface FacadeServiceGestionStock {
     void passerCommande(int idPanier) throws UtilisateurInexistantException;
@@ -58,5 +56,7 @@ public interface FacadeServiceGestionStock {
     ProduitMedical getProduitMedicaleById(int idProduit) throws ProduitInexistantException;
 
     String getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
+
+    Map<String, Integer> getPanierFromCommande(int idCommande) throws CommandeInexistanteException;
 
 }

@@ -212,7 +212,7 @@ public class ControlleurService {
     public ResponseEntity<Commande> getCommande(@PathVariable int id)
     {
         try {
-            //String identifiant = authentication.getName();
+
             Commande commande = facadeServiceGestionStock.getCommande(id);
             return ResponseEntity.ok(commande);
         } catch (CommandeInexistanteException e) {
@@ -251,7 +251,7 @@ public class ControlleurService {
     public ResponseEntity<Integer> getStockProduit(@PathVariable int idProduit)
     {
         try {
-            //String identifiant = authentication.getName();
+
             int nbProduitStock = facadeServiceGestionStock.getStockProduit(idProduit);
             return ResponseEntity.ok(nbProduitStock);
         } catch (ProduitInexistantException e) {
@@ -265,24 +265,23 @@ public class ControlleurService {
     public ResponseEntity<String> getCatalogueFournisseur(@PathVariable int id)
     {
         try {
-            //String identifiant = authentication.getName();
+
             Map<Integer,String> produits = facadeServiceGestionStock.getCatalogueFournisseur(id);
             return ResponseEntity.ok(produits.toString());
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
         }
     }
-
     @Operation(summary = "Récupère les produits d'une commande")
     @GetMapping(value = "/commandes/{idCommande}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> getProduitsCommande(@PathVariable int idCommande)
     {
         try {
-            //String identifiant = authentication.getName();
-            return ResponseEntity.ok(facadeServiceGestionStock.getAllProduitsFromPanier(idCommande));
-        } catch (UtilisateurInexistantException e) {
-            return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok().body(facadeServiceGestionStock.getPanierFromCommande(idCommande).toString());
+        }  catch (CommandeInexistanteException e) {
+            throw new RuntimeException(e);
         }
     }
 

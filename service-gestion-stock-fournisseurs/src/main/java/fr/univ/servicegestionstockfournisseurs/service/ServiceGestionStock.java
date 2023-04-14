@@ -33,15 +33,11 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
                 {
                         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
-                        System.out.println(utilisateur);
                         Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
-                        System.out.println(panier);
+
                         for (Map.Entry<Integer, Integer> entry : panier.entrySet())
                         {
-                                System.out.println(entry.getKey());
-
                                 ProduitMedical produit = produitMedicalRepository.findByIdProduitMedical(entry.getKey());
-                                System.out.println(produit);
                                 for (Fournisseur fournisseur : fournisseurRepository.findAll())
                                 {
                                         if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
@@ -137,14 +133,13 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         @Override
         public void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException {
-                System.out.println(idUtilisateur);
-                System.out.println(idProduit);
+
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur)) {
                         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
-                        System.out.println(utilisateur.toString());
+
 
                         Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
-                        System.out.println(panier);
+
                         if (panier.containsKey(idProduit)) {
                                 panier.remove(idProduit);
                                 utilisateurRepository.save(utilisateur);
@@ -351,6 +346,19 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 }
 
         }
+
+        @Override
+        public Map<String, Integer> getPanierFromCommande(int idCommande) throws CommandeInexistanteException
+        {
+                if (commandeRepository.existsByIdCommande(idCommande))
+                {
+                        return commandeRepository.findByIdCommande(idCommande).getProduitsCommande();
+                }
+                else{
+                        throw new CommandeInexistanteException();
+                }
+        }
+
 
 
 
