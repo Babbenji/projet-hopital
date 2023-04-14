@@ -190,24 +190,24 @@ services:
 ###################################################################################
 
   # Base de données Mongo
-  db-mongo-facturation:
+  db-mongo-comptable:
     image: mongo:latest
-    container_name: bdd_facturation
+    container_name: bdd_compta
     ports:
       - "27019:27017"
     networks:
         - consul
 
   # Application .NET
-  service-facturation:
-    container_name: service-facturation
-    image: service-facturation:1.0
+  service-comptable:
+    container_name: service-comptable
+    image: service-comptable:1.0
     ports:
       - "8085:80"
     environment:
       - Consul__Host=discovery
       - Consul__Port=8500
-      - ServeurDetails__Host=service-facturation
+      - ServeurDetails__Host=service-comptable
       - ServeurDetails__Port=80
       - RabbitMQ__Protocol=amqp
       - RabbitMQ__Host=rabbitmq
@@ -219,9 +219,9 @@ services:
       - consul
     depends_on:
       - discovery
-      - db-mongo-facturation
+      - db-mongo-comptable
       - rabbitmq
-      - service-auth
+#      - service-auth
 
 
 networks:

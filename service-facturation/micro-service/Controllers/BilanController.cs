@@ -27,5 +27,12 @@ namespace micro_service.Controllers
                 return NoContent();
         }
 
+         [AllowAnonymous]
+         [HttpGet("hello-world")]
+         public IActionResult GetHelloWorld()
+         {
+             return Ok("Hello World");
+         }
+
     }
 }

@@ -1,0 +1,22 @@
+### récupération du hello world AVEC GATEWAY
+GET http://localhost:8080/api/bilan/hello-world
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+
+
+### récupération du hello world SANS GATEWAY
+GET http://localhost:8085/api/v1/bilan/hello-world
+Accept: application/json
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+

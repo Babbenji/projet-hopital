@@ -52,14 +52,20 @@ spring:
             - PreserveHostHeader
             - RewriteResponseHeader=Location, /api/v1/gestionnaire/, /gestionnaire/
 
-        - id: service-facturation
-          uri: ${uri.service-facture:http://localhost:8085}
+        - id: service-comptable
+          uri: ${uri.service-comptable:http://localhost:8085}
           predicates:
             - Path=/api/facture/**
+            - Path=/api/bilan/**
+            - Path=/api/commande/**
           filters:
             - RewritePath=/api/facture/(?<remains>.*), /api/v1/facture/${remains}
+            - RewritePath=/api/bilan/(?<remains>.*), /api/v1/bilan/${remains}
+            - RewritePath=/api/commande/(?<remains>.*), /api/v1/commande/${remains}
             - PreserveHostHeader
             - RewriteResponseHeader=Location, /api/v1/facture/, /api/facture/
+            - RewriteResponseHeader=Location, /api/v1/bilan/, /api/bilan/
+            - RewriteResponseHeader=Location, /api/v1/commande/, /api/commande/
 
           #Routes de la documentation openapi
         - id: openapi
@@ -69,12 +75,12 @@ spring:
           filters:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 
-        - id: openapi-dotnet
-          uri: ${uri.service-facture:http://localhost:8085}
-          predicates:
-            - Path=/v1/api-docs/**
-          filters:
-            - RewritePath=/v1/api-docs/(?<remains>.*), /swagger/v1/${remains}
+#        - id: openapi-dotnet
+#          uri: ${uri.service-comptable:http://localhost:8085}
+#          predicates:
+#            - Path=/v1/api-docs/**
+#          filters:
+#            - RewritePath=/v1/api-docs/(?<remains>.*), /swagger/v1/${remains}
 
 springdoc:
   api-docs:
@@ -90,7 +96,9 @@ springdoc:
         url: /v3/api-docs/service-gestion-stock-fournisseurs
       - name: documentation service-gestion-rdv-patients
         url: /v3/api-docs/service-gestion-rdv-patients-personnel
-      - name: documentation service-facturation
+#      - name: documentation service-comptable
+#        url: /v3/api-docs/service-comptable
+      - name: documentation service-comptable
         url: http://localhost:8080/v1/api-docs/swagger.json
 
 uri:
@@ -98,5 +106,5 @@ uri:
   service-notif: lb://service-notification
   service-rdv-patients: lb://service-rdv-patients
   service-stock: lb://service-stockfournisseurs
-  service-facture: lb://service-facturation
+  service-comptable: lb://service-comptable
   api-gateway: lb://api-gateway

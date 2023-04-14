@@ -24,7 +24,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "API Service comptable",
         Version = "1.0",
         Description = "Documentation OpenAPI du service comptable",
-        License = new OpenApiLicense() { Name= "Université d'Orléans", Url= new Uri("https://www.univ-orleans.fr/fr") }
+        License = new OpenApiLicense() { Name= "Universite d'Orleans", Url= new Uri("https://www.univ-orleans.fr/fr") }
     });
 });
 
@@ -114,7 +114,7 @@ app.Use(async (context, next) =>
                 if (expiresUtc <= DateTime.UtcNow)
                 {
                     context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Token expiré");
+                    await context.Response.WriteAsync("Token expirï¿½");
                     return;
                 }
             }

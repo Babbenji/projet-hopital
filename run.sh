@@ -13,7 +13,7 @@
 
 
 # commande pour construite l'image docker du service .NET
-docker build -t service-facturation:1.0 ./service-facturation
+docker build -t service-comptable:1.0 ./service-facturation
 
 
 # commande pour construire et executer les containers docker
