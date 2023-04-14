@@ -13,12 +13,20 @@ spring:
       database: ${DB_NAME:gestionStock}
       host: ${DB_HOST:localhost}
       port: ${DB_PORT:27017}
+
+  config:
+    import: "consul:"
+
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        name: crytographie
 
-# TODO configurer le service de messagerie
+
+  # TODO configurer le service de messagerie
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
