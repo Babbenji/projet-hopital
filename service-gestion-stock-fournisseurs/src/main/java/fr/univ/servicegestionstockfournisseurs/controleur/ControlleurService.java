@@ -272,7 +272,6 @@ public class ControlleurService {
             return ResponseEntity.notFound().build();
         }
     }
-
     @Operation(summary = "Récupère les produits d'une commande")
     @GetMapping(value = "/commandes/{idCommande}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
