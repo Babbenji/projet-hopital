@@ -352,6 +352,23 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         }
 
+        @Override
+        public Map<String, Integer> getPanierFromCommande(int idCommande) throws CommandeInexistanteException
+        {
+                if (commandeRepository.existsByIdCommande(idCommande))
+                {
+                        Map<String,Integer> panier = commandeRepository.findByIdCommande(idCommande).getProduitsCommande();
+
+
+                        return panier;
+                }
+                else{
+                        throw new CommandeInexistanteException();
+                }
+
+        }
+
+
 
 
 

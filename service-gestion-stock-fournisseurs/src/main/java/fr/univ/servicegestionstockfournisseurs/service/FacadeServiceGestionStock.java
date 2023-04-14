@@ -59,4 +59,6 @@ public interface FacadeServiceGestionStock {
 
     String getAllProduitsFromPanier(int idUtilisateur) throws UtilisateurInexistantException;
 
+    Map<String, Integer> getPanierFromCommande(int idCommande) throws CommandeInexistanteException;
+
 }
