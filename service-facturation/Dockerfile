@@ -18,6 +18,5 @@ RUN dotnet publish "micro-service.csproj" -c Release -o /app/publish /p:UseAppHo
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY micro-service/publickey.pem /app
 COPY micro-service/appsettings.json /app
 ENTRYPOINT ["dotnet", "micro-service.dll"]

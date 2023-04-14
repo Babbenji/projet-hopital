@@ -22,15 +22,11 @@
 
     <dependencies>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-            <version>3.0.4</version>
-        </dependency>
+        <!-- Security OAuth2.0 (inclusion de Spring Security) -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
             <version>3.0.4</version>
         </dependency>
 

@@ -1,6 +1,6 @@
 
 ### Inscription Secretaire
-POST http://localhost:8080/api/auth/inscription
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
     });
 %}
 ### Inscription Medecin
-POST http://localhost:8080/api/auth/inscription
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
@@ -28,7 +28,7 @@ Content-Type: application/json
     });
 %}
 ### Inscription Patient
-POST http://localhost:8080/api/auth/inscription
+POST http://localhost:8081/api/v1/auth/inscription
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 %}
 
 ### Connexion Secretaire
-POST http://localhost:8080/api/auth/connexion
+POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
@@ -57,7 +57,7 @@ Content-Type: application/json
     });
 %}
 ### Connexion Medecin
-POST http://localhost:8080/api/auth/connexion
+POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
@@ -71,7 +71,7 @@ Content-Type: application/json
     });
 %}
 ### Connexion Patient
-POST http://localhost:8080/api/auth/connexion
+POST http://localhost:8081/api/v1/auth/connexion
 Content-Type: application/json
 
 {
@@ -86,7 +86,7 @@ Content-Type: application/json
 %}
 
 ### Cette requete permet de créer un medecin // SECRETAIRE
-POST http://localhost:8080/rdvpatients/medecin
+POST http://localhost:8083/api/v1/rdvpatients/medecin
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -96,7 +96,7 @@ Content-Type: application/json
   "email": "hind.hachemi@hopital-medecin.fr"
 }
 ### Cette requete permet de créer un patient // SECRETAIRE
-POST http://localhost:8080/rdvpatients/patient
+POST http://localhost:8083/api/v1/rdvpatients/patient
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -110,13 +110,13 @@ Content-Type: application/json
   "genre": "Homme"
 }
 ### Cette requete permet de voir les données d'un patient // MEDECIN OU PATIENT OU SECRETAIRE
-GET http://localhost:8080/rdvpatients/patient/10
+GET http://localhost:8083/api/v1/rdvpatients/patient/10
 #Authorization: {{patient_token}}
 #Authorization: {{medecin_token}}
 Authorization: {{secretaire_token}}
 
 ### Cette requete permet d'ajouter les antécédents d'un patient à son profil // MEDECIN
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/antecedents
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/antecedents
 Authorization: {{medecin_token}}
 Content-Type: application/json
 
@@ -124,7 +124,7 @@ Content-Type: application/json
   "antecedents": "Fragile"
 }
 ### Cette requete permet d'assigner un medecin à un patient // SECRETAIRE
-PATCH http://localhost:8080/rdvpatients/personnel/modif/patient/15/medecintraitant
+PATCH http://localhost:8083/api/v1/rdvpatients/personnel/modif/patient/15/medecintraitant
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -133,7 +133,7 @@ Content-Type: application/json
   "nom": "BEN JAZIA"
 }
 ### Cette requete permet de prendre un rendez vous pour un patient // PATIENT
-POST http://localhost:8080/rdvpatients/consultation
+POST http://localhost:8083/api/v1/rdvpatients/consultation
 Authorization: {{patient_token}}
 Content-Type: application/json
 
@@ -144,10 +144,10 @@ Content-Type: application/json
   "type": "OPTIQUE"
 }
 ### Cette requete permet à un médecin de confirmer la consultation // MEDECIN
-PATCH http://localhost:8080/rdvpatients/consultation/1/confirmer
+PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/confirmer
 Authorization: {{medecin_token}}
 ### Cette requete permet d'ajouter un compte rendu a une consultation // MEDECIN
-PATCH http://localhost:8080/rdvpatients/consultation/1/compterendu
+PATCH http://localhost:8083/api/v1/rdvpatients/consultation/1/compterendu
 Authorization: {{medecin_token}}
 Content-Type: application/json
 
@@ -158,34 +158,34 @@ Content-Type: application/json
 
 
 ### Cette requete permet de voir les consultations d'un medecin // MEDECIN OU SECRETAIRE
-GET http://localhost:8080/rdvpatients/medecin/19/consultations
+GET http://localhost:8083/api/v1/rdvpatients/medecin/19/consultations
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
 
 ### Cette requete permet de demander d'annuler un RDV pour un patient // PATIENT
-DELETE http://localhost:8080/rdvpatients/consultation/1/annulation
+DELETE http://localhost:8083/api/v1/rdvpatients/consultation/1/annulation
 Authorization: {{patient_token}}
 
 ### Cette requete permet de voir le medecin traitant d'un patient // PATIENT OU MEDECIN OU SECRETAIRE
-GET http://localhost:8080/rdvpatients/patient/9/medecintraitant
+GET http://localhost:8083/api/v1/rdvpatients/patient/9/medecintraitant
 #Authorization: {{secretaire_token}}
 #Authorization: {{medecin_token}}
 Authorization: {{patient_token}}
 
 ### Cette requete permet de voir les produits utilisés lors d'une consultation // MEDECIN OU SECRETAIRE
-GET http://localhost:8080/rdvpatients/consultation/1/produits
+GET http://localhost:8083/api/v1/rdvpatients/consultation/1/produits
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
 
 ### Cette requete permet de voir les patients assignés à un médecin // MEDECIN OU SECRETAIRE
-GET http://localhost:8080/rdvpatients/medecin/19/patients
+GET http://localhost:8083/api/v1/rdvpatients/medecin/19/patients
 #Authorization: {{secretaire_token}}
 Authorization: {{medecin_token}}
 
 ### Cette requete permet de voir toutes les consultation // SECRETAIRE
-GET http://localhost:8080/rdvpatients/consultation/liste
+GET http://localhost:8083/api/v1/rdvpatients/consultation/liste
 Authorization: {{secretaire_token}}
 
 ### Cette requete permet de voir toutes les consultation de type dentaire// SECRETAIRE
-GET http://localhost:8080/rdvpatients/consultation/liste/DENTAIRE
+GET http://localhost:8083/api/v1/rdvpatients/consultation/liste/DENTAIRE
 Authorization: {{secretaire_token}}

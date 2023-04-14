@@ -33,6 +33,7 @@ public class ApiGatewayApplication {
 //	private String SERVICE_STOCK_FOURNISSEURS;
 //	@Value("${prod.uri.service-facture:http://localhost:8085}")
 //	private String SERVICE_FACTURATION;
+
 //	private String URL_DOC_OPENAPI = "http://localhost:8080";
 
 	public static void main(String[] args) {
@@ -103,12 +104,12 @@ public class ApiGatewayApplication {
 //						)
 //						.uri(SERVICE_FACTURATION)
 //				)
-//				// Routes de la documentation openapi
-//				.route(r -> r.path("/v3/api-docs/**")
-//						.filters(f -> f.rewritePath("/v3/api-docs/(?<remains>.*)", "/${remains}/v3/api-docs")
-//						)
-//						.uri(URL_DOC_OPENAPI)
-//				)
+////				// Routes de la documentation openapi
+////				.route(r -> r.path("/v3/api-docs/**")
+////						.filters(f -> f.rewritePath("/v3/api-docs/(?<remains>.*)", "/${remains}/v3/api-docs")
+////						)
+////						.uri(URL_DOC_OPENAPI)
+////				)
 //				.build();
 //	}
 

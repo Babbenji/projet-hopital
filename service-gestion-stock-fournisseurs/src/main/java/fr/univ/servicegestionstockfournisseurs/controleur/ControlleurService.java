@@ -195,6 +195,7 @@ public class ControlleurService {
 
     @Operation(summary = "Permet de mettre à jour les informations d'un produit")
     @PatchMapping(path = "/produits/{idProduit}")
+    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
     public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody Map<String,Object> attributsAModifier) {
         try {
 

@@ -22,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -34,8 +33,8 @@ import java.util.function.Function;
  */
 @RestController
 @RequestMapping(value = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-@EnableWebSecurity
-@EnableMethodSecurity
+@EnableWebSecurity@EnableMethodSecurity
+
 public class UtilisateurControleur {
 
     /**

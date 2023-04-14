@@ -59,9 +59,9 @@ spring:
           filters:
             - RewritePath=/api/facture/(?<remains>.*), /api/v1/facture/${remains}
             - PreserveHostHeader
-            - RewriteResponseHeader=Location, /api/facture/v1/, /api/facture/
+            - RewriteResponseHeader=Location, /api/v1/facture/, /api/facture/
 
-         # Routes de la documentation openapi
+          #Routes de la documentation openapi
         - id: openapi
           uri: ${uri.api-gateway:http://localhost:8080}
           predicates:
@@ -94,7 +94,7 @@ springdoc:
         url: http://localhost:8080/v1/api-docs/swagger.json
 
 uri:
-  service-auth: lb://service-auth
+  service-auth: lb://service-authentification
   service-notif: lb://service-notification
   service-rdv-patients: lb://service-rdv-patients
   service-stock: lb://service-stockfournisseurs

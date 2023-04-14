@@ -3,7 +3,7 @@
 #             Utilisateurs                 #
 ############################################
 
-POST http://localhost:8081/api/v1/auth/inscription
+POST http://localhost:8080/api/auth/inscription
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 %}
 
 ### Connexion d'un compte secretaire
-POST http://localhost:8081/api/v1/auth/connexion
+POST http://localhost:8080/api/auth/connexion
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 %}
 
 ### get panier utilisateur###
-GET http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier
+GET http://localhost:8080/gestionnaire/utilisateurs/2/panier
 Authorization: {{secretaire_token}}
 
 
@@ -44,7 +44,7 @@ Authorization: {{secretaire_token}}
 ############################################
 
 
-POST http://localhost:8084/api/v1/gestionnaire/produits
+POST http://localhost:8080/gestionnaire/produits
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -57,36 +57,36 @@ Content-Type: application/json
 
 ### Ajouter un produit dans un panier###
 
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier?idProduit=5&quantite=5
+POST http://localhost:8080/gestionnaire/utilisateurs/2/panier?idProduit=5&quantite=5
 Authorization: {{secretaire_token}}
 
 
 ### Ajout produit dans le catalogue fournisseur ###
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs/2/catalogue?idProduit=5
+POST http://localhost:8080/gestionnaire/fournisseurs/2/catalogue?idProduit=5
 Authorization: {{secretaire_token}}
 
 ### Supprimer un produit dans un panier###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/panier/6
+DELETE http://localhost:8080/gestionnaire/utilisateurs/2/panier/6
 Authorization: {{secretaire_token}}
 
 ### supprimer un produit ###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/produits/{idProduit}
+DELETE http://localhost:8080/gestionnaire/produits/{idProduit}
 Authorization: {{secretaire_token}}
 
 ### supprimer un produit d'un catalogue fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
 Authorization: {{secretaire_token}}
 
 ### get stock produit ###
 
-GET http://localhost:8084/api/v1/gestionnaire/produits/4/stock
+GET http://localhost:8080/gestionnaire/produits/4/stock
 Authorization: {{secretaire_token}}
 
 ### modifier un produit son prix , son nom ou sa descritpion ou les trois en memes temps ###
-PATCH http://localhost:8084/api/v1/gestionnaire/produits/5
+PATCH http://localhost:8080/gestionnaire/produits/5
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -102,7 +102,7 @@ Content-Type: application/json
 
 ### Ajout Fournisseur###
 
-POST http://localhost:8084/api/v1/gestionnaire/fournisseurs
+POST http://localhost:8080/gestionnaire/fournisseurs
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -114,7 +114,7 @@ Content-Type: application/json
 
 ### modifier un fournisseur###
 
-PATCH http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+PATCH http://localhost:8080/gestionnaire/fournisseurs/2
 Authorization: {{secretaire_token}}
 Content-Type: application/json
 
@@ -125,17 +125,17 @@ Content-Type: application/json
 
 ### supprimer un fournisseur###
 
-DELETE http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+DELETE http://localhost:8080/gestionnaire/fournisseurs/2
 Authorization: {{secretaire_token}}
 
 ### get fournisseur by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/2
+GET http://localhost:8080/gestionnaire/fournisseurs/2
 Authorization: {{secretaire_token}}
 
 ### get catalogue fournisseur###
 
-GET http://localhost:8084/api/v1/gestionnaire/fournisseurs/4/catalogue
+GET http://localhost:8080/gestionnaire/fournisseurs/4/catalogue
 Authorization: {{secretaire_token}}
 
 
@@ -145,7 +145,7 @@ Authorization: {{secretaire_token}}
 
 
 ### passer commande###
-POST http://localhost:8084/api/v1/gestionnaire/utilisateurs/2/passerCommande
+POST http://localhost:8080/gestionnaire/utilisateurs/2/passerCommande
 Authorization: {{secretaire_token}}
 
 ### Annuler commande###
@@ -155,7 +155,7 @@ Authorization: {{secretaire_token}}
 
 ### get commande by id###
 
-GET http://localhost:8084/api/v1/gestionnaire/commandes/1
+GET http://localhost:8080/gestionnaire/commandes/1
 Authorization: {{secretaire_token}}
 
 
