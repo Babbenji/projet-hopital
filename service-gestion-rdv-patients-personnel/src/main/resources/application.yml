@@ -13,10 +13,18 @@ spring:
       database: ${DB_NAME:rdvpatients}
       host: ${DB_HOST:localhost}
       port: ${DB_PORT:27018}
+
+  config:
+    import: "consul:"
+
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        name: crytographie
+
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}

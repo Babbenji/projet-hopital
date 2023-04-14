@@ -1,6 +1,7 @@
 package fr.univ.orleans.miage.serviceauthentification;
 
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
+import fr.univ.orleans.miage.serviceauthentification.service.ConsulService;
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.CompteDejaActiveException;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.TokenExpirationException;
@@ -17,11 +18,20 @@ public class InitUtilisateursRunner implements CommandLineRunner {
     private UtilisateurService utilisateurService;
 
     @Autowired
+    ConsulService consulService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
 
     @Override
     public void run(String... args) {
+
+        try {
+            consulService.storePublicKey();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             // Créer un compte admin
