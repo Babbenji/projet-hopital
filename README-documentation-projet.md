@@ -156,6 +156,45 @@ http://localhost:8080/service-notif/swagger-ui/index.html
 http://localhost:8080/v3/api-docs/swagger-config
 
 
+### Configuration centralisée
+
+Gestion de la configuration avec Spring Cloud Config Server via un repository git
+
+Le repository git contient les fichiers de configuration des services
+
+Lien du repo git : https://github.com/rachy-da/config-repo
+
+Importation du repo git dans un dossier nommé "config-repo" à la racine du projet pour faciliter la consultation et modification des fichiers de configuration.
+
+Commande pour récupérer le repo git dans le dossier "config-repo" :
+
+#### Commandes pour récupérer le repo git dans le dossier "config-repo"
+
+```gitexclude
+# créer le dossier local config-repo
+mkdir config-repo
+cd config-repo/
+# initialiser le repo git local
+git init
+git add.
+# lier le repo local au repo distant
+git remote add origin https://github.com/rachy-da/config-repo.git
+
+# vérifier que le remote est bien ajouté
+git remote -v
+
+# récupérer le repo distant
+git pull origin main  
+
+# pusher les modifications sur le repo distant
+git push origin main
+
+# ou si le repo local n'est pas encore lié au repo distant
+git push --set-upstream origin main 
+
+# vérifier que le repo local est bien à jour
+git status
+````
 
 
 
