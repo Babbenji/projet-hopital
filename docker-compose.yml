@@ -150,6 +150,7 @@ services:
       - discovery
       - db-mongo-rdv-patients
       - rabbitmq
+      - service-auth
 
 ###################################################################################
 #                  SERVICE DE GESTION DES STOCKS ET FOURNISSEURS
@@ -159,10 +160,14 @@ services:
   db-mongo-stockfournisseurs:
     image: mongo:latest
     container_name: bdd_stockfournisseurs
+    volumes:
+      - ./initBDDSTOCK.js:/docker-entrypoint-initdb.d/initBDDSTOCK.js
     ports:
       - "27017:27017"
     networks:
       - consul
+    environment:
+      - MONGO_INITDB_DATABASE=gestionStock
 
   # Application Spring Boot
   service-stockfournisseurs:
@@ -182,7 +187,7 @@ services:
       - discovery
       - rabbitmq
       - db-mongo-stockfournisseurs
-#      - service-auth
+      - service-auth
 
 
 ###################################################################################
@@ -221,7 +226,7 @@ services:
       - discovery
       - db-mongo-comptable
       - rabbitmq
-#      - service-auth
+      - service-auth
 
 
 networks:

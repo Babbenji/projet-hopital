@@ -31,6 +31,11 @@ spring:
     routingkey: email.routingkey
     queue: email.queue
 
+    ### NOTIF ###
+    queue-notification: notification.queue
+    routingkey-notification: notification.routingkey
+
+
 ##################   BASE DE DONNEES   ###############
 
   datasource:

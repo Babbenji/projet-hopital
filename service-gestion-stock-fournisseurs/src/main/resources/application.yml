@@ -42,5 +42,5 @@ spring:
     routingkey-facture-patient: facture.routingKey
 
     ### Exchange stock bas ###
-    exchange-notification-stock-bas: stockBas.exchange
-    routingkey-notification-stock-bas: stockBas.routingKey
+    exchange-notification: email.exchange
+    routingkey-notification: notification.routingkey

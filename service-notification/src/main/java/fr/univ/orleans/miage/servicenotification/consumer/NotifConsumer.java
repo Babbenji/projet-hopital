@@ -19,11 +19,9 @@ public class NotifConsumer
 
     private static final Logger logger = LoggerFactory.getLogger(NotifConsumer.class);
 
-    @RabbitListener(queues = "${spring.rabbitmq.notification.queue}")
+    @RabbitListener(queues = "${spring.rabbitmq.queue-notification}")
     public void listen() throws MessagingException {
-
             logger.info("Message reçu");
-
     }
 
 }
