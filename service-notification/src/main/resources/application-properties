@@ -1,0 +1,44 @@
+server.port=8082
+
+spring.application.name=service-notification
+spring.config.import=optional:configserver:http://localhost:8888
+
+spring.cloud.consul.host=${CONSUL_HOST:localhost}
+spring.cloud.consul.port=${CONSUL_PORT:8500}
+spring.cloud.consul.config.enabled=true
+spring.cloud.consul.config.name=crytographie
+
+spring.rabbitmq.host=${RABBITMQ_HOST:localhost}
+spring.rabbitmq.port=${RABBITMQ_PORT:15672}
+spring.rabbitmq.username=${RABBITMQ_USERNAME:guest}
+spring.rabbitmq.password=${RABBITMQ_PASSWORD:guest}
+spring.rabbitmq.exchange=email.exchange
+spring.rabbitmq.routingkey=email.routingkey
+spring.rabbitmq.queue=email.queue
+
+################## BASE DE DONNEES ###############
+
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.url=jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}
+spring.datasource.username=${DB_USERNAME:postgres}
+spring.datasource.password=${DB_PASSWORD:postgres}
+
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.database=postgresql
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+################## EMAIL ######################
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=noreply.hopital@gmail.com
+spring.mail.password=iytmgdoiclzvqbzw
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.ssl.trust=smtp.gmail.com
+
+################## DEBUG ######################
+
+spring.main.banner-mode=off

@@ -184,7 +184,7 @@ git remote add origin https://github.com/rachy-da/config-repo.git
 git remote -v
 
 # récupérer le repo distant
-git pull origin main  
+git pull origin
 
 # pusher les modifications sur le repo distant
 git push origin main
@@ -196,5 +196,7 @@ git push --set-upstream origin main
 git status
 ````
 
+Démarrer le serveur Spring Cloud Config et consulter la configuration des services à l'URL :
+http://localhost:8888/projet-hopital/default
 
-
+Le serveur a donc récupéré les fichiers de configuration des services dans le repo git et les a mis à disposition des services sous format JSON à l'URL : http://localhost:8888/projet-hopital/default
