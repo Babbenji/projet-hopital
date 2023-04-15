@@ -13,21 +13,21 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Service
 public class RabbitMQProducer {
-    @Value("spring.rabbitmq.exchange-facture")
+    @Value("${spring.rabbitmq.exchange-facture}")
     private String exchangeFacture;
 
-    @Value("spring.rabbitmq.routingkey-facture-fournisseur")
+    @Value("${spring.rabbitmq.routingkey-facture-fournisseur}")
     private String routingKeyFactureFournisseur;
 
 
 
-    @Value("spring.rabbitmq.routingkey-facture-patient")
+    @Value("${spring.rabbitmq.routingkey-facture-patient}")
     private String routingKeyFacturePatient;
 
-    @Value("spring.rabbitmq.exchange-notification-stock-bas")
+    @Value("${spring.rabbitmq.exchange-notification-stock-bas}")
     private String exchangeNotificationStockBas;
 
-    @Value("spring.rabbitmq.routingkey-notification-stock-bas")
+    @Value("${spring.rabbitmq.routingkey-notification-stock-bas}")
     private String routingKeyNotificationStockBas;
 
 

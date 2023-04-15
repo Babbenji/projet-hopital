@@ -87,7 +87,7 @@ namespace micro_service.Helpers
 
             pdfDocument.Save(filePath);
             pdfDocument.Close();
-            return "http://" + hyperLink.Host + ":" + hyperLink.Port + "api/v1/comptable/facture/pdf?idfacture=" + idfacture;
+            return "http://" + hyperLink.Host + ":" + hyperLink.Port + "/api/comptable/facture/pdf?idfacture=" + idfacture;
         }
     }
 }

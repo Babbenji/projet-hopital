@@ -59,7 +59,7 @@ namespace micro_service.Service
                   .Build();
 
 
-                this.rabbitMQPublisher.Publish<Email>(email, "email.exchange", "email.routingKey");
+                this.rabbitMQPublisher.Publish<Email>(email, "email.exchange", "email.routingkey");
             }
             else
             {
@@ -146,7 +146,7 @@ namespace micro_service.Service
                   .Build();
 
 
-                this.rabbitMQPublisher.Publish<Email>(email, "email.exchange", "email.routingKey");
+                this.rabbitMQPublisher.Publish<Email>(email, "email.exchange", "email.routingkey");
             }
             else
             {
