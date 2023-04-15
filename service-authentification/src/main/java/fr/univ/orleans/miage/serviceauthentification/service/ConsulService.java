@@ -1,8 +1,7 @@
 package fr.univ.orleans.miage.serviceauthentification.service;
 
-
+import fr.univ.orleans.miage.serviceauthentification.dto.PublicKeyDTO;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
@@ -50,20 +49,15 @@ public class ConsulService {
         Resource resource = resourceLoader.getResource("classpath:app.pub");
         Path filePath = Paths.get(resource.getURI());
 
-
-        JSONObject json = new JSONObject();
-
-
-
-        json.put("key", Files.readString(filePath));
-
+        PublicKeyDTO publicKeyDTO = new PublicKeyDTO();
+        publicKeyDTO.setKey(Files.readString(filePath));
 
         WebClient webClient = WebClient.create();
         String url = String.format("http://%s/v1/kv/config/crytographie-dotnet/clepublique",host+":"+port);
         WebClient.ResponseSpec responseSpec = webClient.put()
                 .uri(url)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(json.toString())
+                .bodyValue(publicKeyDTO)
                 .retrieve();
 
         HttpStatusCode responseStatus = responseSpec.toBodilessEntity().block().getStatusCode();
