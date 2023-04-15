@@ -17,28 +17,12 @@ public class RabbitMqConfig {
     private String queue;
 
     @Value("${spring.rabbitmq.exchange}")
-    private String exchange_auth;
+    private String exchange;
 
     @Value("${spring.rabbitmq.routingkey}")
-    private String routingKey_auth;
+    private String routingKey;
 
-    @Value("${spring.rabbitmq.exchange-facture}")
-    private String exchange_facture;
 
-    @Value("${spring.rabbitmq.routingkey-facture}")
-    private String routingKey_facture;
-
-    @Value("${spring.rabbitmq.exchange-rdvpatients}")
-    private String exchange_rdvpatients;
-
-    @Value("${spring.rabbitmq.exchange-notification-stock-bas}")
-    private String exchange_notification_stock_bas;
-
-    @Value("${spring.rabbitmq.routingkey-notification-stock-bas}")
-    private String routingKey_notification_stock_bas;
-
-    @Value("${spring.rabbitmq.routingkey-rdvpatients}")
-    private String routingKey_rdvpatients;
 
     @Value("${spring.rabbitmq.username}")
     private String username;
@@ -57,57 +41,17 @@ public class RabbitMqConfig {
 
 
     @Bean
-    Exchange authExchange() {
-        return ExchangeBuilder.directExchange(exchange_auth).durable(true).build();
+    Exchange exchange() {
+        return ExchangeBuilder.directExchange(exchange).durable(true).build();
     }
 
-    @Bean
-    Exchange factureExchange() {
-        return ExchangeBuilder.directExchange(exchange_facture).durable(true).build();
-    }
 
     @Bean
-    Exchange rdvpatientsExchange() {
-        return ExchangeBuilder.directExchange(exchange_rdvpatients).durable(true).build();
-    }
-
-    @Bean
-    Exchange stockBasExchange() {
-        return ExchangeBuilder.directExchange(exchange_notification_stock_bas).durable(true).build();
-    }
-
-    @Bean
-    Binding binding_auth() {
+    Binding binding() {
         return BindingBuilder
                 .bind(queue())
-                .to(authExchange())
-                .with(routingKey_auth)
-                .noargs();
-    }
-
-    @Bean
-    Binding binding_facture() {
-        return BindingBuilder
-                .bind(queue())
-                .to(factureExchange())
-                .with(routingKey_facture)
-                .noargs();
-    }
-    @Bean
-    Binding binding_rdvpatients() {
-        return BindingBuilder
-                .bind(queue())
-                .to(rdvpatientsExchange())
-                .with(routingKey_rdvpatients)
-                .noargs();
-    }
-
-    @Bean
-    Binding binding_stock_bas() {
-        return BindingBuilder
-                .bind(queue())
-                .to(stockBasExchange())
-                .with(routingKey_notification_stock_bas)
+                .to(exchange())
+                .with(routingKey)
                 .noargs();
     }
 

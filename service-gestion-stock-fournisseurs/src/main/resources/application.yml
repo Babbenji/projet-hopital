@@ -1,6 +1,4 @@
-jwt:
-  public:
-    key: classpath:app.pub
+
 
 server:
   port: 8084

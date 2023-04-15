@@ -1,8 +1,6 @@
 ##################   APPLICATION   ###############
 
-jwt:
-  public:
-    key: classpath:app.pub
+
 
 server:
   port: 8082
@@ -11,10 +9,16 @@ spring:
   application:
     name: service-notification
 
+  config:
+    import: "consul:"
+
   cloud:
     consul:
       host: ${CONSUL_HOST:localhost}
       port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        name: crytographie
 
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
@@ -22,23 +26,9 @@ spring:
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
 
-    # communication service-auth
-    exchange: user.exchange
-    routingkey: user.routingkey
-
-    # communication service-facture
-    exchange-facture: facture.exchange
-    routingkey-facture: facture.routingKey
-
-    # communication service-rdvpatients
-    exchange-rdvpatients: rdvpatients.exchange
-    routingkey-rdvpatients: rdvpatients.routingkey
-
-    # communication service-gestionStock
-    exchange-notification-stock-bas: notification.exchange
-    routingkey-notification-stock-bas: notification.routingkey
-
-    # queue globale pour tous les exchanges (envoi d'émails)
+    # communication
+    exchange: email.exchange
+    routingkey: email.routingkey
     queue: email.queue
 
 ##################   BASE DE DONNEES   ###############

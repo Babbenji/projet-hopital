@@ -20,8 +20,8 @@ spring:
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:guest}
     password: ${RABBITMQ_PASSWORD:guest}
-    exchange: user.exchange
-    routingkey: user.routingkey
+    exchange: email.exchange
+    routingkey: email.routingkey
 
   datasource:
     driver-class-name: org.postgresql.Driver

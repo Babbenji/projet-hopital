@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
 {
-    [Route("api/v1/facture")]
+    [Route("api/v1/comptable/facture")]
     [ApiController]
     [Authorize(Roles = "COMPTABLE")]
     public class FactureController : ControllerBase
@@ -21,6 +21,12 @@ namespace micro_service.Controllers
             this.env = env;
         }
 
+
+
+        /// <summary>
+        /// Lister toutes les factures
+        /// </summary>
+        /// <returns>liste de factures</returns>
         [HttpGet]
         public IActionResult GetFactures()
         {

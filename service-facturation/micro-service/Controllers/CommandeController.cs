@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
 {
-    [Route("api/v1/commande")]
+    [Route("api/v1/comptable/commande")]
     [ApiController]
     [Authorize(Roles = "COMPTABLE")]
     public class CommandeController : ControllerBase

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace micro_service.Controllers
 {
-    [Route("api/v1/bilan")]
+    [Route("api/v1/comptable/bilan")]
     [ApiController]
     [Authorize(Roles = "COMPTABLE")]
     public class BilanController : ControllerBase
