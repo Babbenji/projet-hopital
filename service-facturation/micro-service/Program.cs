@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MongoDB.Driver;
 using System.Security.Claims;
+using Winton.Extensions.Configuration.Consul;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,7 @@ builder.Services.AddSwaggerGen(c =>
         Title = "API Service comptable",
         Version = "1.0",
         Description = "Documentation OpenAPI du service comptable",
-        License = new OpenApiLicense() { Name= "Universite d'Orleans", Url= new Uri("https://www.univ-orleans.fr/fr") }
+        License = new OpenApiLicense() { Name= "Université d'Orléans", Url= new Uri("https://www.univ-orleans.fr/fr") }
     });
 });
 
@@ -62,12 +63,35 @@ builder.Services.AddHostedService<ConsulRegisterService>();
 
 builder.Services.AddHostedService<RabbitMQListener>();
 
-builder.Services.AddHostedService<PublicKeyFetching>();
-
-
-
 
 builder.Services.AddHealthChecks();
+
+
+
+builder.Configuration.AddConsul("config/crytographie-dotnet/clepublique", options =>
+{
+    //Configure Consul Connection Details, i.e. Address, DataCenter, Certificates and Auth details
+    options.ConsulConfigurationOptions =
+                    cco => { cco.Address = new Uri("http://" + builder.Configuration.GetSection("Consul:Host").Value + ":" + builder.Configuration.GetSection("Consul:Port").Value); };
+    //Making Configuration either optional or not
+    options.Optional = true;
+    //Wait Time before pulling an change from Consul
+    options.PollWaitTime = TimeSpan.FromSeconds(5);
+    //Whether Reload the Configuration if any changes are detected
+    options.ReloadOnChange = true;
+    //What action to perform if On Load Fails
+    options.OnLoadException = (consulLoadExceptionContext) =>
+    {
+        Console.WriteLine($"Error onLoadException {consulLoadExceptionContext.Exception.Message} and stacktrace {consulLoadExceptionContext.Exception.StackTrace}");
+        throw consulLoadExceptionContext.Exception;
+    };
+    //What action to perform if Watching Changes failed
+    options.OnWatchException = (consulWatchExceptionContext) =>
+    {
+        Console.WriteLine($"Unable to watchChanges in Consul due to {consulWatchExceptionContext.Exception.Message}");
+        return TimeSpan.FromSeconds(2);
+    };
+});
 
 
 
@@ -83,7 +107,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuerSigningKey = true,
         RoleClaimType = "scope",
         NameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier",
-        IssuerSigningKey = RSAConfiguration.RSASignature()
+        IssuerSigningKey = RSAConfiguration.RSASignature(builder.Configuration.GetSection("key").Value)
     };
 });
 
@@ -92,12 +116,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 var app = builder.Build();
 
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.Use(async (context, next) =>
@@ -114,7 +134,7 @@ app.Use(async (context, next) =>
                 if (expiresUtc <= DateTime.UtcNow)
                 {
                     context.Response.StatusCode = 401;
-                    await context.Response.WriteAsync("Token expirï¿½");
+                    await context.Response.WriteAsync("Token expiré");
                     return;
                 }
             }

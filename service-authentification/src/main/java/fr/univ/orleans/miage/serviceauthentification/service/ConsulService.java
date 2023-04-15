@@ -1,6 +1,8 @@
 package fr.univ.orleans.miage.serviceauthentification.service;
 
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.*;
@@ -15,6 +17,12 @@ import java.nio.file.Paths;
 public class ConsulService {
     private final ResourceLoader resourceLoader;
 
+    @Value("${spring.cloud.consul.host}")
+    private String host;
+
+    @Value("${spring.cloud.consul.port}")
+    private int port;
+
     public ConsulService(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
@@ -22,7 +30,7 @@ public class ConsulService {
         WebClient webClient = WebClient.create();
         Resource resource = resourceLoader.getResource("classpath:app.pub");
         Path filePath = Paths.get(resource.getURI());
-        String url = String.format("http://%s/v1/kv/config/crytographie/clepublique", "localhost:8500");
+        String url = String.format("http://%s/v1/kv/config/crytographie/clepublique", host+":"+port);
         WebClient.ResponseSpec responseSpec = webClient.put()
                 .uri(url)
                 .contentType(MediaType.TEXT_PLAIN)
@@ -37,5 +45,32 @@ public class ConsulService {
 
     }
 
+
+    public void storePublicKeyDotnet()throws Exception{
+        Resource resource = resourceLoader.getResource("classpath:app.pub");
+        Path filePath = Paths.get(resource.getURI());
+
+
+        JSONObject json = new JSONObject();
+
+
+
+        json.put("key", Files.readString(filePath));
+
+
+        WebClient webClient = WebClient.create();
+        String url = String.format("http://%s/v1/kv/config/crytographie-dotnet/clepublique",host+":"+port);
+        WebClient.ResponseSpec responseSpec = webClient.put()
+                .uri(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(json.toString())
+                .retrieve();
+
+        HttpStatusCode responseStatus = responseSpec.toBodilessEntity().block().getStatusCode();
+
+        if (responseStatus != HttpStatus.OK) {
+            throw new Exception("Failed to store public key in Consul");
+        }
+    }
 }
 

@@ -23,12 +23,12 @@ namespace micro_service.ConsulConfig
             AgentServiceRegistration agentServiceRegistration = new AgentServiceRegistration()
             {
                 Address = uri.Host,
-                Name = "service-comptable",
+                Name = "service-facturation",
                 Port = uri.Port,
-                ID = "service-comptable"
+                ID = "service-facturation"
             };
 
-           await this.consulClient.Agent.ServiceDeregister("service-comptable", cancellationToken);
+           await this.consulClient.Agent.ServiceDeregister("service-facturation", cancellationToken);
            await this.consulClient.Agent.ServiceRegister(agentServiceRegistration, cancellationToken);
             
         }
@@ -37,7 +37,7 @@ namespace micro_service.ConsulConfig
         {
             try
             {
-                await this.consulClient.Agent.ServiceDeregister("service-comptable", cancellationToken);
+                await this.consulClient.Agent.ServiceDeregister("service-facturation", cancellationToken);
                 
             }
             catch (Exception ex)

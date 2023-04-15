@@ -15,7 +15,7 @@ namespace micro_service.EventBus
             this.factory.Uri = new Uri($"{rabbitMQConfig.Value.Protocol}://{rabbitMQConfig.Value.Username}:{rabbitMQConfig.Value.Password}@{rabbitMQConfig.Value.Host}:{rabbitMQConfig.Value.Port}");
             this.factory.AutomaticRecoveryEnabled = true;
             this.factory.DispatchConsumersAsync = false;
-            this.connection = factory.CreateConnection("service-comptable");
+            this.connection = factory.CreateConnection("service-facturation");
         }
 
         public IConnection Connection

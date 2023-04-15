@@ -29,6 +29,7 @@ public class InitUtilisateursRunner implements CommandLineRunner {
 
         try {
             consulService.storePublicKey();
+            consulService.storePublicKeyDotnet();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

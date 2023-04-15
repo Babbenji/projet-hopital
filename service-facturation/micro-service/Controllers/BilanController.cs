@@ -1,4 +1,5 @@
 ﻿using micro_service.Models.DTO;
+using micro_service.Security;
 using micro_service.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,8 @@ namespace micro_service.Controllers
             this.bilanService = bilanService;
         }
 
+       
+
         [HttpGet("recette")]
         public IActionResult GetRecette() 
         {
@@ -26,13 +29,6 @@ namespace micro_service.Controllers
             else
                 return NoContent();
         }
-
-         [AllowAnonymous]
-         [HttpGet("hello-world")]
-         public IActionResult GetHelloWorld()
-         {
-             return Ok("Hello World");
-         }
 
     }
 }

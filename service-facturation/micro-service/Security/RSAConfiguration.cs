@@ -1,19 +1,16 @@
-﻿using Consul;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
-using System.Net;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace micro_service.Security
 {
-    public static class RSAConfiguration
+    public class RSAConfiguration
     {
         
-        public static RsaSecurityKey RSASignature()
+        public static RsaSecurityKey RSASignature(string publicKeyString)
         {
-            StringReader reader = new StringReader(RsaKey.publicKey);
+            StringReader reader = new StringReader(publicKeyString);
             PemReader pemReader = new PemReader(reader);
             RsaKeyParameters publicKey = (RsaKeyParameters)pemReader.ReadObject();
             return new RsaSecurityKey(new RSAParameters
