@@ -76,7 +76,7 @@ builder.Configuration.AddConsul("config/crytographie-dotnet/clepublique", option
     //Making Configuration either optional or not
     options.Optional = true;
     //Wait Time before pulling an change from Consul
-    options.PollWaitTime = TimeSpan.FromSeconds(5);
+    options.PollWaitTime = TimeSpan.FromSeconds(1);
     //Whether Reload the Configuration if any changes are detected
     options.ReloadOnChange = true;
     //What action to perform if On Load Fails
