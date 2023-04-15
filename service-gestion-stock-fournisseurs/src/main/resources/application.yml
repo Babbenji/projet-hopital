@@ -40,3 +40,7 @@ spring:
     exchange-facture: facture.exchange
     routingkey-facture-fournisseur : factureCmd.routingKey
     routingkey-facture-patient: facture.routingKey
+
+    ### Exchange stock bas ###
+    exchange-notification-stock-bas: stockBas.exchange
+    routingkey-notification-stock-bas: stockBas.routingKey
