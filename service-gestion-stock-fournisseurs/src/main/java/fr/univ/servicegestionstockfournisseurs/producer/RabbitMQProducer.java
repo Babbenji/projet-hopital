@@ -24,10 +24,10 @@ public class RabbitMQProducer {
     @Value("${spring.rabbitmq.routingkey-facture-patient}")
     private String routingKeyFacturePatient;
 
-    @Value("${spring.rabbitmq.exchange-notification-stock-bas}")
+    @Value("spring.rabbitmq.exchange-notification-stock-bas")
     private String exchangeNotificationStockBas;
 
-    @Value("${spring.rabbitmq.routingkey-notification-stock-bas}")
+    @Value("spring.rabbitmq.routingkey-notification-stock-bas")
     private String routingKeyNotificationStockBas;
 
 
