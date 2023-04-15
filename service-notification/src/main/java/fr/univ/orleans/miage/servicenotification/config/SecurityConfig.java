@@ -20,7 +20,6 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-//    @Value("${clepublique}")
     @Value("${jwt.public.key}")
     RSAPublicKey key;
 

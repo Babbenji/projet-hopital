@@ -36,8 +36,8 @@ public class InitUtilisateursRunner implements CommandLineRunner {
 
         try {
             // Créer un compte admin
-            String admin = utilisateurService.inscriptionConfirmation("admin@hopital.fr", passwordEncoder.encode("admin"));
-            utilisateurService.confirmationCompte(admin);
+//            String admin = utilisateurService.inscriptionConfirmation("admin@hopital.fr", passwordEncoder.encode("admin"));
+//            utilisateurService.confirmationCompte(admin);
 
             // Créer un compte médecin
             String medecin = utilisateurService.inscriptionConfirmation("medecin@hopital-medecin.fr", passwordEncoder.encode("mdp"));

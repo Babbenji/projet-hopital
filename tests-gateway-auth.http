@@ -3,7 +3,7 @@ POST http://localhost:8080/api/auth/inscription/sans-confirmation
 Content-Type: application/json
 
 {
-  "email": "frederic@hopital-medecin.fr",
+  "email": "frederic2@hopital-medecin.fr",
   "password": "fred"
 }
 
