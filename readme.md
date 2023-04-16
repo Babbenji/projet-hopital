@@ -1,6 +1,6 @@
 <img height="130" src="./ressources/docker.png"/> $~~~$ <img height="120" src="./ressources/rabbitmq.png" />$~~~$<img height="120" src="./ressources/spring-framework.png" />$~~~$<img height="120" src="./ressources/springcloud-logo.png"/><img height="120" src="./ressources/logonet.png"/><img height="100" src="./ressources/logo-git.png"/>
 <br>
-<img height="120" src="./ressources/vault-logo.png"/>$~~~$<img height="120" src="./ressources/consul2.png"/>$~~~$<img height="120" src="./ressources/karate.png"/>$~~~$<img height="120" src="./ressources/mongodblogo.png"/>$~~~$<img height="120" src="./ressources/postgre.png"/>
+<img height="120" src="./ressources/vault-logo.png"/>$~~~$<img height="120" src="./ressources/consul2.png"/>$~~~$<img height="120" src="./ressources/karate.png"/>$~~~$<img height="120" src="./ressources/mongodblogo.png"/>$~~~$<img height="120" src="./ressources/postgre.png"/>$~~~$<img height="120" src="./ressources/openapi.png"/>
 
 
 # Projet Hopital - Microservices
@@ -62,7 +62,7 @@ Veuillez trouver ci-joint un schéma d'architecture globale et un schéma qui pr
 
 ------------------------------------------------------
 # Déploiement
-+ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~8min)
++ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~10min windows / ~7min linux)
 ------------------------------------------------------
 # Technologies utilisées
 + Java 17
