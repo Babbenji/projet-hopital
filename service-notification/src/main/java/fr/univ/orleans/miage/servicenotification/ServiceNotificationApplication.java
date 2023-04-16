@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 @EnableRabbit
 @EnableDiscoveryClient
@@ -18,7 +19,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
         description = "Documentation OpenAPI du service de notification du micro-service Hôpital " +
                       "<br> Projet Innovation SI, Master 2 MIAGE, Université d'Orléans, 2022-2023",
         license =@License(name = "Université d'Orléans", url = "https://www.univ-orleans.fr/fr")))
-
+@RefreshScope
 public class ServiceNotificationApplication {
 
     public static void main(String[] args) {

@@ -12,6 +12,32 @@ services:
     networks:
       - consul
 
+  # Vault pour le stockage des secrets
+  vault:
+    image: vault:latest
+    container_name: vault
+    ports:
+      - "8200:8200"
+    restart: always
+    networks:
+      - consul
+    command: server -dev -dev-root-token-id=${VAULT_TOKEN}
+
+  # Service de configuration
+  config-serveur:
+    image: projet-hopital/config-serveur:latest
+    container_name: config-serveur
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+        -DVAULT_HOST=vault -DVAULT_PORT=8200 -DVAULT_TOKEN=${VAULT_TOKEN}
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
 
   # Service de messagerie
   rabbitmq:
@@ -23,9 +49,6 @@ services:
     restart: always
     networks:
       - consul
-
-  # Service de configuration
-
 
   # Service api gateway
   api-gateway:
@@ -70,6 +93,8 @@ services:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db-postgres-auth -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_auth
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=5672
+        -DVAULT_HOST=vault -DVAULT_PORT=8200 -DVAULT_TOKEN=${VAULT_TOKEN}
+        -DCONFIG_SERVER_HOST=config-serveur -DCONFIG_SERVER_PORT=8888
     ports:
       - "8081:8081"
     restart: always
@@ -107,6 +132,8 @@ services:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db-postgres-notif -DDB_PORT=5432 -DDB_USER=postgres -DDB_PASSWORD=postgres -DDB_NAME=bdd_notif
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+        -DVAULT_HOST=vault -DVAULT_PORT=8200 -DVAULT_TOKEN=${VAULT_TOKEN}
+        -DCONFIG_SERVER_HOST=config-serveur -DCONFIG_SERVER_PORT=8888
     ports:
       - "8082:8082"
     restart: always
@@ -116,7 +143,8 @@ services:
       - discovery
       - db-postgres-notif
       - rabbitmq
-    #      - service-auth
+      - service-auth
+
 
 ####################################################################################
 #                  SERVICE DE GESTION DES PATIENTS ET PERSONNEL
@@ -145,6 +173,8 @@ services:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db-mongo-rdv-patients -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=rdvpatients
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+        -DVAULT_HOST=vault -DVAULT_PORT=8200 -DVAULT_TOKEN=${VAULT_TOKEN}
+        -DCONFIG_SERVER_HOST=config-serveur -DCONFIG_SERVER_PORT=8888
     ports:
       - "8083:8083"
     restart: always
@@ -182,6 +212,8 @@ services:
         -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
         -DDB_HOST=db-mongo-stockfournisseurs -DDB_PORT=27017 -DDB_USER=mongo -DDB_PASSWORD=mongo -DDB_NAME=gestionStock
         -DRABBITMQ_USERNAME=guest -DRABBITMQ_PASSWORD=guest -DRABBITMQ_HOST=rabbitmq -DRABBITMQ_PORT=15672
+        -DVAULT_HOST=vault -DVAULT_PORT=8200 -DVAULT_TOKEN=${VAULT_TOKEN}
+        -DCONFIG_SERVER_HOST=config-serveur -DCONFIG_SERVER_PORT=8888
     ports:
       - "8084:8084"
     restart: always

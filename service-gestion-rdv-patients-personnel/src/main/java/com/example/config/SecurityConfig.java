@@ -20,7 +20,7 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 
-    @Value("${clepublique}")
+    @Value("${publicKey}")
     RSAPublicKey key;
 
     private static final String[] LISTE_URI_PERMIT_ALL = {

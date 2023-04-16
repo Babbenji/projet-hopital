@@ -22,6 +22,20 @@
 
     <dependencies>
 
+        <!-- Vault -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+        </dependency>
+
+        <!-- Spring Cloud Config Client -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
         <!-- Security OAuth2.0 (inclusion de Spring Security) -->
 
         <dependency>
@@ -29,6 +43,8 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
             <version>3.0.4</version>
         </dependency>
+
+        <!-- Consul et Actuator -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,6 +58,8 @@
             <version>4.0.1</version>
         </dependency>
 
+        <!-- JPA et Base de données PostgreSQL -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -54,6 +72,8 @@
             <version>42.5.4</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- Dépendances de base -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

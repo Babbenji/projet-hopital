@@ -22,6 +22,21 @@
 
     <dependencies>
 
+        <!-- Vault -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+        </dependency>
+
+        <!-- Spring Cloud Config Client -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+
         <!-- Spring Security et OAuth2 -->
 
         <dependency>
@@ -46,11 +61,6 @@
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-config</artifactId>
-            <version>3.0.4</version>
-        </dependency>
 
        <!-- Email -->
 

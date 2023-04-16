@@ -1,46 +1,22 @@
-
-
-server:
-  port: 8084
-
 spring:
   application:
     name: service-gestion-stock-fournisseurs
-  data:
-    mongodb:
-      database: ${DB_NAME:gestionStock}
-      host: ${DB_HOST:localhost}
-      port: ${DB_PORT:27017}
-
-  config:
-    import: "consul:"
 
   cloud:
-    consul:
-      host: ${CONSUL_HOST:localhost}
-      port: ${CONSUL_PORT:8500}
-      config:
+    vault:
+      scheme: http
+      host: ${VAULT_HOST:localhost}
+      port: ${VAULT_PORT:8200}
+      authentication: TOKEN
+      token: ${VAULT_TOKEN:token45}
+      kv:
         enabled: true
-        name: crytographie
 
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}, vault://
 
-  # TODO configurer le service de messagerie
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
-
-    #### Modif stock####
-    exchange-stock: stock.exchange
-    queue: stock.queue
-    routingkey-stock: stock.routingkey
-
-    #### Exchange des factures ####
-    exchange-facture: facture.exchange
-    routingkey-facture-fournisseur : factureCmd.routingKey
-    routingkey-facture-patient: facture.routingKey
-
-    ### Exchange stock bas ###
-    exchange-notification: email.exchange
-    routingkey-notification: notification.routingkey
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
