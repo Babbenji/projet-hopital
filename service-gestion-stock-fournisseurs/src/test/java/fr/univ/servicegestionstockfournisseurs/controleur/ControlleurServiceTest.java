@@ -88,7 +88,8 @@ public class ControlleurServiceTest {
 
 
     @Test
-    public void testAddNewUtilisateur_UtilisateurDejaExistant() throws UtilisateurDejaExistantException {
+    public void testAddNewUtilisateur_UtilisateurDejaExistant() throws UtilisateurDejaExistantException
+    {
         Utilisateur utilisateur = new Utilisateur("John", "Doe", "john.doe@example.com");
         Mockito.doThrow(UtilisateurDejaExistantException.class).when(facadeServiceGestionStock).ajouterUtilisateur(Mockito.any(Utilisateur.class));
         ResponseEntity<Object> response = controlleurService.addNewUtilisateur(utilisateur);

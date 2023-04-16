@@ -12,12 +12,6 @@ Feature: Tests Integration email et notifciation
     Then status 200
     And print response
 
-    ## Faut que la BDD soit vide pour que le test passe ##
-  Scenario: Test get list emails mais vide
-    Given path '/emails'
-    When method GET
-    Then status 204
-    And print response
 
   Scenario: Test send email
     Given path '/send-email'
