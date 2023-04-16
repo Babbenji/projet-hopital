@@ -58,8 +58,8 @@ Enfin, nous avons mis en place des tests Karaté pour assurer une couverture com
 
 Veuillez trouver ci-joint un schéma d'architecture globale et un schéma qui précise les échanges RabbitMQ.
 
+<img height="400" src="./ressources/Schema-Architecture-Microservices-Finale.png" width="600"/>$~~~$<img height="400" src="./ressources/echanges-rabbitmq.png" width="600"/>
 
-<img height="400" src="./ressources/Schéma-Architecture-Microservices-ArchiV3.png" width="600"/>
 ------------------------------------------------------
 # Déploiement
 + Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~8min)
