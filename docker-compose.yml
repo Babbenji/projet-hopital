@@ -129,8 +129,12 @@ services:
     ports:
       - "27018:27017"
     restart: always
+    volumes:
+      - ./initBDDRDVPatients.js:/docker-entrypoint-initdb.d/initBDDRDVPatients.js
     networks:
       - consul
+    environment:
+      - MONGO_INITDB_DATABASE=rdvpatients
 
   # Application Spring Boot
   service-rdv-patients:
