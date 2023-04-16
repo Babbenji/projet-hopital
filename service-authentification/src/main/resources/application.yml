@@ -1,8 +1,15 @@
 spring:
   application:
     name: service-authentification
+  cloud:
+   vault:
+     token: ${VAULT_TOKEN:token45}
+     scheme: http
+     kv:
+      enabled: true
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888, vault://
+
 
 management:
   endpoints:

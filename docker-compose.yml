@@ -24,7 +24,31 @@ services:
     networks:
       - consul
 
+  # Vault pour le stockage des secrets
+  vault:
+      image: vault:latest
+      container_name: vault
+      ports:
+      - "8200:8200"
+      restart: always
+      networks:
+      - consul
+      command: server -dev -dev-root-token-id=${VAULT_TOKEN}
+
   # Service de configuration
+  config-serveur:
+    image: projet-hopital/config-serveur:latest
+    container_name: config-serveur
+    environment:
+      JAVA_TOOL_OPTIONS:
+        -DCONSUL_HOST=discovery -DCONSUL_PORT=8500
+    ports:
+      - "8888:8888"
+    restart: always
+    networks:
+      - consul
+    depends_on:
+      - discovery
 
 
   # Service api gateway
@@ -76,6 +100,8 @@ services:
     networks:
       - consul
     depends_on:
+      - vault
+      - config-serveur
       - discovery
       - db-postgres-auth
       - rabbitmq

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # commande pour construire une image docker de chaque service spring boot
 
 #for dir in */ ; do
@@ -14,6 +15,10 @@
 
 # commande pour construite l'image docker du service .NET
 docker build -t service-comptable:1.0 ./service-facturation
+
+
+# variable d'environnement
+export VAULT_TOKEN="token"
 
 
 # commande pour construire et executer les containers docker

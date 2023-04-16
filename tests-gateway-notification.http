@@ -116,15 +116,6 @@ Content-Type: application/json
 %}
 
 
-### Endpoint for getting all the emails
-GET http://localhost:8080/api/notification/emails
-Authorization: {{admin_token}}
-
-> {%
-    client.test("Request executed successfully", function() {
-        client.assert(response.status === 200, "Response status is not 200");
-    });
-%}
 
 ### Endpoint for getting all the emails
 GET http://localhost:8080/api/notification/emails

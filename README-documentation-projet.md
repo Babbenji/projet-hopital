@@ -200,3 +200,7 @@ Démarrer le serveur Spring Cloud Config et consulter la configuration des servi
 http://localhost:8888/projet-hopital/default
 
 Le serveur a donc récupéré les fichiers de configuration des services dans le repo git et les a mis à disposition des services sous format JSON à l'URL : http://localhost:8888/projet-hopital/default
+
+
+#### Vault Configuration pour le partage de clés secrètes et de mots de passe
+

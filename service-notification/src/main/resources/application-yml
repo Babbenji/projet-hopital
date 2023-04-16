@@ -1,12 +1,18 @@
 spring:
   application:
     name: service-notification
+  cloud:
+    vault:
+      token: hvs.4zxLUBwlKAmIbNkpRjlLFByA
+      scheme: http
+      kv:
+        enabled: true
 
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888, vault://
 
 
-# configuration de l'envoi de mail avec gmail
+  # configuration de l'envoi de mail avec gmail
   mail:
     host: smtp.gmail.com
     port: 587

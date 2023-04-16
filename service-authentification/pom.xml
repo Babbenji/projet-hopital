@@ -22,6 +22,13 @@
 
     <dependencies>
 
+        <!-- Vault -->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+        </dependency>
+
         <!-- Spring Cloud Config Client -->
 
         <dependency>
