@@ -72,12 +72,12 @@ Authorization: {{secretaire_token}}
 
 ### supprimer un produit ###
 
-DELETE http://localhost:8080/gestionnaire/produits/{idProduit}
+DELETE http://localhost:8080/gestionnaire/produits/2
 Authorization: {{secretaire_token}}
 
 ### supprimer un produit d'un catalogue fournisseur###
 
-DELETE http://localhost:8080/gestionnaire/fournisseurs/{idFournisseur}/catalogue/{idProduit}
+DELETE http://localhost:8080/gestionnaire/fournisseurs/2/catalogue/2
 Authorization: {{secretaire_token}}
 
 ### get stock produit ###
@@ -161,7 +161,7 @@ Authorization: {{secretaire_token}}
 
 ### Get panier d une commande ###
 
-GET http://localhost:8080/gestionnaire/commandes/{idCommande}/panier
+GET http://localhost:8080/gestionnaire/commandes/1/panier
 Authorization: {{secretaire_token}}
 
 ### Get all commandes ###

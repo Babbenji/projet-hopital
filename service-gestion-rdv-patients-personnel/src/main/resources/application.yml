@@ -1,38 +1,18 @@
-
-
-server:
-  port: 8083
-
 spring:
   application:
     name: service-gestion-rdv-patients-personnel
-  data:
-    mongodb:
-      database: ${DB_NAME:rdvpatients}
-      host: ${DB_HOST:localhost}
-      port: ${DB_PORT:27018}
-
-  config:
-    import: "consul:"
-
   cloud:
-    consul:
-      host: ${CONSUL_HOST:localhost}
-      port: ${CONSUL_PORT:8500}
-      config:
+    vault:
+      token: ${VAULT_TOKEN:token45}
+      scheme: http
+      kv:
         enabled: true
-        name: crytographie
+  config:
+    import: optional:configserver:http://localhost:8888, vault://
 
-  rabbitmq:
-    host: ${RABBITMQ_HOST:localhost}
-    port: ${RABBITMQ_PORT:5672}
-    username: ${RABBITMQ_USERNAME:guest}
-    password: ${RABBITMQ_PASSWORD:guest}
 
-  #  Communication Service Notification
-    exchange-email: email.exchange
-    routingkey-email: email.routingKey
-
-    #  Communication Service Stock
-    exchange-stock: stock.exchange
-    routingkey-stock: stock.routingkey
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @EnableDiscoveryClient
@@ -17,7 +18,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 		version = "1.0",
 		description = "Documentation OpenAPI du service de gestion des RDV des patients et du personnel",
 		license = @License(name = "Université d'Orléans", url = "https://www.univ-orleans.fr/fr")))
-
+@RefreshScope
 public class ServiceGestionRdvPatientsPersonnelApplication {
 
 	public static void main(String[] args) {
