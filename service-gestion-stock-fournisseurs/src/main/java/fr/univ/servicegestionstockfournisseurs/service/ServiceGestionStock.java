@@ -2,11 +2,12 @@ package fr.univ.servicegestionstockfournisseurs.service;
 
 import fr.univ.servicegestionstockfournisseurs.modele.*;
 import fr.univ.servicegestionstockfournisseurs.modele.DTO.FactureDTO;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FournisseurDTO;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.ProduitMedicalDTO;
 import fr.univ.servicegestionstockfournisseurs.producer.RabbitMQProducer;
 import fr.univ.servicegestionstockfournisseurs.repository.*;
 import fr.univ.servicegestionstockfournisseurs.service.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -33,17 +34,24 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur))
                 {
                         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
+                        System.out.println(utilisateur);
                         Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
-
+                        System.out.println(panier);
                         for (Map.Entry<Integer, Integer> entry : panier.entrySet())
                         {
+                                System.out.println(entry.getKey());
+
                                 ProduitMedical produit = produitMedicalRepository.findByIdProduitMedical(entry.getKey());
+                                System.out.println(produit);
                                 for (Fournisseur fournisseur : fournisseurRepository.findAll())
                                 {
                                         if (fournisseur.getCatalogueFournisseur().containsKey(entry.getKey()))
                                         {
                                                 produit.setStockProduitMedical(produit.getStockProduitMedical()+entry.getValue());
                                                 produitMedicalRepository.save(produit);
+                                                System.out.println(commande.getProduitsCommande());
+                                                System.out.println(produit.getNomProduitMedical());
+                                                System.out.println(entry.getValue());
                                                 commande.getProduitsCommande().put(produit.getNomProduitMedical(),entry.getValue());
                                         }
                                 }
@@ -81,15 +89,20 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         @Override
         public void ajouterProduitFournisseur(int idFournisseur, int idProduit) throws FournisseurInexistantException, ProduitDejaDansCatalogueException, ProduitInexistantException {
+                System.out.println(idFournisseur);
+                System.out.println(idProduit);
                 if (produitMedicalRepository.existsByIdProduitMedical(idProduit)) {
                         if (fournisseurRepository.existsByIdFournisseur(idFournisseur)) {
                                 Fournisseur fournisseur = fournisseurRepository.findByIdFournisseur(idFournisseur);
-                                if (fournisseurRepository.existsByCatalogueFournisseur(idProduit)) {
+                                System.out.println(fournisseur);
+                                if (fournisseur.getCatalogueFournisseur().containsKey(idProduit)) {
                                         throw new ProduitDejaDansCatalogueException();
                                 }
-                                ProduitMedical produitMedical = produitMedicalRepository.findByIdProduitMedical(idProduit);
-                                fournisseur.getCatalogueFournisseur().put(idProduit, produitMedical.getNomProduitMedical());
-                                fournisseurRepository.save(fournisseur);
+                                else {
+                                        ProduitMedical produitMedical = produitMedicalRepository.findByIdProduitMedical(idProduit);
+                                        fournisseur.getCatalogueFournisseur().put(idProduit, produitMedical.getNomProduitMedical());
+                                        fournisseurRepository.save(fournisseur);
+                                }
                         } else {
                                 throw new FournisseurInexistantException();
                         }
@@ -133,13 +146,14 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
         @Override
         public void supprimerProduitPanier(int idUtilisateur, int idProduit) throws ProduitInexistantException {
-
+                System.out.println(idUtilisateur);
+                System.out.println(idProduit);
                 if (utilisateurRepository.existsUtilisateurByIdUtilisateur(idUtilisateur)) {
                         Utilisateur utilisateur = utilisateurRepository.findUtilisateurByIdUtilisateur(idUtilisateur);
-
+                        System.out.println(utilisateur.toString());
 
                         Map<Integer, Integer> panier = utilisateur.getPanierUtilisateur();
-
+                        System.out.println(panier);
                         if (panier.containsKey(idProduit)) {
                                 panier.remove(idProduit);
                                 utilisateurRepository.save(utilisateur);
@@ -184,47 +198,73 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
 
 
         @Override
-        public void modifierFournisseur(int idFournisseur , Map<String,Object> attributsAModifier) throws FournisseurInexistantException,IllegalArgumentException
+        public void modifierFournisseur(int idFournisseur , FournisseurDTO fournisseurDTO) throws FournisseurInexistantException,IllegalArgumentException
         {
+                System.out.println(fournisseurDTO);
                 if (!fournisseurRepository.existsByIdFournisseur(idFournisseur))
                 {
+                        System.out.println("test");
                         throw new FournisseurInexistantException();
                 }
                 Fournisseur fournisseur = fournisseurRepository.findByIdFournisseur(idFournisseur);
-                for (Map.Entry<String,Object> attributs : attributsAModifier.entrySet())
-                {
-                        switch (attributs.getKey()) {
-                                case "nomFournisseur" ->
-                                        fournisseur.setNomFournisseur((String) attributs.getValue());
-
-                                case "adresseFournisseur" ->
-                                        fournisseur.setAdresseFournisseur((String) attributs.getValue());
-                                case "telephoneFournisseur" ->
-                                        fournisseur.setTelephoneFournisseur((String) attributs.getValue());
-                                default -> throw new IllegalArgumentException("Attribut inconnu");
-                        }
+                if(fournisseurDTO.getNomFournisseur() != null) {
+                        fournisseur.setNomFournisseur(fournisseurDTO.getNomFournisseur());
                 }
+                if (fournisseurDTO.getAdresseFournisseur() != null) {
+                        fournisseur.setAdresseFournisseur(fournisseurDTO.getAdresseFournisseur());
+                }
+                if (fournisseurDTO.getTelephoneFournisseur() != null) {
+                        fournisseur.setTelephoneFournisseur(fournisseurDTO.getTelephoneFournisseur());
+                }
+
+
+//                for (Map.Entry<String,Object> attributs : attributsAModifier.entrySet())
+//                {
+//                        switch (attributs.getKey()) {
+//                                case "nomFournisseur" ->
+//                                        fournisseur.setNomFournisseur((String) attributs.getValue());
+//
+//                                case "adresseFournisseur" ->
+//                                        fournisseur.setAdresseFournisseur((String) attributs.getValue());
+//                                case "telephoneFournisseur" ->
+//                                        fournisseur.setTelephoneFournisseur((String) attributs.getValue());
+//                                default -> throw new IllegalArgumentException("Attribut inconnu");
+//                        }
+//                }
                 fournisseurRepository.save(fournisseur);
         }
         @Override
-        public void modifierProduit(int idFournisseur , Map<String,Object> attributsAModifier) throws ProduitInexistantException {
-                if (!produitMedicalRepository.existsByIdProduitMedical(idFournisseur))
+        public void modifierProduit(int idProduit , ProduitMedicalDTO produitMedicalDTO) throws ProduitInexistantException {
+                System.out.println(produitMedicalDTO);
+                if (!produitMedicalRepository.existsByIdProduitMedical(idProduit))
                 {
                         throw new ProduitInexistantException();
                 }
-                ProduitMedical produitMedical = produitMedicalRepository.findByIdProduitMedical(idFournisseur);
-                for (Map.Entry<String,Object> attributs : attributsAModifier.entrySet())
-                {
-                        switch (attributs.getKey()) {
-                                case "nomProduitMedical" ->
-                                        produitMedical.setNomProduitMedical((String) attributs.getValue());
-                                case "prixProduitMedical" ->
-                                        produitMedical.setPrixProduitMedical((double) attributs.getValue());
-                                case "descriptionProduitMedical" ->
-                                        produitMedical.setDescriptionProduitMedical((String) attributs.getValue());
-                                default -> throw new IllegalArgumentException("Attribut inconnu");
-                        }
+                ProduitMedical produitMedical = produitMedicalRepository.findByIdProduitMedical(idProduit);
+
+                if(produitMedicalDTO.getNomProduitMedical() != null) {
+                        produitMedical.setNomProduitMedical(produitMedicalDTO.getNomProduitMedical());
                 }
+                if (produitMedicalDTO.getDescriptionProduitMedical() != null) {
+                        produitMedical.setDescriptionProduitMedical(produitMedicalDTO.getDescriptionProduitMedical());
+                }
+                if (produitMedicalDTO.getPrixProduitMedical() != 0.0) {
+                        produitMedical.setPrixProduitMedical(produitMedicalDTO.getPrixProduitMedical());
+                }
+
+//                for (Map.Entry<String,Object> attributs : attributsAModifier.entrySet())
+//                {
+//                        switch (attributs.getKey()) {
+//                                case "nomProduitMedical" ->
+//                                        produitMedical.setNomProduitMedical((String) attributs.getValue());
+//                                case "prixProduitMedical" ->
+//                                        produitMedical.setPrixProduitMedical((double) attributs.getValue());
+//                                case "descriptionProduitMedical" ->
+//                                        produitMedical.setDescriptionProduitMedical((String) attributs.getValue());
+//                                default -> throw new IllegalArgumentException("Attribut inconnu");
+//                        }
+//                }
+
                 produitMedicalRepository.save(produitMedical);
         }
 
@@ -352,12 +392,15 @@ public class ServiceGestionStock implements FacadeServiceGestionStock {
         {
                 if (commandeRepository.existsByIdCommande(idCommande))
                 {
-                        return commandeRepository.findByIdCommande(idCommande).getProduitsCommande();
+                        Map<String,Integer> panier = commandeRepository.findByIdCommande(idCommande).getProduitsCommande();
+                        return panier;
                 }
                 else{
                         throw new CommandeInexistanteException();
                 }
+
         }
+
 
 
 
