@@ -1,15 +1,19 @@
 spring:
   application:
     name: service-gestion-rdv-patients-personnel
+    
   cloud:
     vault:
-      token: ${VAULT_TOKEN:token45}
       scheme: http
+      host: ${VAULT_HOST:localhost}
+      port: ${VAULT_PORT:8200}
+      authentication: TOKEN
+      token: ${VAULT_TOKEN:token45}
       kv:
         enabled: true
-  config:
-    import: optional:configserver:http://localhost:8888, vault://
 
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}, vault://
 
 management:
   endpoints:
