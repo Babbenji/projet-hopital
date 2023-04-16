@@ -1,13 +1,13 @@
-<img height="150" src="./ressources/docker.png"/><span style="color: transparent">-------------</span>
-<img height="150" src="./ressources/rabbitmq.png" /><span style="color: transparent">------------</span>
-<img height="150" src="./ressources/spring-framework.png" /><span style="color: transparent">-----------</span>
-<img height="150" src="./ressources/springcloud-logo.png"/><span style="color: transparent">-------------</span>
+<img height="150" src="./ressources/docker.png"/>
+<img height="150" src="./ressources/rabbitmq.png" />
+<img height="150" src="./ressources/spring-framework.png" />
+<img height="150" src="./ressources/springcloud-logo.png"/>
 <br>
 <br>
-<img height="120" src="./ressources/logo-git.png"/><span style="color: transparent">------------</span>
-<img height="150" src="./ressources/vault-logo.png"/><span style="color: transparent">------------</span>
-<img height="150" src="./ressources/consul2.png"/><span style="color: transparent">---------------</span>
-<img height="150" src="./ressources/karate.png"/><span style="color: transparent">----------------</span>
+<img height="120" src="./ressources/logo-git.png"/>
+<img height="150" src="./ressources/vault-logo.png"/>
+<img height="150" src="./ressources/consul2.png"/>
+<img height="150" src="./ressources/karate.png"/>
 <img height="150" src="./ressources/logonet.png"/>
 
 
