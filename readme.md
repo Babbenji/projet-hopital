@@ -1,8 +1,4 @@
-<img height="150" src="./ressources/docker.png"/>
-<img height="150" src="./ressources/rabbitmq.png" />
-<img height="150" src="./ressources/spring-framework.png" />
-<img height="150" src="./ressources/springcloud-logo.png"/>
-<br>
+<img height="150" src="./ressources/docker.png"/> $~~~$ <img height="150" src="./ressources/rabbitmq.png" />$~~~$<img height="150" src="./ressources/spring-framework.png" />$~~~$<img height="150" src="./ressources/springcloud-logo.png"/>
 <br>
 <img height="120" src="./ressources/logo-git.png"/>
 <img height="150" src="./ressources/vault-logo.png"/>
