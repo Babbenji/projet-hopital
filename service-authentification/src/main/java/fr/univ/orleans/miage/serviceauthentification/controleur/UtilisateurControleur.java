@@ -1,16 +1,14 @@
 package fr.univ.orleans.miage.serviceauthentification.controleur;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fr.univ.orleans.miage.serviceauthentification.dto.UserDTO;
 import fr.univ.orleans.miage.serviceauthentification.service.UtilisateurService;
 import fr.univ.orleans.miage.serviceauthentification.service.exceptions.*;
 import fr.univ.orleans.miage.serviceauthentification.modele.Utilisateur;
-import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmation;
 import fr.univ.orleans.miage.serviceauthentification.token.TokenConfirmationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.configurationprocessor.json.JSONException;
-//import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.function.Function;
 
@@ -31,6 +28,7 @@ import java.util.function.Function;
  * Controleur REST pour l'authentification et la gestion des comptes utilisateurs du microservice.
  * @version : 1.0
  */
+
 @RestController
 @RequestMapping(value = "/api/v1/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 @EnableWebSecurity@EnableMethodSecurity
@@ -77,6 +75,7 @@ public class UtilisateurControleur {
             String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
             Utilisateur u = utilisateurService.inscriptionSansConfirmation(userDTO.getEmail(), encodedPassword);
 
+
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{email}")
                     .buildAndExpand(userDTO.getEmail()).toUri();
@@ -93,34 +92,29 @@ public class UtilisateurControleur {
      * Permet à un utilisateur de créer un compte en lui envoyant un token de confirmation par email pour activer son compte
      * @param userDTO informations de l'utilisateur
      */
-//    @Operation(summary= "Permet à un utilisateur de créer un compte en lui envoyant un token de confirmation par email pour activer son compte")
-//    @PostMapping(value = "/inscription")
-//    public ResponseEntity<String> inscriptionConfirmation(@Valid @RequestBody UserDTO userDTO) {
-//        try {
-//            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-//            String u = utilisateurService.inscriptionConfirmation(userDTO.getEmail(), encodedPassword);
-//
-//            HttpHeaders reponseHeaders = new HttpHeaders();
-//            reponseHeaders.set("Token-Confirmation", u);
-//
-//            URI location = ServletUriComponentsBuilder
-//                    .fromCurrentRequest().path("/{email}")
-//                    .buildAndExpand(userDTO.getEmail()).toUri();
-//            String string = "{\"token\": \"Bearer "+u+"\"}";
-//            JSONObject json = null;
-//            try {
-//                json = new JSONObject(string);;
-//            } catch (JSONException e) {
-//                throw new RuntimeException(e);
-//            }
-//            return ResponseEntity
-//                    .created(location)
-//                    .headers(reponseHeaders)
-//                    .body(json.toString());
-//        } catch (UtilisateurDejaExistantException e) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
-//        }
-//    }
+    @Operation(summary= "Permet à un utilisateur de créer un compte en lui envoyant un token de confirmation par email pour activer son compte")
+    @PostMapping(value = "/inscription")
+    public ResponseEntity<String> inscriptionConfirmation(@Valid @RequestBody UserDTO userDTO) {
+        try {
+            String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+            String u = utilisateurService.inscriptionConfirmation(userDTO.getEmail(), encodedPassword);
+
+            HttpHeaders reponseHeaders = new HttpHeaders();
+            reponseHeaders.set("Token-Confirmation", u);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest().path("/{email}")
+                    .buildAndExpand(userDTO.getEmail()).toUri();
+            String string = "{\"token\": \"Bearer "+u+"\"}";
+
+            return ResponseEntity
+                    .created(location)
+                    .headers(reponseHeaders)
+                    .body(string);
+        } catch (UtilisateurDejaExistantException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email "+userDTO.getEmail()+" déjà pris");
+        }
+    }
 
     /**
      * Permet à un utilisateur de confirmer son compte après inscription via un token de confirmation
@@ -139,35 +133,30 @@ public class UtilisateurControleur {
         }
     }
 
+
     /**
      * Permet à un utilisateur de se connecter
      * @param userDTO informations de connexion
      */
-//    @Operation(summary= "Permet à un utilisateur de se connecter")
-//    @PostMapping("/connexion")
-//    public ResponseEntity login(@Valid @RequestBody UserDTO userDTO) {
-//        Utilisateur u = null;
-//        try {
-//            u = utilisateurService.getUtilisateurByEmail(userDTO.getEmail());
-//        } catch (UtilisateurInexistantException e) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//        }
-//        if (!u.isCompteActive()) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Le compte n'est pas encore activé.");
-//        }
-//        if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
-//            String token = genereToken.apply(u);
-//            String string = "{\"token\": \"Bearer "+token+"\"}";
-//            JSONObject json = null;
-//            try {
-//                json = new JSONObject(string);;
-//            } catch (JSONException e) {
-//                throw new RuntimeException(e);
-//            }
-//            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION,"Bearer "+token).body(json.toString());
-//        }
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-//    }
+    @Operation(summary= "Permet à un utilisateur de se connecter")
+    @PostMapping("/connexion")
+    public ResponseEntity login(@Valid @RequestBody UserDTO userDTO)  {
+        Utilisateur u = null;
+        try {
+            u = utilisateurService.getUtilisateurByEmail(userDTO.getEmail());
+        } catch (UtilisateurInexistantException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (!u.isCompteActive()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Le compte n'est pas encore activé.");
+        }
+        if (passwordEncoder.matches(userDTO.getPassword(), u.getPassword())) {
+            String token = genereToken.apply(u);
+            String jsonStr = "{" + "\"token\": \"" + "Bearer " + token + "\"" + "}";
+            return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION,"Bearer "+token).body(jsonStr);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 
     /**
      * Permet à un utilisateur de récupérer ses informations

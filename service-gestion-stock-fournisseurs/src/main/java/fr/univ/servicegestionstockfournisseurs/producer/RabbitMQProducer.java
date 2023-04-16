@@ -19,15 +19,13 @@ public class RabbitMQProducer {
     @Value("${spring.rabbitmq.routingkey-facture-fournisseur}")
     private String routingKeyFactureFournisseur;
 
-
-
     @Value("${spring.rabbitmq.routingkey-facture-patient}")
     private String routingKeyFacturePatient;
 
-    @Value("spring.rabbitmq.exchange-notification-stock-bas")
+    @Value("${spring.rabbitmq.exchange-notification}")
     private String exchangeNotificationStockBas;
 
-    @Value("spring.rabbitmq.routingkey-notification-stock-bas")
+    @Value("${spring.rabbitmq.routingkey-notification}")
     private String routingKeyNotificationStockBas;
 
 
@@ -59,7 +57,7 @@ public class RabbitMQProducer {
     public void envoieNotificationStockBas(String nomProduit)
     {
         LOGGER.info("Notification envoyée pour stock bas", nomProduit);
-        rabbitTemplate.convertAndSend(exchangeNotificationStockBas, routingKeyNotificationStockBas, nomProduit);
+        rabbitTemplate.convertAndSend(exchangeFacture, routingKeyNotificationStockBas, nomProduit);
     }
 }
 

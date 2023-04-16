@@ -20,9 +20,4 @@ namespace micro_service.Security
             });
         }
     }
-
-    public static class RsaKey
-    {
-        public static string publicKey = "";
-    } 
 }

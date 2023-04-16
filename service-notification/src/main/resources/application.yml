@@ -1,0 +1,87 @@
+##################   APPLICATION   ###############
+
+
+
+server:
+  port: 8082
+
+spring:
+  application:
+    name: service-notification
+
+  config:
+    import: "consul:"
+
+  cloud:
+    consul:
+      host: ${CONSUL_HOST:localhost}
+      port: ${CONSUL_PORT:8500}
+      config:
+        enabled: true
+        name: crytographie
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:15672}
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+
+    # communication
+    exchange: email.exchange
+    routingkey: email.routingkey
+    queue: email.queue
+
+    ### NOTIF ###
+    queue-notification: notification.queue
+    routingkey-notification: notification.routingkey
+
+
+##################   BASE DE DONNEES   ###############
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:bdd_notif}  #--> prod
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:postgres}  #--> dev
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+##################   EMAIL   ######################
+
+# configuration de l'envoi de mail avec gmail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    # version variable d'environnement
+    #username: ${EMAIL}
+    #password: ${PASSWORD}subject
+    # version directe et sécurisée par un mot de passe d'application gmail
+    username: noreply.hopital@gmail.com
+    password: iytmgdoiclzvqbzw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          smtp:
+            ssl:
+              trust: smtp.gmail.com
+
+##################   DEBUG   ######################
+
+  main:
+    banner-mode: off
+
+#logging.level.org.springframework: DEBUG
+#logging.level.org.hibernate: DEBUG
+#logging.level.org.hibernate.SQL: DEBUG

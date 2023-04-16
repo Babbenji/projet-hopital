@@ -17,8 +17,9 @@ namespace micro_service.EventBus
         private readonly IModel channelFacture;
         private readonly IModel channelFactureCmd;
         private readonly IWebHostEnvironment env;
+        private readonly IConfiguration configuration;
 
-        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, RabbitMQProvider rabbitMQProvider, ICommandeService commandeService, IFactureService factureService, IWebHostEnvironment env)
+        public RabbitMQConsumer(ILogger<RabbitMQConsumer> logger, RabbitMQProvider rabbitMQProvider, ICommandeService commandeService, IFactureService factureService, IWebHostEnvironment env, IConfiguration configuration)
         {
             this.commandeService = commandeService;
             this.logger = logger;
@@ -28,6 +29,7 @@ namespace micro_service.EventBus
             this.channelFactureCmd = this.rabbitMQProvider.Connection.CreateModel();
             this.factureService = factureService;
             this.env = env;
+            this.configuration = configuration;
         }
 
         public void DeclarationExchangeQueue()
@@ -94,7 +96,7 @@ namespace micro_service.EventBus
                 };
                 Facture facture = new() { DateFature = DateTime.Now, type = factureModel.type, listeProduits = factureModel.listeProduits, patient = patientModel, coutDuPatient = factureModel.coutDuPatient };
                 Facture entity = this.factureService.Create(facture);
-                this.factureService.ConfirmationFactureGenere(entity, "sololourde@outlook.fr", Path.Combine(env.ContentRootPath, "pdfFile-bill"));
+                this.factureService.ConfirmationFactureGenere(entity, this.configuration.GetValue<string>("secretaireEmail")??"", Path.Combine(env.ContentRootPath, "pdfFile-bill"));
                 logger.LogInformation($" message reçu le : {JsonConvert.SerializeObject(entity)}");
             }
 

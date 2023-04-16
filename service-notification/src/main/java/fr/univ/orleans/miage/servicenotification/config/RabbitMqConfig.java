@@ -22,6 +22,12 @@ public class RabbitMqConfig {
     @Value("${spring.rabbitmq.routingkey}")
     private String routingKey;
 
+    @Value("${spring.rabbitmq.queue-notification}")
+    private String queueNotif;
+
+    @Value("${spring.rabbitmq.routingkey-notification}")
+    private String routingKeyNotif;
+
 
 
     @Value("${spring.rabbitmq.username}")
@@ -38,6 +44,10 @@ public class RabbitMqConfig {
         return new Queue(queue, true);
     }
 
+    @Bean
+    public Queue queueNotif() {
+        return new Queue(queueNotif, true);
+    }
 
 
     @Bean
@@ -54,6 +64,16 @@ public class RabbitMqConfig {
                 .with(routingKey)
                 .noargs();
     }
+
+    @Bean
+    Binding bindingNotif() {
+        return BindingBuilder
+                .bind(queueNotif())
+                .to(exchange())
+                .with(routingKeyNotif)
+                .noargs();
+    }
+
 
     @Bean(name="service-notification")
     public ConnectionFactory connectionFactory() {

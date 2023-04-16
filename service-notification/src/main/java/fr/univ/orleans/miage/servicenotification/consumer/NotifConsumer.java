@@ -13,14 +13,15 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 
-//@Component
-//public class NotifConsumer
-//{
-//
-//    @RabbitListener(queues = "${spring.rabbitmq.queue}")
-//    public void listen() throws MessagingException {
-//
-//
-//    }
-//
-//}
+@Component
+public class NotifConsumer
+{
+
+    private static final Logger logger = LoggerFactory.getLogger(NotifConsumer.class);
+
+    @RabbitListener(queues = "${spring.rabbitmq.queue-notification}")
+    public void listen() throws MessagingException {
+            logger.info("Message reçu");
+    }
+
+}
