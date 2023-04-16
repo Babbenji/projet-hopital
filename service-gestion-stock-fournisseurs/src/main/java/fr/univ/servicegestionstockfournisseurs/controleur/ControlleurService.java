@@ -3,6 +3,8 @@ package fr.univ.servicegestionstockfournisseurs.controleur;
 
 
 import fr.univ.servicegestionstockfournisseurs.modele.Commande;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.FournisseurDTO;
+import fr.univ.servicegestionstockfournisseurs.modele.DTO.ProduitMedicalDTO;
 import fr.univ.servicegestionstockfournisseurs.modele.Fournisseur;
 import fr.univ.servicegestionstockfournisseurs.modele.ProduitMedical;
 import fr.univ.servicegestionstockfournisseurs.modele.Utilisateur;
@@ -43,7 +45,6 @@ public class ControlleurService {
         } catch (UtilisateurInexistantException e) {
             return ResponseEntity.badRequest().body("Utilisateur inexistant");
         }
-
     }
 
     @Operation(summary = "Permet d'ajouter un secrétaire gestionnaire de stock")
@@ -104,7 +105,7 @@ public class ControlleurService {
 
             return ResponseEntity.created(location).body("Produit ajouté au catalogue fournisseur");
         } catch (FournisseurInexistantException e) {
-            return ResponseEntity.notFound().build();
+                return ResponseEntity.notFound().build();
         } catch (ProduitDejaDansCatalogueException e) {
             return ResponseEntity.badRequest().body("Produit déjà dans le catalogue");
         } catch (ProduitInexistantException e) {
@@ -183,10 +184,10 @@ public class ControlleurService {
     @Operation(summary = "Permet de mettre à jour les informations d'un fournisseur")
     @PatchMapping(path = "/fournisseurs/{id}")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
-    public ResponseEntity<String> updateFournisseur(@PathVariable int id, @RequestBody Map<String,Object> attributsAModifier ) {
+    public ResponseEntity<String> updateFournisseur(@PathVariable int id, @RequestBody FournisseurDTO fournisseurDTO  ) {
         try {
 
-            facadeServiceGestionStock.modifierFournisseur(id,attributsAModifier);
+            facadeServiceGestionStock.modifierFournisseur(id,fournisseurDTO);
             return ResponseEntity.accepted().body("Fournisseur modifié");
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -195,12 +196,10 @@ public class ControlleurService {
 
     @Operation(summary = "Permet de mettre à jour les informations d'un produit")
     @PatchMapping(path = "/produits/{idProduit}")
-    @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
-    public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody Map<String,Object> attributsAModifier) {
+    public ResponseEntity<String> updateProduit(@PathVariable int idProduit, @RequestBody ProduitMedicalDTO produitMedicalDTO) {
         try {
-
-            facadeServiceGestionStock.modifierProduit( idProduit, attributsAModifier);
-            return ResponseEntity.ok("Produit modifié avec succès");
+            facadeServiceGestionStock.modifierProduit( idProduit, produitMedicalDTO);
+            return ResponseEntity.accepted().body("Produit modifié avec succès");
         }  catch (ProduitInexistantException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -212,7 +211,7 @@ public class ControlleurService {
     public ResponseEntity<Commande> getCommande(@PathVariable int id)
     {
         try {
-
+            //String identifiant = authentication.getName();
             Commande commande = facadeServiceGestionStock.getCommande(id);
             return ResponseEntity.ok(commande);
         } catch (CommandeInexistanteException e) {
@@ -251,7 +250,6 @@ public class ControlleurService {
     public ResponseEntity<Integer> getStockProduit(@PathVariable int idProduit)
     {
         try {
-
             int nbProduitStock = facadeServiceGestionStock.getStockProduit(idProduit);
             return ResponseEntity.ok(nbProduitStock);
         } catch (ProduitInexistantException e) {
@@ -265,23 +263,22 @@ public class ControlleurService {
     public ResponseEntity<String> getCatalogueFournisseur(@PathVariable int id)
     {
         try {
-
             Map<Integer,String> produits = facadeServiceGestionStock.getCatalogueFournisseur(id);
             return ResponseEntity.ok(produits.toString());
         } catch (FournisseurInexistantException e) {
             return ResponseEntity.notFound().build();
         }
     }
+
     @Operation(summary = "Récupère les produits d'une commande")
     @GetMapping(value = "/commandes/{idCommande}/panier")
     @PreAuthorize("hasAuthority('SCOPE_SECRETAIRE')")
-    public ResponseEntity<String> getProduitsCommande(@PathVariable int idCommande)
+    public ResponseEntity<?> getProduitsCommande(@PathVariable int idCommande)
     {
         try {
-
-            return ResponseEntity.ok().body(facadeServiceGestionStock.getPanierFromCommande(idCommande).toString());
-        }  catch (CommandeInexistanteException e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.ok(facadeServiceGestionStock.getPanierFromCommande(idCommande));
+        } catch (CommandeInexistanteException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 
