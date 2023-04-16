@@ -1,3 +1,16 @@
+<img height="150" src="./ressources/docker.png"/><span style="color: transparent">-------------</span>
+<img height="150" src="./ressources/rabbitmq.png" /><span style="color: transparent">------------</span>
+<img height="150" src="./ressources/spring-framework.png" /><span style="color: transparent">-----------</span>
+<img height="150" src="./ressources/springcloud-logo.png"/><span style="color: transparent">-------------</span>
+<br>
+<br>
+<img height="120" src="./ressources/logo-git.png"/><span style="color: transparent">------------</span>
+<img height="150" src="./ressources/vault-logo.png"/><span style="color: transparent">------------</span>
+<img height="150" src="./ressources/consul2.png"/><span style="color: transparent">---------------</span>
+<img height="150" src="./ressources/karate.png"/><span style="color: transparent">----------------</span>
+<img height="150" src="./ressources/logonet.png"/>
+
+
 # Projet Hopital - Microservices
 Conception et implementation d'une application qui fait la **gestion des ressources matérielles** des différents départements d’une faculté en respectant **l'architecture des microservices** avec le framework **Spring Boot**.
 
@@ -54,9 +67,9 @@ Enfin, nous avons mis en place des tests Karaté pour assurer une couverture com
 Veuillez trouver ci-joint un schéma d'architecture globale et un schéma qui précise les échanges RabbitMQ.
 
 
-<img height="400" src="./ressources/echanges-rabbitmq.png" width="400"/> <img height="400" src="./ressources/Schéma-Architecture-Microservices-ArchiV3.png" width="600"/>
+<img height="400" src="./ressources/Schéma-Architecture-Microservices-ArchiV3.png" width="600"/>
 ------------------------------------------------------
-# Déployement
+# Déploiement
 + Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: 15min)
 ------------------------------------------------------
 # Technologies utilisées
