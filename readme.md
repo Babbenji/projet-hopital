@@ -7,7 +7,7 @@
 L'objectif du projet hopital était de développer une architecture de microservices pour une petite clinique afin d'améliorer la gestion des services de spécialistes médicaux et garantir une meilleure sécurité et évolutivité des données.
 
 # Problématique
-Une petite clinique offrant des services de spécialistes médicaux. Les patients peuvent prendre rendez-vous en ligne via notre plateforme Doctolib. Les médecins examinent les patients et fournissent tous les détails de la consultation, ainsi que les médicaments prescrits.
+Une petite clinique offrant des services de spécialistes médicaux. Les patients peuvent prendre rendez-vous en ligne via notre plateforme. Les médecins examinent les patients et fournissent tous les détails de la consultation, ainsi que les médicaments prescrits.
 
 Le service de gestion des stocks gère les médicaments et passe des commandes auprès des fournisseurs. Le service de facturation génère des factures pour les fournisseurs et les clients. Nous avons également un système d'authentification pour les patients et le personnel, ainsi qu'un service de notification pour informer les patients par e-mail de leur rendez-vous et notifier le personnel de toute nouvelle affectation.
 
