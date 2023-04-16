@@ -1,10 +1,10 @@
-<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="120" src="./ressources/rabbitmq.png" />$~~~$<img height="120" src="./ressources/spring-framework.png" />$~~~$<img height="120" src="./ressources/springcloud-logo.png"/>
+<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="120" src="./ressources/rabbitmq.png" />$~~~$<img height="120" src="./ressources/spring-framework.png" />$~~~$<img height="120" src="./ressources/springcloud-logo.png"/><img height="120" src="./ressources/logonet.png"/><img height="100" src="./ressources/logo-git.png"/>
 <br>
-<img height="100" src="./ressources/logo-git.png"/>$~~~$<img height="120" src="./ressources/vault-logo.png"/>$~~~$<img height="120" src="./ressources/consul2.png"/>$~~~$<img height="120" src="./ressources/karate.png"/>$~~~$<img height="120" src="./ressources/logonet.png"/>
+<img height="120" src="./ressources/vault-logo.png"/>$~~~$<img height="120" src="./ressources/consul2.png"/>$~~~$<img height="120" src="./ressources/karate.png"/>$~~~$<img height="120" src="./ressources/mongodblogo.png"/>$~~~$<img height="120" src="./ressources/postgre.png"/>
 
 
 # Projet Hopital - Microservices
-Conception et implementation d'une application qui fait la **gestion des ressources matérielles** des différents départements d’une faculté en respectant **l'architecture des microservices** avec le framework **Spring Boot**.
+L'objectif du projet hopital était de développer une architecture de microservices pour une petite clinique afin d'améliorer la gestion des services de spécialistes médicaux et garantir une meilleure sécurité et évolutivité des données.
 
 # Problématique
 Une petite clinique offrant des services de spécialistes médicaux. Les patients peuvent prendre rendez-vous en ligne via notre plateforme Doctolib. Les médecins examinent les patients et fournissent tous les détails de la consultation, ainsi que les médicaments prescrits.
@@ -62,14 +62,28 @@ Veuillez trouver ci-joint un schéma d'architecture globale et un schéma qui pr
 <img height="400" src="./ressources/Schéma-Architecture-Microservices-ArchiV3.png" width="600"/>
 ------------------------------------------------------
 # Déploiement
-+ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: 15min)
++ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~8min)
 ------------------------------------------------------
 # Technologies utilisées
 + Java 17
-+ Spring Boot
-+ MongoDB
-+ PostgreSQL
++ Spring Boot 3.0.4 ou 3.0.5
++ MongoDB latest
++ PostgreSQL latest
 + Docker
++ C# .NET 7
+
+## Dépendances utilisées
++ Spring Cloud Config Server
++ Spring Cloud Consul
++ Spring Cloud Gateway
++ Spring boot Actuator
++ Auth2
++ OPEN API
++ Load Balancer
++ Karate
++ Vault
++ RabbitMQ
++ JUnit
 ------------------------------------------------------
 # Equipe
 + Aaron BROSSEAU
