@@ -1,4 +1,4 @@
-<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="100" src="./ressources/rabbitmq.png" />$~~~$<img height="100" src="./ressources/spring-framework.png" />$~~~$<img height="100" src="./ressources/springcloud-logo.png"/><img height="100" src="./ressources/logonet.png"/><img height="100" src="./ressources/logo-git.png"/>
+<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="100" src="./ressources/rabbitmq.png" />$~~~$<img height="100" src="./ressources/spring-framework.png" />$~~~$<img height="100" src="./ressources/springcloud-logo.png"/><img height="100" src="./ressources/logonet.png"/><img height="60" src="./ressources/logo-git.png"/>
 <br>
 <img height="100" src="./ressources/vault-logo.png"/>$~~~$<img height="100" src="./ressources/consul2.png"/>$~~~$<img height="100" src="./ressources/karate.png"/>$~~~$<img height="100" src="./ressources/mongodblogo.png"/>$~~~$<img height="100" src="./ressources/postgre.png"/>$~~~$<img height="100" src="./ressources/openapi.png"/>
 
