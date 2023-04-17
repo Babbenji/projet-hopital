@@ -30,8 +30,8 @@ public class RabbitMQConsumer {
         for (Map.Entry<String, Integer> entry : factureDTO.getListeProduits().entrySet())
         {
             LOGGER.info(String.format("La quantite du produit " + entry.getKey() + " a été modifiée de " + entry.getValue()));
-            facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
         }
+        facadeServiceGestionStock.modifierQuantiteProduitMedical(factureDTO);
     }
 
     @RabbitListener(queues = {"${spring.rabbitmq.queue}"})

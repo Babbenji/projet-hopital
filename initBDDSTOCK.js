@@ -6,6 +6,8 @@ db.produitMedical.insert({_id : 15, prixProduitMedical : 2.0, nomProduitMedical 
 
 db.produitMedical.insert({_id : 1, prixProduitMedical : 8.0, nomProduitMedical  : "Lisopaîne", descriptionProduitMedical  : "ça soigne", stockProduitMedical : 23 })
 
+db.produitMedical.insert({_id : 15, prixProduitMedical : 2.0, nomProduitMedical  : "Doliprane", descriptionProduitMedical  : "1000mg max/jour", stockProduitMedical : 120 })
+
 db.utilisateur.insert({_id : 13, nomUtilisateur : "Filok", prenomUtilisateur : "Julie", emailUtilisateur : "filok.julie@gmail.com", panierUtilisateur : {1 : 5, 14 : 2}})
 
 db.commande.insert({ _id : 8, dateCommande: Date(), prixCommande : 148.0})

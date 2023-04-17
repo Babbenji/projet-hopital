@@ -2,20 +2,20 @@ Feature: CAS D'USAGES
 
   Scenario: PRISE DE RDV CLASSIQUE
 
-#    Given url 'http://localhost:8080/api/auth/inscription'
-#    And request { "email": "brosseau.aaron@gmail.com", "password": "pwd123" }
-#    When method post
-#    Then status 201
-#
-#    Given url 'http://localhost:8080/api/auth/inscription'
-#    And request { "email": "usersecr@hopital-secretaire.fr", "password": "pwd123" }
-#    When method post
-#    Then status 201
-#
-#    Given url 'http://localhost:8080/api/auth/inscription'
-#    And request { "email": "usermed@hopital-medecin.fr", "password": "pwd123" }
-#    When method post
-#    Then status 201
+    Given url 'http://localhost:8080/api/auth/inscription'
+    And request { "email": "brosseau.aaron@gmail.com", "password": "pwd123" }
+    When method post
+    Then status 201
+
+    Given url 'http://localhost:8080/api/auth/inscription'
+    And request { "email": "usersecr@hopital-secretaire.fr", "password": "pwd123" }
+    When method post
+    Then status 201
+
+    Given url 'http://localhost:8080/api/auth/inscription'
+    And request { "email": "usermed@hopital-medecin.fr", "password": "pwd123" }
+    When method post
+    Then status 201
 
 
 
