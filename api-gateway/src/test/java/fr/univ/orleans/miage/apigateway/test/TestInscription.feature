@@ -12,7 +12,7 @@ Feature: CAS D'USAGES
     When method post
     Then status 201
 
-    Given url 'http://localhost:8081/api/v1/auth/inscription'
+    Given url 'http://localhost:8080/api/auth/inscription'
     And request { "email": "usermed@hopital-medecin.fr", "password": "pwd123" }
     When method post
     Then status 201
@@ -69,4 +69,4 @@ Feature: CAS D'USAGES
     When method patch
     Then status 202
 
-  Scenario: REAPPROVISIONNEMENT DE PRODUIT MEDICAL
+#  Scenario: REAPPROVISIONNEMENT DE PRODUIT MEDICAL
