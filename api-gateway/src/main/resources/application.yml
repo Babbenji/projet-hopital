@@ -91,7 +91,7 @@ springdoc:
 uri:
   service-auth: lb://service-authentification
   service-notif: lb://service-notification
-  service-rdv-patients: lb://service-rdv-patients
-  service-stock: lb://service-stockfournisseurs
+  service-rdv-patients: lb://service-gestion-rdv-patients-personnel
+  service-stock: lb://service-gestion-stock-fournisseurs
   service-comptable: lb://service-comptable
   api-gateway: lb://api-gateway

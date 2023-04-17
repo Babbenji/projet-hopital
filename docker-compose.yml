@@ -165,7 +165,7 @@ services:
       - MONGO_INITDB_DATABASE=rdvpatients
 
   # Application Spring Boot
-  service-rdv-patients:
+  service-gestion-rdv-patients-personnel:
     image: projet-hopital/service-gestion-rdv-patients-personnel:latest
     container_name: service-rdv-patients
     environment:
@@ -204,7 +204,7 @@ services:
       - MONGO_INITDB_DATABASE=gestionStock
 
   # Application Spring Boot
-  service-stockfournisseurs:
+  service-service-gestion-stock-fournisseurs:
     image: projet-hopital/service-gestion-stock-fournisseurs:latest
     container_name: service-stockfournisseurs
     environment:

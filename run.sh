@@ -1,4 +1,5 @@
 #!/bin/bash
+export VAULT_TOKEN="token45"
 
 # commande pour construire une image docker de chaque service spring boot
 for dir in */ ; do
@@ -11,7 +12,6 @@ for dir in */ ; do
 done
 
 # variable d'environnement pour le token de vault
-export VAULT_TOKEN="token45"
 
 # commande pour construite l'image docker du service .NET
 docker build -t service-comptable:1.0 ./service-facturation
