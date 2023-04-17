@@ -2,6 +2,8 @@ db.fournisseur.insert({_id : 10, nomFournisseur : "Solomon", adresseFournisseur 
 
 db.produitMedical.insert({_id : 14, prixProduitMedical : 5.0, nomProduitMedical  : "Pansement", descriptionProduitMedical  : "utile", stockProduitMedical : 45 })
 
+db.produitMedical.insert({_id : 15, prixProduitMedical : 2.0, nomProduitMedical  : "Doliprane", descriptionProduitMedical  : "1000mg max/jour", stockProduitMedical : 120 })
+
 db.produitMedical.insert({_id : 1, prixProduitMedical : 8.0, nomProduitMedical  : "Lisopaîne", descriptionProduitMedical  : "ça soigne", stockProduitMedical : 23 })
 
 db.produitMedical.insert({_id : 15, prixProduitMedical : 2.0, nomProduitMedical  : "Doliprane", descriptionProduitMedical  : "1000mg max/jour", stockProduitMedical : 120 })

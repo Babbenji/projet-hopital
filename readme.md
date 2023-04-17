@@ -48,7 +48,7 @@ Il y a cinq microservices :
 
 # Travail realisé
 
-Notre équipe a travaillé sur le développement d'une architecture de micro services pour le projet-hopital. Nous avons commencé par mettre en place des services avec leurs bases de données dockerisées, en utilisant des modèles de conception tels que la façade et les contrôleurs pour garantir une bonne séparation des tâches.
+Nous avons commencé par mettre en place des services avec leurs bases de données dockerisées, en utilisant des modèles de conception tels que la façade et les contrôleurs pour garantir une bonne séparation des tâches.
 
 Nous avons ensuite mis en place une passerelle (gateway) pour permettre l'accès aux microservices depuis l'extérieur de notre architecture. Pour gérer les services et leurs enregistrements dans l'annuaire, nous avons utilisé Consul, un outil open-source pour la gestion des services.
 Nous avons également ajouté une couche d'authentification pour permettre aux utilisateurs d'accéder aux différents microservices en fonction de leurs rôles/permissions. Pour la communication interservices, nous avons utilisé Rabbit Mq, une solution de messagerie fiable et performante.
