@@ -1,13 +1,13 @@
-<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="120" src="./ressources/rabbitmq.png" />$~~~$<img height="120" src="./ressources/spring-framework.png" />$~~~$<img height="120" src="./ressources/springcloud-logo.png"/><img height="120" src="./ressources/logonet.png"/><img height="100" src="./ressources/logo-git.png"/>
+<img height="130" src="./ressources/docker.png"/> $~~~$ <img height="100" src="./ressources/rabbitmq.png" />$~~~$<img height="100" src="./ressources/spring-framework.png" />$~~~$<img height="100" src="./ressources/springcloud-logo.png"/><img height="100" src="./ressources/logonet.png"/><img height="60" src="./ressources/logo-git.png"/>
 <br>
-<img height="120" src="./ressources/vault-logo.png"/>$~~~$<img height="120" src="./ressources/consul2.png"/>$~~~$<img height="120" src="./ressources/karate.png"/>$~~~$<img height="120" src="./ressources/mongodblogo.png"/>$~~~$<img height="120" src="./ressources/postgre.png"/>
+<img height="100" src="./ressources/vault-logo.png"/>$~~~$<img height="100" src="./ressources/consul2.png"/>$~~~$<img height="100" src="./ressources/karate.png"/>$~~~$<img height="100" src="./ressources/mongodblogo.png"/>$~~~$<img height="100" src="./ressources/postgre.png"/>$~~~$<img height="100" src="./ressources/openapi.png"/>
 
 
 # Projet Hopital - Microservices
 L'objectif du projet hopital était de développer une architecture de microservices pour une petite clinique afin d'améliorer la gestion des services de spécialistes médicaux et garantir une meilleure sécurité et évolutivité des données.
 
 # Problématique
-Une petite clinique offrant des services de spécialistes médicaux. Les patients peuvent prendre rendez-vous en ligne via notre plateforme Doctolib. Les médecins examinent les patients et fournissent tous les détails de la consultation, ainsi que les médicaments prescrits.
+Une petite clinique offrant des services de spécialistes médicaux. Les patients peuvent prendre rendez-vous en ligne via notre plateforme. Les médecins examinent les patients et fournissent tous les détails de la consultation, ainsi que les médicaments prescrits.
 
 Le service de gestion des stocks gère les médicaments et passe des commandes auprès des fournisseurs. Le service de facturation génère des factures pour les fournisseurs et les clients. Nous avons également un système d'authentification pour les patients et le personnel, ainsi qu'un service de notification pour informer les patients par e-mail de leur rendez-vous et notifier le personnel de toute nouvelle affectation.
 
@@ -62,7 +62,7 @@ Veuillez trouver ci-joint un schéma d'architecture globale et un schéma qui pr
 
 ------------------------------------------------------
 # Déploiement
-+ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~8min)
++ Lancer le script **./run.sh** pour lancer tous l'environnement du projet. (Temps estimé: ~10min windows / ~7min linux)
 ------------------------------------------------------
 # Technologies utilisées
 + Java 17
