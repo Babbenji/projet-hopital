@@ -39,5 +39,4 @@ public class RabbitMQConsumer {
 
         LOGGER.info(String.valueOf(token));
     }
-
 }

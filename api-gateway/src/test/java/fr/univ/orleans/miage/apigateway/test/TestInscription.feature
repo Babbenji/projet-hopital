@@ -17,8 +17,6 @@ Feature: CAS D'USAGES
     When method post
     Then status 201
 
-
-
     Given url 'http://localhost:8080/api/auth/connexion'
     And request { "email": "brosseau.aaron@gmail.com", "password": "pwd123" }
     When method post
@@ -68,5 +66,3 @@ Feature: CAS D'USAGES
     And request {"compteRendu":"Patient fiévreux", "listeProduitsMedicaux" : {"Doliprane":1 ,"Pansement":2}}
     When method patch
     Then status 202
-
-#  Scenario: REAPPROVISIONNEMENT DE PRODUIT MEDICAL
